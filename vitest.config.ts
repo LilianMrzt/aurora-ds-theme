@@ -1,5 +1,6 @@
-import { defineConfig } from 'vitest/config'
 import { resolve } from 'path'
+
+import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
     test: {
@@ -13,10 +14,14 @@ export default defineConfig({
             include: ['src/**/*.ts', 'src/**/*.tsx'],
             exclude: ['src/index.ts', 'src/**/*.d.ts'],
         },
+        typecheck: {
+            tsconfig: './tsconfig.test.json',
+        },
     },
     resolve: {
         alias: {
             '@': resolve(__dirname, './src'),
+            '@tests': resolve(__dirname, './tests'),
         },
     },
 })

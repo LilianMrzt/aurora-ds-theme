@@ -1,4 +1,3 @@
-import type { Theme } from '@/types/Theme'
 
 import {
     cacheKeyToSuffix,
@@ -11,6 +10,7 @@ import {
 } from './styleEngine'
 
 import type { StyleFunction, StyleWithPseudos } from './types'
+import type { Theme } from '@/types/Theme'
 
 /**
  * Extract component name from stack trace

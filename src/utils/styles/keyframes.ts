@@ -1,5 +1,3 @@
-import type { CSSProperties } from 'react'
-
 import {
     addKeyframes,
     getNextKeyframeId,
@@ -8,6 +6,9 @@ import {
     insertRule,
     objectToCss
 } from './styleEngine'
+
+import type { CSSProperties } from 'react'
+
 
 /**
  * Create and inject keyframes

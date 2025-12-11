@@ -1,6 +1,7 @@
+import { insertRule, toKebabCase } from './styleEngine'
+
 import type { Theme } from '@/types/Theme'
 
-import { insertRule, toKebabCase } from './styleEngine'
 
 /**
  * Generate CSS variables from a theme object

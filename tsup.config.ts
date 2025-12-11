@@ -10,6 +10,7 @@ export default defineConfig({
     splitting: false,
     treeshake: true,
     external: ['react', 'react-dom'],
+    tsconfig: 'tsconfig.build.json',
     esbuildOptions(options) {
         options.banner = {
             js: '"use client";',
