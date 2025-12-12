@@ -1,6 +1,24 @@
 import type { BaseTheme, DeepPartial } from '@/types'
 
 /**
+ * Simple hash function for objects (djb2)
+ */
+const hashObject = (obj: unknown): string => {
+    const str = JSON.stringify(obj)
+    let hash = 5381
+    for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) + hash) ^ str.charCodeAt(i)
+    }
+    return (hash >>> 0).toString(36)
+}
+
+/**
+ * Memoization cache for createTheme
+ */
+const themeCache = new Map<string, BaseTheme>()
+const MAX_THEME_CACHE_SIZE = 50
+
+/**
  * Deep merge two objects
  */
 const deepMerge = <T extends Record<string, unknown>>(target: T, source: DeepPartial<T>): T => {
@@ -50,7 +68,24 @@ export const createTheme = <T extends BaseTheme>(
     baseTheme: T,
     overrides: DeepPartial<T>
 ): T => {
-    return deepMerge(baseTheme, overrides)
+    // Create cache key from base theme reference + overrides hash
+    const cacheKey = `${hashObject(baseTheme)}_${hashObject(overrides)}`
+
+    const cached = themeCache.get(cacheKey)
+    if (cached) {
+        return cached as T
+    }
+
+    const result = deepMerge(baseTheme, overrides)
+
+    // Evict oldest if cache is full
+    if (themeCache.size >= MAX_THEME_CACHE_SIZE) {
+        const firstKey = themeCache.keys().next().value
+        if (firstKey) {themeCache.delete(firstKey)}
+    }
+
+    themeCache.set(cacheKey, result)
+    return result
 }
 
 /**
