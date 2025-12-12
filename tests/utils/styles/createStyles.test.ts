@@ -101,7 +101,7 @@ describe('createStyles', () => {
             button: {
                 backgroundColor: theme.colors.primary,
                 ':hover': {
-                    backgroundColor: theme.colors.hoverPrimary
+                    backgroundColor: theme.colors.primaryHover
                 }
             }
         }))

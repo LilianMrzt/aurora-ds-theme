@@ -5,6 +5,9 @@ import {
     createTheme,
     mergeThemes,
     createThemeVariant,
+    clearThemeCache,
+    getThemeCacheSize,
+    MAX_THEME_CACHE_SIZE,
     defaultTheme,
     defaultDarkTheme,
     defaultColors,
@@ -78,6 +81,22 @@ describe('utils/theme/index.ts exports', () => {
         it('should export createThemeVariant', () => {
             expect(createThemeVariant).toBeDefined()
             expect(typeof createThemeVariant).toBe('function')
+        })
+
+        it('should export clearThemeCache', () => {
+            expect(clearThemeCache).toBeDefined()
+            expect(typeof clearThemeCache).toBe('function')
+        })
+
+        it('should export getThemeCacheSize', () => {
+            expect(getThemeCacheSize).toBeDefined()
+            expect(typeof getThemeCacheSize).toBe('function')
+        })
+
+        it('should export MAX_THEME_CACHE_SIZE', () => {
+            expect(MAX_THEME_CACHE_SIZE).toBeDefined()
+            expect(typeof MAX_THEME_CACHE_SIZE).toBe('number')
+            expect(MAX_THEME_CACHE_SIZE).toBe(50)
         })
     })
 

@@ -1,4 +1,11 @@
-export { createTheme, mergeThemes, createThemeVariant } from './createTheme'
+export {
+    createTheme,
+    mergeThemes,
+    createThemeVariant,
+    clearThemeCache,
+    getThemeCacheSize,
+    MAX_THEME_CACHE_SIZE,
+} from './createTheme'
 
 export {
     // Complete themes

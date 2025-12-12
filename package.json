@@ -2,7 +2,7 @@
   "name": "@aurora-ui/theme",
   "version": "0.1.0",
   "description": "A performant CSS-in-JS theme management library for React",
-  "author": "",
+  "author": "Lilian MARZET <lilian.marzet@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -39,11 +39,17 @@
     "dev": "tsup --watch",
     "build": "tsup",
     "test": "vitest",
+    "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint src tests --ext .ts,.tsx",
+    "lint:fix": "eslint src tests --ext .ts,.tsx --fix",
     "typecheck": "tsc --noEmit",
     "size": "size-limit",
-    "prepublishOnly": "npm run build && npm run size"
+    "audit": "npm audit --audit-level=moderate",
+    "audit:fix": "npm audit fix",
+    "validate": "npm run lint && npm run typecheck && npm run test:run",
+    "ci": "npm run validate && npm run build && npm run size && npm run audit",
+    "prepublishOnly": "npm run ci"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
@@ -51,27 +57,27 @@
   },
   "devDependencies": {
     "@size-limit/preset-small-lib": "^12.0.0",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^14.1.2",
-    "@types/node": "^20.10.5",
-    "@types/react": "^18.2.45",
-    "@types/react-dom": "^18.2.18",
-    "@typescript-eslint/eslint-plugin": "^6.15.0",
-    "@typescript-eslint/parser": "^6.15.0",
-    "@vitest/coverage-v8": "^1.1.0",
-    "eslint": "^8.56.0",
-    "eslint-import-resolver-typescript": "^3.6.1",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-jsx-a11y": "^6.8.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "jsdom": "^23.0.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.14",
+    "@types/react-dom": "^18.3.3",
+    "@typescript-eslint/eslint-plugin": "^8.18.0",
+    "@typescript-eslint/parser": "^8.18.0",
+    "@vitest/coverage-v8": "^4.0.15",
+    "eslint": "^8.57.1",
+    "eslint-import-resolver-typescript": "^3.7.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "jsdom": "^25.0.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "size-limit": "^12.0.0",
-    "tsup": "^8.0.1",
-    "typescript": "^5.3.3",
-    "vitest": "^1.1.0"
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^4.0.15"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -79,11 +85,14 @@
   "size-limit": [
     {
       "path": "dist/index.js",
-      "limit": "15 KB"
+      "limit": "10 KB",
+      "gzip": true
     },
     {
       "path": "dist/index.cjs",
-      "limit": "15 KB"
+      "limit": "10 KB",
+      "gzip": true
     }
-  ]
+  ],
+  "packageManager": "npm@10.9.0"
 }

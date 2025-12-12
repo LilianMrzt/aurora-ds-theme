@@ -16,7 +16,25 @@ const hashObject = (obj: unknown): string => {
  * Memoization cache for createTheme
  */
 const themeCache = new Map<string, BaseTheme>()
-const MAX_THEME_CACHE_SIZE = 50
+
+/**
+ * Maximum number of themes to cache before eviction
+ */
+export const MAX_THEME_CACHE_SIZE = 50
+
+/**
+ * Clear the theme cache (useful for testing)
+ */
+export const clearThemeCache = (): void => {
+    themeCache.clear()
+}
+
+/**
+ * Get the current theme cache size (useful for testing)
+ */
+export const getThemeCacheSize = (): number => {
+    return themeCache.size
+}
 
 /**
  * Deep merge two objects
