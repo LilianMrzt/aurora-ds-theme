@@ -376,6 +376,18 @@ clearSSRRules() // Reset for next request
 
 ---
 
+## Contributing
+
+Interested in contributing? Check out the [Developer Guide](./README.dev.md) for:
+
+- Development setup
+- Available scripts
+- Project structure
+- Coding conventions
+- Publishing process
+
+---
+
 ## License
 
 MIT
