@@ -5,7 +5,7 @@ A performant, type-safe, and **fully extensible** CSS-in-JS theme management lib
 ## Features
 
 - 🎨 **Theme Management** - Define and switch between themes easily
-- 🔧 **Fully Extensible** - Add custom colors, spacing, and any theme tokens
+- 🔧 **Modular Customization** - Customize colors, spacing, or any token independently
 - ⚡ **Optimized Performance** - LRU caching, static style deduplication
 - 🖥️ **SSR Support** - Server-side rendering compatible
 - 📦 **Lightweight** - No runtime dependencies besides React
@@ -16,208 +16,149 @@ A performant, type-safe, and **fully extensible** CSS-in-JS theme management lib
 
 ```bash
 npm install @aurora-ui/theme
-# or
-yarn add @aurora-ui/theme
-# or
-pnpm add @aurora-ui/theme
 ```
 
 ## Quick Start
 
-### 1. Use the default theme or create your own
-
 ```tsx
-import { defaultTheme, createTheme, ThemeProvider } from '@aurora-ui/theme'
+import { defaultTheme, ThemeProvider, createStyles } from '@aurora-ui/theme'
 
-// Option 1: Use default theme directly
+// Wrap your app
 <ThemeProvider theme={defaultTheme}>
     <App />
 </ThemeProvider>
 
-// Option 2: Customize the default theme
+// Create styles
+const STYLES = createStyles((theme) => ({
+    container: {
+        padding: theme.spacing.md,
+        backgroundColor: theme.colors.surface,
+        borderRadius: theme.radius.lg,
+    },
+}))
+
+// Use in components
+function MyComponent() {
+    return <div className={STYLES.container}>Hello!</div>
+}
+```
+
+## Modular Customization
+
+Aurora exports individual presets so you can customize only what you need:
+
+### Customize Only Colors
+
+```tsx
+import {
+    defaultTheme,
+    defaultColors,
+    createTheme,
+} from '@aurora-ui/theme'
+
+// Override just the colors you want
 const myTheme = createTheme(defaultTheme, {
     colors: {
+        ...defaultColors,
         primary: '#your-brand-color',
+        primaryHover: '#your-brand-hover',
     },
 })
 ```
 
-### 2. Create and use styles
+### Customize Only Spacing
 
 ```tsx
-import { createStyles, useTheme } from '@aurora-ui/theme'
+import {
+    defaultTheme,
+    defaultSpacing,
+    createTheme,
+} from '@aurora-ui/theme'
 
-const STYLES = createStyles((theme) => ({
-    container: {
-        display: 'flex',
-        padding: theme.spacing.md,
-        backgroundColor: theme.colors.background,
-        ':hover': {
-            backgroundColor: theme.colors.backgroundHover,
-        },
+const myTheme = createTheme(defaultTheme, {
+    spacing: {
+        ...defaultSpacing,
+        md: '1.25rem', // Override medium spacing
+        lg: '2rem',    // Override large spacing
     },
-    title: {
-        fontSize: theme.fontSize.lg,
-        color: theme.colors.text,
-    },
-}))
+})
+```
 
-function MyComponent() {
-    return (
-        <div className={STYLES.container}>
-            <h1 className={STYLES.title}>Hello World</h1>
-        </div>
-    )
+### Mix and Match
+
+```tsx
+import {
+    defaultColors,
+    defaultDarkColors,
+    defaultSpacing,
+    defaultRadius,
+    defaultShadows,
+    defaultFontSize,
+    defaultFontWeight,
+    defaultLineHeight,
+    defaultZIndex,
+    defaultTransition,
+} from '@aurora-ui/theme'
+
+// Build a completely custom theme from presets
+const myCustomTheme: BaseTheme = {
+    colors: {
+        ...defaultColors,
+        primary: '#0066cc',
+    },
+    spacing: defaultSpacing,
+    radius: {
+        ...defaultRadius,
+        md: '8px', // More rounded
+    },
+    shadows: defaultShadows,
+    fontSize: defaultFontSize,
+    fontWeight: defaultFontWeight,
+    lineHeight: defaultLineHeight,
+    zIndex: defaultZIndex,
+    transition: defaultTransition,
 }
 ```
 
-## Extending the Theme
+## Available Presets
 
-Aurora is designed to be **fully extensible**. You can add custom colors, spacing, or any other tokens.
+| Preset | Description |
+|--------|-------------|
+| `defaultColors` | Light mode color palette |
+| `defaultDarkColors` | Dark mode color palette |
+| `defaultSpacing` | Spacing scale (none → 4xl) |
+| `defaultRadius` | Border radius scale |
+| `defaultShadows` | Shadow/elevation scale |
+| `defaultFontSize` | Typography size scale |
+| `defaultFontWeight` | Font weight scale |
+| `defaultLineHeight` | Line height scale |
+| `defaultZIndex` | Z-index layering scale |
+| `defaultTransition` | Animation timing presets |
 
-### Adding Custom Colors
+## Extending Types
+
+Add custom tokens with full TypeScript support:
 
 ```tsx
-import type { BaseColors, BaseTheme, ExtendTheme } from '@aurora-ui/theme'
-import { defaultTheme, createTheme, ThemeProvider, createStyles } from '@aurora-ui/theme'
+import type { BaseColors, ExtendTheme } from '@aurora-ui/theme'
 
-// 1. Define your extended color type
+// Extend colors
 type MyColors = BaseColors & {
-    accent: string
-    info: string
-    onInfo: string
+    brand: string
+    brandHover: string
 }
 
-// 2. Create your theme type
+// Create extended theme type
 type MyTheme = ExtendTheme<{
     colors: MyColors
 }>
 
-// 3. Create your theme
-const myTheme = createTheme(defaultTheme, {
-    colors: {
-        accent: '#ff6b6b',
-        info: '#3498db',
-        onInfo: '#ffffff',
-    },
-}) as MyTheme
-
-// 4. Use with full type safety
+// Use with type safety
 const STYLES = createStyles<MyTheme>((theme) => ({
-    infoBox: {
-        backgroundColor: theme.colors.info,     // ✅ TypeScript knows about this!
-        color: theme.colors.onInfo,
-        borderLeft: `4px solid ${theme.colors.accent}`,
+    button: {
+        backgroundColor: theme.colors.brand, // ✅ TypeScript knows this!
     },
 }))
-
-// 5. Get typed theme in components
-function MyComponent() {
-    const theme = useTheme<MyTheme>()
-    return <div style={{ color: theme.colors.accent }}>Accent color!</div>
-}
-```
-
-### Adding Custom Spacing
-
-```tsx
-import type { BaseSpacing, ExtendTheme } from '@aurora-ui/theme'
-
-type MySpacing = BaseSpacing & {
-    xxl: string
-    '2xl': string
-    '3xl': string
-}
-
-type MyTheme = ExtendTheme<{
-    spacing: MySpacing
-}>
-
-const myTheme = createTheme(defaultTheme, {
-    spacing: {
-        xxl: '3rem',
-        '2xl': '4rem',
-        '3xl': '6rem',
-    },
-}) as MyTheme
-```
-
-### Adding Completely Custom Properties
-
-```tsx
-import type { BaseTheme, ExtendTheme } from '@aurora-ui/theme'
-
-type MyTheme = ExtendTheme<{
-    // Custom breakpoints
-    breakpoints: {
-        sm: string
-        md: string
-        lg: string
-        xl: string
-    }
-    // Custom z-index scale
-    zIndex: {
-        modal: number
-        dropdown: number
-        tooltip: number
-    }
-}>
-
-const myTheme: MyTheme = {
-    ...defaultTheme,
-    breakpoints: {
-        sm: '640px',
-        md: '768px',
-        lg: '1024px',
-        xl: '1280px',
-    },
-    zIndex: {
-        modal: 1000,
-        dropdown: 100,
-        tooltip: 50,
-    },
-}
-```
-
-## Theme Utilities
-
-### createTheme
-
-Merge a base theme with overrides:
-
-```tsx
-const myTheme = createTheme(defaultTheme, {
-    colors: { primary: '#ff0000' },
-    spacing: { md: '1.5rem' },
-})
-```
-
-### mergeThemes
-
-Merge multiple theme overrides:
-
-```tsx
-const theme = mergeThemes(
-    defaultTheme,
-    brandColors,
-    darkModeOverrides,
-    userPreferences
-)
-```
-
-### createThemeVariant
-
-Create reusable theme variants:
-
-```tsx
-const createDarkVariant = createThemeVariant({
-    colors: {
-        background: '#1a1a1a',
-        text: '#ffffff',
-    },
-})
-
-const darkTheme = createDarkVariant(lightTheme)
 ```
 
 ## Dynamic Styles
@@ -225,10 +166,10 @@ const darkTheme = createDarkVariant(lightTheme)
 ```tsx
 const STYLES = createStyles((theme) => ({
     button: (variant: 'primary' | 'secondary', size: 'sm' | 'md' | 'lg') => ({
-        backgroundColor: variant === 'primary' 
-            ? theme.colors.primary 
-            : theme.colors.secondary,
+        backgroundColor: theme.colors[variant],
         padding: theme.spacing[size],
+        borderRadius: theme.radius.md,
+        transition: theme.transition.fast,
     }),
 }))
 
@@ -236,34 +177,34 @@ const STYLES = createStyles((theme) => ({
 <button className={STYLES.button('primary', 'md')}>Click me</button>
 ```
 
-## Keyframes
+## Theme Utilities
+
+### createTheme
 
 ```tsx
-import { keyframes, createStyles } from '@aurora-ui/theme'
-
-const fadeIn = keyframes({
-    from: { opacity: 0 },
-    to: { opacity: 1 },
+const myTheme = createTheme(defaultTheme, {
+    colors: { primary: '#ff0000' },
 })
-
-const STYLES = createStyles(() => ({
-    animated: {
-        animation: `${fadeIn} 0.3s ease-in-out`,
-    },
-}))
 ```
 
-## CSS Variables
+### mergeThemes
 
 ```tsx
-import { cssVariables } from '@aurora-ui/theme'
+const theme = mergeThemes(
+    defaultTheme,
+    brandOverrides,
+    darkModeOverrides
+)
+```
 
-const vars = cssVariables({
-    primaryColor: '#007bff',
-    spacing: '1rem',
+### createThemeVariant
+
+```tsx
+const createDarkVariant = createThemeVariant({
+    colors: defaultDarkColors,
 })
 
-// vars.primaryColor === 'var(--primary-color)'
+const darkTheme = createDarkVariant(lightTheme)
 ```
 
 ## SSR Support
@@ -271,7 +212,7 @@ const vars = cssVariables({
 ```tsx
 import { getSSRStyles, clearSSRRules } from '@aurora-ui/theme'
 
-// In your server-side code
+// Server-side
 const html = renderToString(<App />)
 const styles = getSSRStyles()
 
@@ -285,57 +226,36 @@ const fullHtml = `
 </html>
 `
 
-// Clear rules for next request
-clearSSRRules()
+clearSSRRules() // Reset for next request
 ```
 
 ## API Reference
 
-### Types
+### Theme Types
 
 | Type | Description |
 |------|-------------|
-| `Theme` | Generic theme type with customizable tokens |
-| `BaseTheme` | Minimum required theme structure |
-| `BaseColors` | Base color tokens |
-| `BaseSpacing` | Base spacing tokens |
-| `ExtendTheme<T>` | Helper to create extended theme types |
-| `DeepPartial<T>` | Make all properties optional (for overrides) |
-| `ThemeOverride<T>` | Type for theme overrides |
+| `BaseTheme` | Complete theme structure |
+| `BaseColors` | Color token type |
+| `BaseSpacing` | Spacing token type |
+| `ExtendTheme<T>` | Helper to extend theme |
+| `DeepPartial<T>` | For partial overrides |
 
 ### Components & Hooks
 
 | Export | Description |
 |--------|-------------|
-| `ThemeProvider` | Context provider for theme |
-| `useTheme<T>()` | Hook to access current theme with custom type |
-
-### Theme Utilities
-
-| Export | Description |
-|--------|-------------|
-| `defaultTheme` | Default light theme |
-| `defaultDarkTheme` | Default dark theme |
-| `createTheme()` | Create theme with overrides |
-| `mergeThemes()` | Merge multiple overrides |
-| `createThemeVariant()` | Create reusable theme variants |
+| `ThemeProvider` | Theme context provider |
+| `useTheme<T>()` | Access current theme |
 
 ### Styling
 
 | Export | Description |
 |--------|-------------|
-| `createStyles<T>()` | Create type-safe styles with theme access |
-| `keyframes()` | Define CSS keyframes animations |
-| `fontFace()` | Define @font-face rules |
-| `cssVariables()` | Create CSS custom properties |
-
-### SSR
-
-| Export | Description |
-|--------|-------------|
-| `getSSRStyles()` | Get collected styles for SSR |
-| `getSSRStyleTag()` | Get styles as complete `<style>` tag |
-| `clearSSRRules()` | Clear SSR style buffer |
+| `createStyles<T>()` | Create themed styles |
+| `keyframes()` | CSS keyframe animations |
+| `fontFace()` | @font-face rules |
+| `cssVariables()` | CSS custom properties |
 
 ## License
 

@@ -10,6 +10,9 @@ export type {
     BaseShadows,
     BaseFontSize,
     BaseFontWeight,
+    BaseLineHeight,
+    BaseZIndex,
+    BaseTransition,
     ExtendTheme,
     DeepPartial,
     ThemeOverride,
@@ -21,7 +24,22 @@ export type { ThemeProviderProps } from './providers/ThemeProvider'
 
 // Theme utilities
 export { createTheme, mergeThemes, createThemeVariant } from './utils/theme/createTheme'
-export { defaultTheme, defaultDarkTheme } from './utils/theme/defaultTheme'
+export {
+    // Complete themes
+    defaultTheme,
+    defaultDarkTheme,
+    // Individual presets for modular customization
+    defaultColors,
+    defaultDarkColors,
+    defaultSpacing,
+    defaultRadius,
+    defaultShadows,
+    defaultFontSize,
+    defaultFontWeight,
+    defaultLineHeight,
+    defaultZIndex,
+    defaultTransition,
+} from './utils/theme/defaultTheme'
 
 // Style utilities
 export { createStyles } from './utils/styles/createStyles'
