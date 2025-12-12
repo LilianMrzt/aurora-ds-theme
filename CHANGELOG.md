@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Simplified Token Scales** - Reduced token options for a cleaner, more usable API
+  - `spacing`: Removed `px`, `2xl`, `3xl`, `4xl` → Now `none`, `xs`, `sm`, `md`, `lg`, `xl`
+  - `fontSize`: Removed `2xl` to `6xl` → Now `xs`, `sm`, `md`, `lg`, `xl`
+  - `radius`: Removed `2xl`, added `xs` → Now `none`, `xs`, `sm`, `md`, `lg`, `xl`, `full`
+  - `shadows`: Removed `2xl`, `inner` → Now `none`, `xs`, `sm`, `md`, `lg`, `xl`
+  - `fontWeight`: Removed `thin`, `extrabold` → Now `light`, `regular`, `medium`, `semibold`, `bold`
+  - `lineHeight`: Removed `snug`, `loose` → Now `none`, `tight`, `normal`, `relaxed`
+  - `transition`: Removed `slower` → Now `fast`, `normal`, `slow`
+
 ## [0.1.0] - 2025-12-12
 
 ### Added

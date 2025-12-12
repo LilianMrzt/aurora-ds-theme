@@ -244,15 +244,11 @@ const myTheme = createTheme(defaultTheme, {
 ```tsx
 spacing: {
     none: '0',
-    px: '1px',
     xs: '0.25rem',   // 4px
     sm: '0.5rem',    // 8px
     md: '1rem',      // 16px
     lg: '1.5rem',    // 24px
     xl: '2rem',      // 32px
-    '2xl': '3rem',   // 48px
-    '3xl': '4rem',   // 64px
-    '4xl': '6rem',   // 96px
 }
 ```
 
@@ -260,13 +256,13 @@ spacing: {
 
 | Token | Values |
 |-------|--------|
-| `radius` | `none`, `sm`, `md`, `lg`, `xl`, `2xl`, `full` |
-| `shadows` | `none`, `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `inner` |
-| `fontSize` | `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `3xl`, `4xl`, `5xl`, `6xl` |
-| `fontWeight` | `thin`, `light`, `regular`, `medium`, `semibold`, `bold`, `extrabold` |
-| `lineHeight` | `none`, `tight`, `snug`, `normal`, `relaxed`, `loose` |
+| `radius` | `none`, `xs`, `sm`, `md`, `lg`, `xl`, `full` |
+| `shadows` | `none`, `xs`, `sm`, `md`, `lg`, `xl` |
+| `fontSize` | `xs`, `sm`, `md`, `lg`, `xl` |
+| `fontWeight` | `light`, `regular`, `medium`, `semibold`, `bold` |
+| `lineHeight` | `none`, `tight`, `normal`, `relaxed` |
 | `zIndex` | `behind`, `base`, `dropdown`, `sticky`, `fixed`, `overlay`, `modal`, `popover`, `tooltip`, `toast` |
-| `transition` | `fast`, `normal`, `slow`, `slower` |
+| `transition` | `fast`, `normal`, `slow` |
 
 ---
 
