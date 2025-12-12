@@ -112,6 +112,7 @@ export {
     setThemeContextGetter,
     getTheme,
     insertRule,
+    sanitizeCssValue,
 } from './utils/styles/styleEngine'
 
 // Types for style utilities

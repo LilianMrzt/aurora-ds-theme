@@ -1,5 +1,5 @@
 import { renderHook , render, screen } from '@testing-library/react'
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 
 import { ThemeProvider, useTheme } from '@/providers/ThemeProvider'
 import { defaultTheme, defaultDarkTheme } from '@/utils/theme'
@@ -126,9 +126,15 @@ describe('useTheme', () => {
     })
 
     it('should throw error when used outside ThemeProvider', () => {
+        // Suppress React and jsdom error logging for this expected error test
+        const originalError = console.error
+        console.error = vi.fn()
+
         expect(() => {
             renderHook(() => useTheme())
         }).toThrow('useTheme must be used within a ThemeProvider')
+
+        console.error = originalError
     })
 
     it('should return typed theme with generic', () => {

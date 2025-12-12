@@ -128,13 +128,46 @@ export const toKebabCaseClassName = (name: string): string => {
 }
 
 /**
- * Convert values to valid CSS
+ * Dangerous patterns that could be used for CSS injection attacks
+ * - expression(): IE-specific, allows JavaScript execution
+ * - url() with javascript:/data:: can execute scripts or embed malicious content
+ * - behavior: IE-specific, loads external HTC files
+ * - -moz-binding: Firefox-specific, loads XBL files
+ * - @import: could load external malicious stylesheets
+ * - </style>: could break out of style context
+ */
+const CSS_INJECTION_PATTERNS = /expression\s*\(|javascript\s*:|data\s*:\s*text\/html|behavior\s*:|@import|<\s*\/?\s*style/i
+
+/**
+ * Sanitize a CSS value to prevent injection attacks
+ * Returns the sanitized value or 'unset' if the value is dangerous
+ */
+export const sanitizeCssValue = (value: string): string => {
+    // Remove any null bytes
+    const cleaned = value.replace(/\0/g, '')
+
+    // Check for dangerous patterns
+    if (CSS_INJECTION_PATTERNS.test(cleaned)) {
+        if (__DEV__) {
+            console.warn(`[Aurora] Potentially dangerous CSS value blocked: "${value.slice(0, 50)}..."`)
+        }
+        return 'unset'
+    }
+
+    return cleaned
+}
+
+// Development mode flag (will be tree-shaken in production)
+const __DEV__ = typeof process !== 'undefined' && process.env?.NODE_ENV !== 'production'
+
+/**
+ * Convert values to valid CSS with sanitization
  */
 export const toCssValue = (key: string, value: unknown): string => {
     if (typeof value === 'number' && !UNITLESS_PROPERTIES.has(key)) {
         return `${value}px`
     }
-    return String(value)
+    return sanitizeCssValue(String(value))
 }
 
 /**

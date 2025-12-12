@@ -7,6 +7,7 @@ export {
     setThemeContextGetter,
     getTheme,
     insertRule,
+    sanitizeCssValue,
 } from './styleEngine'
 export type { StyleWithPseudos, StyleFunction, FontFaceOptions, CSSProperties } from './types'
 

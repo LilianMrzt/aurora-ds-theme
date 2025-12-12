@@ -12,6 +12,7 @@ import {
     hashString,
     getUniqueClassName,
     resolveAmpersandSelector,
+    sanitizeCssValue,
 } from '@/utils/styles/styleEngine'
 
 describe('toKebabCase', () => {
@@ -290,6 +291,64 @@ describe('resolveAmpersandSelector', () => {
     it('should handle multiple & occurrences', () => {
         expect(resolveAmpersandSelector('& &', 'item')).toBe('.item .item')
         expect(resolveAmpersandSelector('&&', 'cls')).toBe('.cls.cls')
+    })
+})
+
+describe('sanitizeCssValue', () => {
+    it('should pass through safe CSS values', () => {
+        expect(sanitizeCssValue('red')).toBe('red')
+        expect(sanitizeCssValue('#ff0000')).toBe('#ff0000')
+        expect(sanitizeCssValue('rgb(255, 0, 0)')).toBe('rgb(255, 0, 0)')
+        expect(sanitizeCssValue('1px solid black')).toBe('1px solid black')
+        expect(sanitizeCssValue('url(/images/bg.png)')).toBe('url(/images/bg.png)')
+        expect(sanitizeCssValue('var(--color-primary)')).toBe('var(--color-primary)')
+    })
+
+    it('should block expression() attacks (IE)', () => {
+        expect(sanitizeCssValue('expression(alert(1))')).toBe('unset')
+        expect(sanitizeCssValue('EXPRESSION(alert(1))')).toBe('unset')
+        expect(sanitizeCssValue('expression (alert(1))')).toBe('unset')
+    })
+
+    it('should block javascript: URLs', () => {
+        expect(sanitizeCssValue('url(javascript:alert(1))')).toBe('unset')
+        expect(sanitizeCssValue('url(JAVASCRIPT:alert(1))')).toBe('unset')
+        expect(sanitizeCssValue('url(javascript :alert(1))')).toBe('unset')
+    })
+
+    it('should block data:text/html URLs', () => {
+        expect(sanitizeCssValue('url(data:text/html,<script>alert(1)</script>)')).toBe('unset')
+        expect(sanitizeCssValue('url(data :text/html,test)')).toBe('unset')
+    })
+
+    it('should allow safe data URLs', () => {
+        expect(sanitizeCssValue('url(data:image/png;base64,abc)')).toBe('url(data:image/png;base64,abc)')
+        expect(sanitizeCssValue('url(data:image/svg+xml,...)')).toBe('url(data:image/svg+xml,...)')
+    })
+
+    it('should block behavior: attacks (IE)', () => {
+        expect(sanitizeCssValue('behavior:url(malicious.htc)')).toBe('unset')
+        expect(sanitizeCssValue('behavior :url(malicious.htc)')).toBe('unset')
+    })
+
+    it('should block @import attacks', () => {
+        expect(sanitizeCssValue('@import url(evil.css)')).toBe('unset')
+        expect(sanitizeCssValue('@IMPORT url(evil.css)')).toBe('unset')
+    })
+
+    it('should block style tag injection', () => {
+        expect(sanitizeCssValue('red</style><script>alert(1)</script>')).toBe('unset')
+        expect(sanitizeCssValue('< /style>')).toBe('unset')
+        expect(sanitizeCssValue('<style>')).toBe('unset')
+    })
+
+    it('should remove null bytes', () => {
+        expect(sanitizeCssValue('re\0d')).toBe('red')
+        expect(sanitizeCssValue('\0\0color')).toBe('color')
+    })
+
+    it('should handle empty strings', () => {
+        expect(sanitizeCssValue('')).toBe('')
     })
 })
 
