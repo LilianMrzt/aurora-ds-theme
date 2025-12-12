@@ -15,13 +15,13 @@ A performant, type-safe, and **fully customizable** CSS-in-JS theme management l
 ## Installation
 
 ```bash
-npm install @aurora-ui/theme
+npm install @aurora-dev-ui/theme
 ```
 
 ## Quick Start
 
 ```tsx
-import { defaultTheme, ThemeProvider, createStyles } from '@aurora-ui/theme'
+import { defaultTheme, ThemeProvider, createStyles } from '@aurora-dev-ui/theme'
 
 // 1. Wrap your app
 <ThemeProvider theme={defaultTheme}>
