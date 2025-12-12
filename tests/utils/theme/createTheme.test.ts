@@ -8,6 +8,8 @@ import {
     defaultDarkTheme,
 } from '@/utils/theme'
 
+import type { DeepPartial, BaseTheme } from '@/types'
+
 describe('createTheme', () => {
     it('should create a theme with overrides', () => {
         const customTheme = createTheme(defaultTheme, {
@@ -56,6 +58,35 @@ describe('createTheme', () => {
         expect(theme1).not.toBe(theme2)
         expect(theme1.colors.primary).toBe('#ff0000')
         expect(theme2.colors.primary).toBe('#00ff00')
+    })
+
+    it('should handle empty overrides', () => {
+        const theme = createTheme(defaultTheme, {})
+
+        expect(theme.colors.primary).toBe(defaultTheme.colors.primary)
+        expect(theme.spacing).toEqual(defaultTheme.spacing)
+    })
+
+    it('should not mutate the original theme', () => {
+        const originalPrimary = defaultTheme.colors.primary
+
+        createTheme(defaultTheme, {
+            colors: { primary: '#changed' },
+        })
+
+        expect(defaultTheme.colors.primary).toBe(originalPrimary)
+    })
+
+    it('should handle undefined values in overrides', () => {
+        const overrides: DeepPartial<BaseTheme> = {
+            colors: {
+                primary: undefined,
+            },
+        }
+        const theme = createTheme(defaultTheme, overrides)
+
+        // Should keep original value when override is undefined
+        expect(theme.colors.primary).toBe(defaultTheme.colors.primary)
     })
 })
 

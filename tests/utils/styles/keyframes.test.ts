@@ -51,5 +51,55 @@ describe('keyframes', () => {
 
         expect(typeof move).toBe('string')
     })
+
+    it('should return same name for identical keyframes (deduplication)', () => {
+        const keyframe1 = keyframes({
+            from: { opacity: 0 },
+            to: { opacity: 1 }
+        })
+
+        // Same keyframes should return same name (cached)
+        const keyframe2 = keyframes({
+            from: { opacity: 0 },
+            to: { opacity: 1 }
+        })
+
+        expect(keyframe1).toBe(keyframe2)
+    })
+
+    it('should return different names for different keyframes', () => {
+        const fadeIn = keyframes({
+            from: { opacity: 0 },
+            to: { opacity: 1 }
+        })
+
+        const fadeOut = keyframes({
+            from: { opacity: 1 },
+            to: { opacity: 0 }
+        })
+
+        expect(fadeIn).not.toBe(fadeOut)
+    })
+
+    it('should handle empty keyframe objects', () => {
+        const empty = keyframes({
+            from: {},
+            to: {}
+        })
+
+        expect(typeof empty).toBe('string')
+    })
+
+    it('should handle complex animations with many steps', () => {
+        const complex = keyframes({
+            '0%': { transform: 'rotate(0deg)', opacity: 1 },
+            '25%': { transform: 'rotate(90deg)', opacity: 0.75 },
+            '50%': { transform: 'rotate(180deg)', opacity: 0.5 },
+            '75%': { transform: 'rotate(270deg)', opacity: 0.75 },
+            '100%': { transform: 'rotate(360deg)', opacity: 1 }
+        })
+
+        expect(typeof complex).toBe('string')
+    })
 })
 
