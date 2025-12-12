@@ -60,7 +60,7 @@ export const ThemeProvider = <T extends BaseTheme>({
  * const theme = useTheme<MyCustomTheme>()
  * ```
  *
- * @throws {Error} If used outside of a ThemeProvider
+ * @throws {Error} If used outside a ThemeProvider
  */
 export const useTheme = <T extends BaseTheme = BaseTheme>(): T => {
     const theme = useContext(ThemeContext)

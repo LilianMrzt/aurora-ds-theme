@@ -1,16 +1,16 @@
-# Aurora - CSS-in-JS Theme Library
+# Aurora Theme
 
-A performant, type-safe, and **fully extensible** CSS-in-JS theme management library for React applications.
+A performant, type-safe, and **fully customizable** CSS-in-JS theme management library for React applications.
 
 ## Features
 
-- 🎨 **Theme Management** - Define and switch between themes easily
-- 🔧 **Modular Customization** - Customize colors, spacing, or any token independently
+- 🎨 **Modular Theming** - Customize colors, spacing, or any token independently
+- 🎯 **Color Scales** - 20 color palettes with 12 shades each (25-950)
 - ⚡ **Optimized Performance** - LRU caching, static style deduplication
 - 🖥️ **SSR Support** - Server-side rendering compatible
 - 📦 **Lightweight** - No runtime dependencies besides React
 - 🔒 **Type-safe** - Full TypeScript support with generics
-- 🎯 **CSS-in-JS** - Write styles in JavaScript with full IDE support
+- 🌗 **Dark Mode Ready** - Light and dark variants for all palettes
 
 ## Installation
 
@@ -23,12 +23,12 @@ npm install @aurora-ui/theme
 ```tsx
 import { defaultTheme, ThemeProvider, createStyles } from '@aurora-ui/theme'
 
-// Wrap your app
+// 1. Wrap your app
 <ThemeProvider theme={defaultTheme}>
     <App />
 </ThemeProvider>
 
-// Create styles
+// 2. Create styles
 const STYLES = createStyles((theme) => ({
     container: {
         padding: theme.spacing.md,
@@ -37,26 +37,145 @@ const STYLES = createStyles((theme) => ({
     },
 }))
 
-// Use in components
+// 3. Use in components
 function MyComponent() {
     return <div className={STYLES.container}>Hello!</div>
 }
 ```
 
+---
+
+## Color Scales
+
+Aurora provides **20 color scales** with **12 shades each** (25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950).
+
+### Available Scales
+
+**Neutrals**
+- `gray` - Pure neutral, universal default
+- `slate` - Cool/blue undertone, tech & corporate
+- `stone` - Warm undertone, lifestyle & natural
+
+**Colors**
+- `red` `orange` `amber` `yellow` `lime` `green`
+- `emerald` `teal` `cyan` `sky` `blue` `indigo`
+- `violet` `purple` `fuchsia` `pink` `rose`
+
+### Usage
+
+```tsx
+import { colors, indigo, emerald } from '@aurora-ui/theme'
+
+// Via the colors object
+colors.indigo[500]  // '#6366f1'
+colors.emerald[400] // '#34d399'
+colors.gray[900]    // '#18181b'
+
+// Or import individual scales
+indigo[600]         // '#4f46e5'
+emerald[50]         // '#ecfdf5'
+
+// Special values
+colors.white        // '#ffffff'
+colors.black        // '#000000'
+colors.transparent  // 'transparent'
+```
+
+### Build Custom Theme Colors
+
+```tsx
+import { colors, defaultTheme, createTheme } from '@aurora-ui/theme'
+
+const myTheme = createTheme(defaultTheme, {
+    colors: {
+        primary: colors.purple[500],
+        primaryHover: colors.purple[600],
+        primaryActive: colors.purple[700],
+        primarySubtle: colors.purple[50],
+        // ... other colors
+    }
+})
+```
+
+---
+
+## Theme Palettes (Presets)
+
+Aurora includes **8 ready-to-use color palettes**, each with light and dark variants.
+
+### Available Palettes
+
+| Palette | Style | Best For |
+|---------|-------|----------|
+| `indigo` | Modern, professional | SaaS, business apps |
+| `rose` | Warm, friendly | Social, lifestyle |
+| `emerald` | Fresh, natural | Health, fintech |
+| `violet` | Creative, bold | Creative, gaming |
+| `amber` | Energetic, warm | Food, education |
+| `cyan` | Tech, modern | Tech, startups |
+| `slate` | Minimal, corporate | Enterprise, B2B |
+| `gray` | Ultra minimal | Portfolios, luxury |
+
+### Usage
+
+```tsx
+import { 
+    palettes, 
+    roseLight, 
+    roseDark,
+    createTheme, 
+    defaultTheme 
+} from '@aurora-ui/theme'
+
+// Option 1: Import directly
+const roseTheme = createTheme(defaultTheme, { colors: roseLight })
+const roseDarkTheme = createTheme(defaultTheme, { colors: roseDark })
+
+// Option 2: Via palettes object
+const theme = createTheme(defaultTheme, { 
+    colors: palettes.emerald.light 
+})
+
+// Option 3: Dynamic switching
+const [isDark, setIsDark] = useState(false)
+const theme = createTheme(defaultTheme, {
+    colors: palettes.violet[isDark ? 'dark' : 'light']
+})
+```
+
+---
+
 ## Modular Customization
 
-Aurora exports individual presets so you can customize only what you need:
+Customize only what you need - colors, spacing, or any individual token.
+
+### Available Presets
+
+```tsx
+import {
+    // Complete themes
+    defaultTheme,
+    defaultDarkTheme,
+    
+    // Individual presets
+    defaultColors,
+    defaultDarkColors,
+    defaultSpacing,
+    defaultRadius,
+    defaultShadows,
+    defaultFontSize,
+    defaultFontWeight,
+    defaultLineHeight,
+    defaultZIndex,
+    defaultTransition,
+} from '@aurora-ui/theme'
+```
 
 ### Customize Only Colors
 
 ```tsx
-import {
-    defaultTheme,
-    defaultColors,
-    createTheme,
-} from '@aurora-ui/theme'
+import { defaultTheme, defaultColors, createTheme } from '@aurora-ui/theme'
 
-// Override just the colors you want
 const myTheme = createTheme(defaultTheme, {
     colors: {
         ...defaultColors,
@@ -69,17 +188,13 @@ const myTheme = createTheme(defaultTheme, {
 ### Customize Only Spacing
 
 ```tsx
-import {
-    defaultTheme,
-    defaultSpacing,
-    createTheme,
-} from '@aurora-ui/theme'
+import { defaultTheme, defaultSpacing, createTheme } from '@aurora-ui/theme'
 
 const myTheme = createTheme(defaultTheme, {
     spacing: {
         ...defaultSpacing,
-        md: '1.25rem', // Override medium spacing
-        lg: '2rem',    // Override large spacing
+        md: '1.25rem',  // Override medium
+        lg: '2rem',     // Override large
     },
 })
 ```
@@ -87,53 +202,73 @@ const myTheme = createTheme(defaultTheme, {
 ### Mix and Match
 
 ```tsx
-import {
-    defaultColors,
-    defaultDarkColors,
-    defaultSpacing,
+import { 
+    defaultSpacing, 
     defaultRadius,
     defaultShadows,
-    defaultFontSize,
-    defaultFontWeight,
-    defaultLineHeight,
-    defaultZIndex,
-    defaultTransition,
+    emeraldLight,
+    createTheme,
+    defaultTheme,
 } from '@aurora-ui/theme'
 
-// Build a completely custom theme from presets
-const myCustomTheme: BaseTheme = {
-    colors: {
-        ...defaultColors,
-        primary: '#0066cc',
-    },
-    spacing: defaultSpacing,
+const myTheme = createTheme(defaultTheme, {
+    colors: emeraldLight,           // Use emerald palette
+    spacing: defaultSpacing,         // Keep default spacing
     radius: {
         ...defaultRadius,
-        md: '8px', // More rounded
+        md: '8px',                   // More rounded
     },
-    shadows: defaultShadows,
-    fontSize: defaultFontSize,
-    fontWeight: defaultFontWeight,
-    lineHeight: defaultLineHeight,
-    zIndex: defaultZIndex,
-    transition: defaultTransition,
+})
+```
+
+---
+
+## Theme Structure
+
+### Colors
+
+| Token | Description |
+|-------|-------------|
+| `primary`, `onPrimary`, `primaryHover`, `primaryActive`, `primarySubtle` | Primary brand color |
+| `secondary`, `onSecondary`, `secondaryHover`, `secondaryActive`, `secondarySubtle` | Secondary actions |
+| `accent`, `onAccent`, `accentHover`, `accentSubtle` | Accent/highlight |
+| `background`, `surface`, `surfaceHover`, `surfaceActive`, `elevated`, `overlay` | Surfaces |
+| `text`, `textSecondary`, `textTertiary`, `textInverse` | Text hierarchy |
+| `border`, `borderHover`, `borderFocus`, `borderSubtle` | Borders |
+| `success`, `warning`, `error`, `info` + variants | Semantic colors |
+| `link`, `linkHover`, `linkVisited`, `focus` | Interactive |
+| `disabled`, `disabledText` | Disabled states |
+
+### Spacing
+
+```tsx
+spacing: {
+    none: '0',
+    px: '1px',
+    xs: '0.25rem',   // 4px
+    sm: '0.5rem',    // 8px
+    md: '1rem',      // 16px
+    lg: '1.5rem',    // 24px
+    xl: '2rem',      // 32px
+    '2xl': '3rem',   // 48px
+    '3xl': '4rem',   // 64px
+    '4xl': '6rem',   // 96px
 }
 ```
 
-## Available Presets
+### Other Tokens
 
-| Preset | Description |
-|--------|-------------|
-| `defaultColors` | Light mode color palette |
-| `defaultDarkColors` | Dark mode color palette |
-| `defaultSpacing` | Spacing scale (none → 4xl) |
-| `defaultRadius` | Border radius scale |
-| `defaultShadows` | Shadow/elevation scale |
-| `defaultFontSize` | Typography size scale |
-| `defaultFontWeight` | Font weight scale |
-| `defaultLineHeight` | Line height scale |
-| `defaultZIndex` | Z-index layering scale |
-| `defaultTransition` | Animation timing presets |
+| Token | Values |
+|-------|--------|
+| `radius` | `none`, `sm`, `md`, `lg`, `xl`, `2xl`, `full` |
+| `shadows` | `none`, `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `inner` |
+| `fontSize` | `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `3xl`, `4xl`, `5xl`, `6xl` |
+| `fontWeight` | `thin`, `light`, `regular`, `medium`, `semibold`, `bold`, `extrabold` |
+| `lineHeight` | `none`, `tight`, `snug`, `normal`, `relaxed`, `loose` |
+| `zIndex` | `behind`, `base`, `dropdown`, `sticky`, `fixed`, `overlay`, `modal`, `popover`, `tooltip`, `toast` |
+| `transition` | `fast`, `normal`, `slow`, `slower` |
+
+---
 
 ## Extending Types
 
@@ -159,7 +294,12 @@ const STYLES = createStyles<MyTheme>((theme) => ({
         backgroundColor: theme.colors.brand, // ✅ TypeScript knows this!
     },
 }))
+
+// Access in components
+const theme = useTheme<MyTheme>()
 ```
+
+---
 
 ## Dynamic Styles
 
@@ -177,35 +317,7 @@ const STYLES = createStyles((theme) => ({
 <button className={STYLES.button('primary', 'md')}>Click me</button>
 ```
 
-## Theme Utilities
-
-### createTheme
-
-```tsx
-const myTheme = createTheme(defaultTheme, {
-    colors: { primary: '#ff0000' },
-})
-```
-
-### mergeThemes
-
-```tsx
-const theme = mergeThemes(
-    defaultTheme,
-    brandOverrides,
-    darkModeOverrides
-)
-```
-
-### createThemeVariant
-
-```tsx
-const createDarkVariant = createThemeVariant({
-    colors: defaultDarkColors,
-})
-
-const darkTheme = createDarkVariant(lightTheme)
-```
+---
 
 ## SSR Support
 
@@ -229,15 +341,20 @@ const fullHtml = `
 clearSSRRules() // Reset for next request
 ```
 
+---
+
 ## API Reference
 
-### Theme Types
+### Types
 
 | Type | Description |
 |------|-------------|
 | `BaseTheme` | Complete theme structure |
 | `BaseColors` | Color token type |
 | `BaseSpacing` | Spacing token type |
+| `ColorScale` | Color scale type (25-950) |
+| `ColorName` | Union of color scale names |
+| `PaletteName` | Union of palette names |
 | `ExtendTheme<T>` | Helper to extend theme |
 | `DeepPartial<T>` | For partial overrides |
 
@@ -256,6 +373,8 @@ clearSSRRules() // Reset for next request
 | `keyframes()` | CSS keyframe animations |
 | `fontFace()` | @font-face rules |
 | `cssVariables()` | CSS custom properties |
+
+---
 
 ## License
 
