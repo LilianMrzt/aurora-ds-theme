@@ -1,17 +1,37 @@
-import { createContext, FC, useContext, useLayoutEffect } from 'react'
+import { createContext, useContext, useLayoutEffect, type ReactNode } from 'react'
 
 import { setThemeContextGetter } from '@/utils/styles/styleEngine'
 
-import type { ThemeProviderProps } from './ThemeProvider.props'
-import type { Theme } from '@/types/Theme'
+import type { BaseTheme } from '@/types/Theme'
 
-const ThemeContext = createContext<Theme | undefined>(undefined)
+const ThemeContext = createContext<BaseTheme | undefined>(undefined)
+
+export type ThemeProviderProps<T extends BaseTheme = BaseTheme> = {
+    theme: T
+    children?: ReactNode
+}
 
 /**
  * Theme provider component
  * Provides theme context to all child components
+ *
+ * @example
+ * ```tsx
+ * // With default theme
+ * <ThemeProvider theme={defaultTheme}>
+ *     <App />
+ * </ThemeProvider>
+ *
+ * // With custom extended theme
+ * <ThemeProvider theme={myCustomTheme}>
+ *     <App />
+ * </ThemeProvider>
+ * ```
  */
-export const ThemeProvider: FC<ThemeProviderProps> = ({ theme, children }) => {
+export const ThemeProvider = <T extends BaseTheme>({
+    theme,
+    children
+}: ThemeProviderProps<T>) => {
     const previousGetter = setThemeContextGetter(() => theme)
 
     useLayoutEffect(() => {
@@ -29,15 +49,26 @@ export const ThemeProvider: FC<ThemeProviderProps> = ({ theme, children }) => {
 
 /**
  * Hook to access the current theme
+ * Use the generic parameter to get proper typing for extended themes
+ *
+ * @example
+ * ```tsx
+ * // Basic usage
+ * const theme = useTheme()
+ *
+ * // With custom theme type
+ * const theme = useTheme<MyCustomTheme>()
+ * ```
+ *
  * @throws {Error} If used outside of a ThemeProvider
  */
-export const useTheme = (): Theme => {
+export const useTheme = <T extends BaseTheme = BaseTheme>(): T => {
     const theme = useContext(ThemeContext)
 
     if (!theme) {
         throw new Error('useTheme must be used within a ThemeProvider')
     }
 
-    return theme
+    return theme as T
 }
 

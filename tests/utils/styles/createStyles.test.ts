@@ -3,10 +3,10 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { createStyles, setThemeContextGetter } from '@/index'
 import { mockTheme } from '@tests/utils/styles/mockTheme'
 
-import type { Theme } from '@/types/Theme'
+import type { BaseTheme } from '@/types/Theme'
 
 describe('createStyles', () => {
-    let previousGetter: (() => Theme | undefined) | null
+    let previousGetter: (() => BaseTheme | undefined) | null
 
     beforeEach(() => {
         previousGetter = setThemeContextGetter(() => mockTheme)
@@ -157,7 +157,7 @@ describe('setThemeContextGetter', () => {
 })
 
 describe('createStyles edge cases', () => {
-    let previousGetter: (() => Theme | undefined) | null
+    let previousGetter: (() => BaseTheme | undefined) | null
 
     beforeEach(() => {
         previousGetter = setThemeContextGetter(() => mockTheme)
@@ -261,7 +261,7 @@ describe('createStyles without theme function', () => {
 })
 
 describe('static style caching', () => {
-    let previousGetter: (() => Theme | undefined) | null
+    let previousGetter: (() => BaseTheme | undefined) | null
 
     beforeEach(() => {
         previousGetter = setThemeContextGetter(() => mockTheme)
@@ -307,7 +307,7 @@ describe('static style caching', () => {
 })
 
 describe('media queries support', () => {
-    let previousGetter: (() => Theme | undefined) | null
+    let previousGetter: (() => BaseTheme | undefined) | null
 
     beforeEach(() => {
         previousGetter = setThemeContextGetter(() => mockTheme)
@@ -349,7 +349,7 @@ describe('media queries support', () => {
 })
 
 describe('container queries support', () => {
-    let previousGetter: (() => Theme | undefined) | null
+    let previousGetter: (() => BaseTheme | undefined) | null
 
     beforeEach(() => {
         previousGetter = setThemeContextGetter(() => mockTheme)
@@ -392,7 +392,7 @@ describe('container queries support', () => {
 })
 
 describe('complex selectors support', () => {
-    let previousGetter: (() => Theme | undefined) | null
+    let previousGetter: (() => BaseTheme | undefined) | null
 
     beforeEach(() => {
         previousGetter = setThemeContextGetter(() => mockTheme)
@@ -446,7 +446,7 @@ describe('complex selectors support', () => {
 })
 
 describe('@supports feature queries', () => {
-    let previousGetter: (() => Theme | undefined) | null
+    let previousGetter: (() => BaseTheme | undefined) | null
 
     beforeEach(() => {
         previousGetter = setThemeContextGetter(() => mockTheme)

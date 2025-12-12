@@ -1,11 +1,11 @@
 import type { StyleWithPseudos } from './types'
-import type { Theme } from '@/types/Theme'
+import type { BaseTheme } from '@/types/Theme'
 
 // Environment detection (constant since it never changes)
 const IS_SERVER = typeof document === 'undefined'
 
 // Global theme getter
-let themeContextGetter: (() => Theme | undefined) | null = null
+let themeContextGetter: (() => BaseTheme | undefined) | null = null
 
 // Stylesheet for client-side injection
 let styleSheet: CSSStyleSheet | null = null
@@ -77,7 +77,7 @@ if (!IS_SERVER) {
 /**
  * Set the theme getter
  */
-export const setThemeContextGetter = (getter: (() => Theme | undefined) | null): (() => Theme | undefined) | null => {
+export const setThemeContextGetter = (getter: (() => BaseTheme | undefined) | null): (() => BaseTheme | undefined) | null => {
     const previous = themeContextGetter
     themeContextGetter = getter
     return previous
@@ -86,7 +86,7 @@ export const setThemeContextGetter = (getter: (() => Theme | undefined) | null):
 /**
  * Get the current theme
  */
-export const getTheme = (): Theme | undefined => {
+export const getTheme = (): BaseTheme | undefined => {
     return themeContextGetter?.()
 }
 

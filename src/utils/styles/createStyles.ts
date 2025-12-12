@@ -10,7 +10,7 @@ import {
 } from './styleEngine'
 
 import type { StyleFunction, StyleWithPseudos } from './types'
-import type { Theme } from '@/types/Theme'
+import type { BaseTheme } from '@/types/Theme'
 
 /**
  * Extract component name from stack trace
@@ -62,41 +62,46 @@ const processStyles = <T extends Record<string, StyleWithPseudos | StyleFunction
 /**
  * Create typed styles with support for pseudo-classes, media queries, container queries, feature queries and complex selectors
  *
+ * Supports custom extended themes via generic parameter.
+ *
  * @example
  * ```ts
+ * // Basic usage with default theme
  * const STYLES = createStyles((theme) => ({
  *     root: {
  *         display: 'flex',
  *         padding: theme.spacing.md,
- *         // Pseudo-classes
  *         ':hover': { backgroundColor: theme.colors.backgroundHover },
- *         // Media queries
- *         '@media (max-width: 768px)': { flexDirection: 'column' },
- *         // Container queries
- *         '@container (min-width: 400px)': { gridTemplateColumns: 'repeat(2, 1fr)' },
- *         // Feature queries (@supports)
- *         '@supports (display: grid)': { display: 'grid' },
- *         // Complex selectors
- *         '& > div': { marginBottom: theme.spacing.sm },
- *         '&:first-child': { marginTop: 0 },
+ *     }
+ * }))
+ *
+ * // With custom extended theme
+ * type MyTheme = BaseTheme & { colors: BaseColors & { accent: string } }
+ *
+ * const STYLES = createStyles<MyTheme>((theme) => ({
+ *     root: {
+ *         backgroundColor: theme.colors.accent, // TypeScript knows about accent!
  *     }
  * }))
  * ```
  */
-export const createStyles = <T extends Record<string, StyleWithPseudos | StyleFunction>>(
-    stylesOrCreator: T | ((theme: Theme) => T)
-): { [K in keyof T]: T[K] extends (...args: infer TArgs) => StyleWithPseudos ? (...args: TArgs) => string : string } => {
+export const createStyles = <
+    TTheme extends BaseTheme = BaseTheme,
+    T extends Record<string, StyleWithPseudos | StyleFunction> = Record<string, StyleWithPseudos | StyleFunction>
+>(
+        stylesOrCreator: T | ((theme: TTheme) => T)
+    ): { [K in keyof T]: T[K] extends (...args: infer TArgs) => StyleWithPseudos ? (...args: TArgs) => string : string } => {
     type Result = { [K in keyof T]: T[K] extends (...args: infer TArgs) => StyleWithPseudos ? (...args: TArgs) => string : string }
     const componentName = getComponentNameFromStack()
 
     // Styles with theme (function)
     if (typeof stylesOrCreator === 'function') {
         let cached: Result | null = null
-        let lastTheme: Theme | undefined
+        let lastTheme: TTheme | undefined
 
         return new Proxy({} as Result, {
             get(_, prop: string | symbol) {
-                const theme = getTheme()
+                const theme = getTheme() as TTheme | undefined
                 if (!theme) {
                     throw new Error('createStyles: Theme context not found. Make sure you are using this inside a ThemeProvider.')
                 }

@@ -1,11 +1,27 @@
 // Main exports for @aurora-ui/theme
 
 // Types
-export type { Theme } from './types/Theme'
+export type {
+    Theme,
+    BaseTheme,
+    BaseColors,
+    BaseSpacing,
+    BaseRadius,
+    BaseShadows,
+    BaseFontSize,
+    BaseFontWeight,
+    ExtendTheme,
+    DeepPartial,
+    ThemeOverride,
+} from './types/Theme'
 
 // Providers
 export { ThemeProvider, useTheme } from './providers/ThemeProvider'
-export type { ThemeProviderProps } from './providers/ThemeProvider.props'
+export type { ThemeProviderProps } from './providers/ThemeProvider'
+
+// Theme utilities
+export { createTheme, mergeThemes, createThemeVariant } from './utils/theme/createTheme'
+export { defaultTheme, defaultDarkTheme } from './utils/theme/defaultTheme'
 
 // Style utilities
 export { createStyles } from './utils/styles/createStyles'
