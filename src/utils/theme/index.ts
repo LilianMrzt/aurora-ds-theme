@@ -1,4 +1,5 @@
 export { createTheme, mergeThemes, createThemeVariant } from './createTheme'
+
 export {
     // Complete themes
     defaultTheme,
@@ -15,4 +16,54 @@ export {
     defaultZIndex,
     defaultTransition,
 } from './defaultTheme'
+
+// Color scales (25-950 shades)
+export {
+    colors,
+    gray,
+    slate,
+    stone,
+    red,
+    orange,
+    amber,
+    yellow,
+    lime,
+    green,
+    emerald,
+    teal,
+    cyan,
+    sky,
+    blue,
+    indigo,
+    violet,
+    purple,
+    fuchsia,
+    pink,
+    rose,
+    white,
+    black,
+    transparent,
+    current,
+} from './colors'
+
+// Theme presets (ready-to-use color palettes)
+export {
+    palettes,
+    indigoLight,
+    indigoDark,
+    roseLight,
+    roseDark,
+    emeraldLight,
+    emeraldDark,
+    violetLight,
+    violetDark,
+    amberLight,
+    amberDark,
+    cyanLight,
+    cyanDark,
+    slateLight,
+    slateDark,
+    grayLight,
+    grayDark,
+} from './palettes'
 

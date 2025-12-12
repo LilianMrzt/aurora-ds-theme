@@ -1,175 +1,7 @@
+import { indigoLight, indigoDark } from './palettes'
+
 import type { BaseTheme } from '@/types/Theme'
 
-/**
- * Default color palette - Modern 2025 aesthetic
- * Inspired by Linear, Vercel, Stripe, and contemporary design trends
- */
-export const defaultColors: BaseTheme['colors'] = {
-    // === PRIMARY (Electric Indigo) ===
-    // A vibrant, modern indigo with slight purple undertone
-    primary: '#6366f1',
-    onPrimary: '#ffffff',
-    primaryHover: '#4f46e5',
-    primaryActive: '#4338ca',
-    primarySubtle: '#eef2ff',
-
-    // === SECONDARY (Modern Gray) ===
-    // Clean, neutral gray with cool undertone
-    secondary: '#6b7280',
-    onSecondary: '#ffffff',
-    secondaryHover: '#4b5563',
-    secondaryActive: '#374151',
-    secondarySubtle: '#f3f4f6',
-
-    // === ACCENT (Vibrant Cyan) ===
-    // Eye-catching cyan for highlights and CTAs
-    accent: '#06b6d4',
-    onAccent: '#ffffff',
-    accentHover: '#0891b2',
-    accentSubtle: '#ecfeff',
-
-    // === NEUTRAL / SURFACE ===
-    // Clean, minimal surfaces
-    background: '#ffffff',
-    surface: '#fafafa',
-    surfaceHover: '#f4f4f5',
-    surfaceActive: '#e4e4e7',
-    elevated: '#ffffff',
-    overlay: 'rgba(9, 9, 11, 0.5)',
-
-    // === TEXT ===
-    // High contrast, crisp text
-    text: '#09090b',
-    textSecondary: '#52525b',
-    textTertiary: '#a1a1aa',
-    textInverse: '#fafafa',
-
-    // === BORDER ===
-    // Subtle, modern borders
-    border: '#e4e4e7',
-    borderHover: '#d4d4d8',
-    borderFocus: '#6366f1',
-    borderSubtle: '#f4f4f5',
-
-    // === SUCCESS (Mint Green) ===
-    // Fresh, modern green
-    success: '#10b981',
-    onSuccess: '#ffffff',
-    successHover: '#059669',
-    successSubtle: '#ecfdf5',
-
-    // === WARNING (Warm Orange) ===
-    // Vibrant but not aggressive
-    warning: '#f97316',
-    onWarning: '#ffffff',
-    warningHover: '#ea580c',
-    warningSubtle: '#fff7ed',
-
-    // === ERROR (Vibrant Red) ===
-    // Clear, modern red
-    error: '#ef4444',
-    onError: '#ffffff',
-    errorHover: '#dc2626',
-    errorSubtle: '#fef2f2',
-
-    // === INFO (Cool Blue) ===
-    // Distinct from primary, informational
-    info: '#3b82f6',
-    onInfo: '#ffffff',
-    infoHover: '#2563eb',
-    infoSubtle: '#eff6ff',
-
-    // === INTERACTIVE ===
-    link: '#6366f1',
-    linkHover: '#4f46e5',
-    linkVisited: '#8b5cf6',
-    focus: '#6366f1',
-
-    // === DISABLED ===
-    disabled: '#f4f4f5',
-    disabledText: '#a1a1aa',
-}
-
-/**
- * Dark mode colors - Premium dark aesthetic
- * OLED-friendly with rich, deep blacks
- */
-export const defaultDarkColors: BaseTheme['colors'] = {
-    // === PRIMARY (Brightened Indigo) ===
-    primary: '#818cf8',
-    onPrimary: '#1e1b4b',
-    primaryHover: '#a5b4fc',
-    primaryActive: '#6366f1',
-    primarySubtle: '#312e81',
-
-    // === SECONDARY (Light Gray) ===
-    secondary: '#9ca3af',
-    onSecondary: '#1f2937',
-    secondaryHover: '#d1d5db',
-    secondaryActive: '#e5e7eb',
-    secondarySubtle: '#1f2937',
-
-    // === ACCENT (Bright Cyan) ===
-    accent: '#22d3ee',
-    onAccent: '#164e63',
-    accentHover: '#67e8f9',
-    accentSubtle: '#164e63',
-
-    // === NEUTRAL / SURFACE ===
-    // Deep, rich blacks
-    background: '#09090b',
-    surface: '#18181b',
-    surfaceHover: '#27272a',
-    surfaceActive: '#3f3f46',
-    elevated: '#27272a',
-    overlay: 'rgba(0, 0, 0, 0.8)',
-
-    // === TEXT ===
-    text: '#fafafa',
-    textSecondary: '#a1a1aa',
-    textTertiary: '#71717a',
-    textInverse: '#09090b',
-
-    // === BORDER ===
-    border: '#27272a',
-    borderHover: '#3f3f46',
-    borderFocus: '#818cf8',
-    borderSubtle: '#18181b',
-
-    // === SUCCESS ===
-    success: '#34d399',
-    onSuccess: '#022c22',
-    successHover: '#6ee7b7',
-    successSubtle: '#064e3b',
-
-    // === WARNING ===
-    warning: '#fb923c',
-    onWarning: '#431407',
-    warningHover: '#fdba74',
-    warningSubtle: '#7c2d12',
-
-    // === ERROR ===
-    error: '#f87171',
-    onError: '#450a0a',
-    errorHover: '#fca5a5',
-    errorSubtle: '#7f1d1d',
-
-    // === INFO ===
-    info: '#60a5fa',
-    onInfo: '#1e3a8a',
-    infoHover: '#93c5fd',
-    infoSubtle: '#1e40af',
-
-    // === INTERACTIVE ===
-    link: '#818cf8',
-    linkHover: '#a5b4fc',
-    linkVisited: '#c4b5fd',
-    focus: '#818cf8',
-
-    // === DISABLED ===
-    disabled: '#27272a',
-    disabledText: '#52525b',
-}
 
 /**
  * Default spacing scale
@@ -280,6 +112,16 @@ export const defaultTransition: BaseTheme['transition'] = {
     slow: '300ms ease-out',
     slower: '500ms ease-out',
 }
+
+/**
+ * Default colors (using indigo palette)
+ */
+export const defaultColors = indigoLight
+
+/**
+ * Default dark colors (using indigo palette)
+ */
+export const defaultDarkColors = indigoDark
 
 /**
  * Complete default light theme

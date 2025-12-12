@@ -18,6 +18,9 @@ export type {
     ThemeOverride,
 } from './types/Theme'
 
+export type { ColorScale, ColorName, ColorShade } from './types/Colors'
+export type { PaletteName } from './types/Palette'
+
 // Providers
 export { ThemeProvider, useTheme } from './providers/ThemeProvider'
 export type { ThemeProviderProps } from './providers/ThemeProvider'
@@ -40,6 +43,56 @@ export {
     defaultZIndex,
     defaultTransition,
 } from './utils/theme/defaultTheme'
+
+// Color scales (25-950 shades)
+export {
+    colors,
+    gray,
+    slate,
+    stone,
+    red,
+    orange,
+    amber,
+    yellow,
+    lime,
+    green,
+    emerald,
+    teal,
+    cyan,
+    sky,
+    blue,
+    indigo,
+    violet,
+    purple,
+    fuchsia,
+    pink,
+    rose,
+    white,
+    black,
+    transparent,
+    current,
+} from './utils/theme/colors'
+
+// Theme presets (ready-to-use palettes)
+export {
+    palettes,
+    indigoLight,
+    indigoDark,
+    roseLight,
+    roseDark,
+    emeraldLight,
+    emeraldDark,
+    violetLight,
+    violetDark,
+    amberLight,
+    amberDark,
+    cyanLight,
+    cyanDark,
+    slateLight,
+    slateDark,
+    grayLight,
+    grayDark,
+} from './utils/theme/palettes'
 
 // Style utilities
 export { createStyles } from './utils/styles/createStyles'

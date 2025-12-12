@@ -15,3 +15,6 @@ export type {
     ThemeOverride,
 } from './Theme'
 
+export type { ColorScale, ColorName, ColorShade } from './Colors'
+export type { PaletteName } from './Palette'
+
