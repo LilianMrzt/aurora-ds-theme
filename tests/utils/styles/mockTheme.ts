@@ -123,13 +123,9 @@ export const mockTheme: Theme = {
         behind: -1,
         base: 0,
         dropdown: 1000,
-        sticky: 1100,
-        fixed: 1200,
         overlay: 1300,
         modal: 1400,
-        popover: 1500,
         tooltip: 1600,
-        toast: 1700,
     },
 
     transition: {
@@ -138,4 +134,3 @@ export const mockTheme: Theme = {
         slow: '350ms ease-out',
     },
 }
-

@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `shadows`: Removed `2xl`, `inner` → Now `none`, `xs`, `sm`, `md`, `lg`, `xl`
   - `fontWeight`: Removed `thin`, `extrabold` → Now `light`, `regular`, `medium`, `semibold`, `bold`
   - `lineHeight`: Removed `snug`, `loose` → Now `none`, `tight`, `normal`, `relaxed`
+  - `zIndex`: Removed `sticky`, `fixed`, `popover`, `toast` → Now `behind`, `base`, `dropdown`, `overlay`, `modal`, `tooltip`
   - `transition`: Removed `slower` → Now `fast`, `normal`, `slow`
 
 ## [0.1.0] - 2025-12-12
