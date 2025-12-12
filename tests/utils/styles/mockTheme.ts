@@ -1,9 +1,9 @@
-import type { BaseTheme } from '@/types'
+import type { Theme } from '@/types'
 
 /**
  * Mock theme for tests
  */
-export const mockTheme: BaseTheme = {
+export const mockTheme: Theme = {
     colors: {
         primary: '#6366f1',
         onPrimary: '#ffffff',

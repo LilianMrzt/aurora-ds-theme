@@ -1,9 +1,9 @@
 import type { BaseColors , BaseFontSize , BaseFontWeight , BaseLineHeight , BaseShadows , BaseSpacing , BaseTransition , BaseZIndex , BaseRadius } from '@/types'
 
 /**
- * Base theme structure with required tokens
+ * Standard theme type with all required tokens
  */
-export type BaseTheme = {
+export type Theme = {
     colors: BaseColors
     spacing: BaseSpacing
     radius: BaseRadius

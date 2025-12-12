@@ -1,12 +1,12 @@
 import { indigoLight, indigoDark } from './palettes'
 
-import type { BaseTheme } from '@/types'
+import type { Theme } from '@/types'
 
 
 /**
  * Default spacing scale
  */
-export const defaultSpacing: BaseTheme['spacing'] = {
+export const defaultSpacing: Theme['spacing'] = {
     none: '0',
     px: '1px',
     xs: '0.25rem',     // 4px
@@ -22,7 +22,7 @@ export const defaultSpacing: BaseTheme['spacing'] = {
 /**
  * Default border radius scale
  */
-export const defaultRadius: BaseTheme['radius'] = {
+export const defaultRadius: Theme['radius'] = {
     none: '0',
     sm: '0.25rem',     // 4px
     md: '0.375rem',    // 6px
@@ -35,7 +35,7 @@ export const defaultRadius: BaseTheme['radius'] = {
 /**
  * Default shadow scale
  */
-export const defaultShadows: BaseTheme['shadows'] = {
+export const defaultShadows: Theme['shadows'] = {
     none: 'none',
     xs: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
     sm: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
@@ -49,7 +49,7 @@ export const defaultShadows: BaseTheme['shadows'] = {
 /**
  * Default font size scale
  */
-export const defaultFontSize: BaseTheme['fontSize'] = {
+export const defaultFontSize: Theme['fontSize'] = {
     xs: '0.75rem',     // 12px
     sm: '0.875rem',    // 14px
     md: '1rem',        // 16px
@@ -65,7 +65,7 @@ export const defaultFontSize: BaseTheme['fontSize'] = {
 /**
  * Default font weight scale
  */
-export const defaultFontWeight: BaseTheme['fontWeight'] = {
+export const defaultFontWeight: Theme['fontWeight'] = {
     thin: 100,
     light: 300,
     regular: 400,
@@ -78,7 +78,7 @@ export const defaultFontWeight: BaseTheme['fontWeight'] = {
 /**
  * Default line height scale
  */
-export const defaultLineHeight: BaseTheme['lineHeight'] = {
+export const defaultLineHeight: Theme['lineHeight'] = {
     none: 1,
     tight: 1.25,
     snug: 1.375,
@@ -90,7 +90,7 @@ export const defaultLineHeight: BaseTheme['lineHeight'] = {
 /**
  * Default z-index scale
  */
-export const defaultZIndex: BaseTheme['zIndex'] = {
+export const defaultZIndex: Theme['zIndex'] = {
     behind: -1,
     base: 0,
     dropdown: 1000,
@@ -106,7 +106,7 @@ export const defaultZIndex: BaseTheme['zIndex'] = {
 /**
  * Default transition scale
  */
-export const defaultTransition: BaseTheme['transition'] = {
+export const defaultTransition: Theme['transition'] = {
     fast: '100ms ease-out',
     normal: '200ms ease-out',
     slow: '300ms ease-out',
@@ -126,7 +126,7 @@ export const defaultDarkColors = indigoDark
 /**
  * Complete default light theme
  */
-export const defaultTheme: BaseTheme = {
+export const defaultTheme: Theme = {
     colors: defaultColors,
     spacing: defaultSpacing,
     radius: defaultRadius,
@@ -141,7 +141,7 @@ export const defaultTheme: BaseTheme = {
 /**
  * Complete default dark theme
  */
-export const defaultDarkTheme: BaseTheme = {
+export const defaultDarkTheme: Theme = {
     ...defaultTheme,
     colors: defaultDarkColors,
 }

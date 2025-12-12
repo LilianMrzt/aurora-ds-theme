@@ -9,8 +9,8 @@ export type {
     BaseLineHeight,
     BaseZIndex,
     BaseTransition,
-    BaseTheme,
     Theme,
+    ExtendedTheme,
     ExtendTheme,
     DeepPartial,
     ThemeOverride,
@@ -21,4 +21,3 @@ export type { ColorScale, ColorName, ColorShade } from './colors'
 
 // Palette types
 export type { PaletteName } from './palettes'
-

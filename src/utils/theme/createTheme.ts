@@ -1,4 +1,4 @@
-import type { BaseTheme, DeepPartial } from '@/types'
+import type { Theme, DeepPartial } from '@/types'
 
 /**
  * Simple hash function for objects (djb2)
@@ -15,7 +15,7 @@ const hashObject = (obj: unknown): string => {
 /**
  * Memoization cache for createTheme
  */
-const themeCache = new Map<string, BaseTheme>()
+const themeCache = new Map<string, Theme>()
 
 /**
  * Maximum number of themes to cache before eviction
@@ -82,7 +82,7 @@ const deepMerge = <T extends Record<string, unknown>>(target: T, source: DeepPar
  * })
  * ```
  */
-export const createTheme = <T extends BaseTheme>(
+export const createTheme = <T extends Theme>(
     baseTheme: T,
     overrides: DeepPartial<T>
 ): T => {
@@ -120,7 +120,7 @@ export const createTheme = <T extends BaseTheme>(
  * )
  * ```
  */
-export const mergeThemes = <T extends BaseTheme>(
+export const mergeThemes = <T extends Theme>(
     baseTheme: T,
     ...overrides: DeepPartial<T>[]
 ): T => {
@@ -146,7 +146,7 @@ export const mergeThemes = <T extends BaseTheme>(
  * const darkTheme = createDarkVariant(lightTheme)
  * ```
  */
-export const createThemeVariant = <T extends BaseTheme>(
+export const createThemeVariant = <T extends Theme>(
     variantOverrides: DeepPartial<T>
 ) => {
     return (baseTheme: T): T => createTheme(baseTheme, variantOverrides)

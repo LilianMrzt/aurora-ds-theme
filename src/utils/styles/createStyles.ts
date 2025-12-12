@@ -10,7 +10,7 @@ import {
 } from './styleEngine'
 
 import type { StyleFunction, StyleWithPseudos } from './types'
-import type { BaseTheme } from '@/types'
+import type { Theme } from '@/types'
 
 /**
  * Extract component name from stack trace
@@ -76,7 +76,7 @@ const processStyles = <T extends Record<string, StyleWithPseudos | StyleFunction
  * }))
  *
  * // With custom extended theme
- * type MyTheme = BaseTheme & { colors: BaseColors & { accent: string } }
+ * type MyTheme = Theme & { colors: BaseColors & { accent: string } }
  *
  * const STYLES = createStyles<MyTheme>((theme) => ({
  *     root: {
@@ -86,7 +86,7 @@ const processStyles = <T extends Record<string, StyleWithPseudos | StyleFunction
  * ```
  */
 export const createStyles = <
-    TTheme extends BaseTheme = BaseTheme,
+    TTheme extends Theme = Theme,
     T extends Record<string, StyleWithPseudos | StyleFunction> = Record<string, StyleWithPseudos | StyleFunction>
 >(
         stylesOrCreator: T | ((theme: TTheme) => T)

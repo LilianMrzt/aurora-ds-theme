@@ -349,7 +349,7 @@ clearSSRRules() // Reset for next request
 
 | Type | Description |
 |------|-------------|
-| `BaseTheme` | Complete theme structure |
+| `Theme` | Complete theme structure |
 | `BaseColors` | Color token type |
 | `BaseSpacing` | Spacing token type |
 | `ColorScale` | Color scale type (25-950) |

@@ -11,7 +11,7 @@ import {
     MAX_THEME_CACHE_SIZE,
 } from '@/utils/theme'
 
-import type { DeepPartial, BaseTheme } from '@/types'
+import type { DeepPartial, Theme } from '@/types'
 
 describe('createTheme', () => {
     beforeEach(() => {
@@ -85,7 +85,7 @@ describe('createTheme', () => {
     })
 
     it('should handle undefined values in overrides', () => {
-        const overrides: DeepPartial<BaseTheme> = {
+        const overrides: DeepPartial<Theme> = {
             colors: {
                 primary: undefined,
             },

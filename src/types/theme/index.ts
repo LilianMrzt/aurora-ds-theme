@@ -8,8 +8,8 @@ export type { BaseFontWeight } from './BaseFontWeight'
 export type { BaseLineHeight } from './BaseLineHeight'
 export type { BaseZIndex } from './BaseZIndex'
 export type { BaseTransition } from './BaseTransition'
-export type { BaseTheme } from './BaseTheme'
+export type { Theme } from './BaseTheme'
 
 // Theme utilities
-export type { Theme, ExtendTheme, DeepPartial, ThemeOverride } from './Theme'
+export type { ExtendedTheme, ExtendTheme, DeepPartial, ThemeOverride } from './Theme'
 

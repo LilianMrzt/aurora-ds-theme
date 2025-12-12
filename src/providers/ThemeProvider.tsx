@@ -2,11 +2,11 @@ import { createContext, useContext, useLayoutEffect, type ReactNode } from 'reac
 
 import { setThemeContextGetter } from '@/utils/styles/styleEngine'
 
-import type { BaseTheme } from '@/types'
+import type { Theme } from '@/types'
 
-const ThemeContext = createContext<BaseTheme | undefined>(undefined)
+const ThemeContext = createContext<Theme | undefined>(undefined)
 
-export type ThemeProviderProps<T extends BaseTheme = BaseTheme> = {
+export type ThemeProviderProps<T extends Theme = Theme> = {
     theme: T
     children?: ReactNode
 }
@@ -28,7 +28,7 @@ export type ThemeProviderProps<T extends BaseTheme = BaseTheme> = {
  * </ThemeProvider>
  * ```
  */
-export const ThemeProvider = <T extends BaseTheme>({
+export const ThemeProvider = <T extends Theme>({
     theme,
     children
 }: ThemeProviderProps<T>) => {
@@ -62,7 +62,7 @@ export const ThemeProvider = <T extends BaseTheme>({
  *
  * @throws {Error} If used outside a ThemeProvider
  */
-export const useTheme = <T extends BaseTheme = BaseTheme>(): T => {
+export const useTheme = <T extends Theme = Theme>(): T => {
     const theme = useContext(ThemeContext)
 
     if (!theme) {

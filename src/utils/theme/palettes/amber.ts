@@ -1,9 +1,9 @@
 import { neutralDark, neutralLight } from './shared'
 import { amber, indigo, gray, emerald, orange, red, sky, yellow, white } from '../colors'
 
-import type { BaseTheme } from '@/types'
+import type { Theme } from '@/types'
 
-type ColorPalette = BaseTheme['colors']
+type ColorPalette = Theme['colors']
 
 export const amberLight: ColorPalette = {
     ...neutralLight,

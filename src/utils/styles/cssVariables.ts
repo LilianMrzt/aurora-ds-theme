@@ -1,6 +1,6 @@
 import { insertRule, toKebabCase } from './styleEngine'
 
-import type { BaseTheme } from '@/types'
+import type { Theme } from '@/types'
 
 
 /**
@@ -34,7 +34,7 @@ const generateCssVariables = (obj: Record<string, unknown>, prefix: string): str
  * // Generates: :root { --aurora-colors-primary: #2563EB; ... }
  * ```
  */
-export const injectCssVariables = (theme: BaseTheme, prefix = 'theme'): void => {
+export const injectCssVariables = (theme: Theme, prefix = 'theme'): void => {
     const variables = generateCssVariables(theme, prefix)
     insertRule(`:root{${variables}}`)
 }

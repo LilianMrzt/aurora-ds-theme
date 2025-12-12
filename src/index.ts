@@ -4,7 +4,7 @@
 export type {
     // Theme types
     Theme,
-    BaseTheme,
+    ExtendedTheme,
     BaseColors,
     BaseSpacing,
     BaseRadius,
@@ -117,4 +117,3 @@ export {
 
 // Types for style utilities
 export type { StyleWithPseudos, StyleFunction, FontFaceOptions, CSSProperties } from './utils/styles/types'
-

@@ -1,9 +1,9 @@
-import type { BaseColors , BaseFontSize , BaseFontWeight , BaseLineHeight , BaseRadius , BaseShadows , BaseSpacing , BaseTheme , BaseTransition , BaseZIndex } from '@/types'
+import type { BaseColors , BaseFontSize , BaseFontWeight , BaseLineHeight , BaseRadius , BaseShadows , BaseSpacing , Theme , BaseTransition , BaseZIndex } from '@/types'
 
 /**
  * Generic theme type that allows extending base tokens
  */
-export type Theme<
+export type ExtendedTheme<
     TColors extends BaseColors = BaseColors,
     TSpacing extends BaseSpacing = BaseSpacing,
     TRadius extends BaseRadius = BaseRadius,
@@ -29,8 +29,8 @@ export type Theme<
 /**
  * Helper type to create a custom theme with extensions
  */
-export type ExtendTheme<T extends Partial<BaseTheme> & Record<string, unknown>> =
-    BaseTheme & T
+export type ExtendTheme<T extends Partial<Theme> & Record<string, unknown>> =
+    Theme & T
 
 /**
  * Utility type to deeply make all properties optional
@@ -42,5 +42,5 @@ export type DeepPartial<T> = {
 /**
  * Type for theme overrides
  */
-export type ThemeOverride<T extends BaseTheme = BaseTheme> = DeepPartial<T>
+export type ThemeOverride<T extends Theme = Theme> = DeepPartial<T>
 
