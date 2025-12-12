@@ -1,6 +1,6 @@
 import { gray, white } from '../colors'
 
-import type { BaseTheme } from '@/types/Theme'
+import type { BaseTheme } from '@/types'
 
 type ColorPalette = BaseTheme['colors']
 

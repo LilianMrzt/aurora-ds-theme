@@ -1,4 +1,4 @@
-import type { ColorScale } from '@/types/Colors'
+import type { ColorScale } from '@/types'
 
 export const slate: ColorScale = {
     25: '#fcfcfd',

@@ -1,4 +1,4 @@
-import type { ColorScale } from '@/types/Colors'
+import type { ColorScale } from '@/types'
 
 export const cyan: ColorScale = {
     25: '#f3fefe',

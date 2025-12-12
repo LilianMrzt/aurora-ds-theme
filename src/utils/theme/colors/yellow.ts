@@ -1,4 +1,4 @@
-import type { ColorScale } from '@/types/Colors'
+import type { ColorScale } from '@/types'
 
 export const yellow: ColorScale = {
     25: '#fefef9',

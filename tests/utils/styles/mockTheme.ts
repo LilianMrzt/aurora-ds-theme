@@ -1,4 +1,4 @@
-import type { BaseTheme } from '@/types/Theme'
+import type { BaseTheme } from '@/types'
 
 /**
  * Mock theme for tests

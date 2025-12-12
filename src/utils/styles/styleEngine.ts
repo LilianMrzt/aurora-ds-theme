@@ -1,5 +1,5 @@
 import type { StyleWithPseudos } from './types'
-import type { BaseTheme } from '@/types/Theme'
+import type { BaseTheme } from '@/types'
 
 // Environment detection (constant since it never changes)
 const IS_SERVER = typeof document === 'undefined'

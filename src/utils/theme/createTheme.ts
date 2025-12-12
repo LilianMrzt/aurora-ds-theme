@@ -1,4 +1,4 @@
-import type { BaseTheme, DeepPartial } from '@/types/Theme'
+import type { BaseTheme, DeepPartial } from '@/types'
 
 /**
  * Deep merge two objects

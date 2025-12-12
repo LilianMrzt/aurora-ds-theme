@@ -10,7 +10,7 @@ import {
 } from './styleEngine'
 
 import type { StyleFunction, StyleWithPseudos } from './types'
-import type { BaseTheme } from '@/types/Theme'
+import type { BaseTheme } from '@/types'
 
 /**
  * Extract component name from stack trace

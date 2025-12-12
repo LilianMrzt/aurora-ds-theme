@@ -1,6 +1,6 @@
 import { insertRule, toKebabCase } from './styleEngine'
 
-import type { BaseTheme } from '@/types/Theme'
+import type { BaseTheme } from '@/types'
 
 
 /**

@@ -2,7 +2,7 @@ import { createContext, useContext, useLayoutEffect, type ReactNode } from 'reac
 
 import { setThemeContextGetter } from '@/utils/styles/styleEngine'
 
-import type { BaseTheme } from '@/types/Theme'
+import type { BaseTheme } from '@/types'
 
 const ThemeContext = createContext<BaseTheme | undefined>(undefined)
 

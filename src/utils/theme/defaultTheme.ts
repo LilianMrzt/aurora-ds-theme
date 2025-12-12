@@ -1,6 +1,6 @@
 import { indigoLight, indigoDark } from './palettes'
 
-import type { BaseTheme } from '@/types/Theme'
+import type { BaseTheme } from '@/types'
 
 
 /**

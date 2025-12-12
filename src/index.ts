@@ -2,6 +2,7 @@
 
 // Types
 export type {
+    // Theme types
     Theme,
     BaseTheme,
     BaseColors,
@@ -16,10 +17,13 @@ export type {
     ExtendTheme,
     DeepPartial,
     ThemeOverride,
-} from './types/Theme'
-
-export type { ColorScale, ColorName, ColorShade } from './types/Colors'
-export type { PaletteName } from './types/Palette'
+    // Color types
+    ColorScale,
+    ColorName,
+    ColorShade,
+    // Palette types
+    PaletteName,
+} from './types'
 
 // Providers
 export { ThemeProvider, useTheme } from './providers/ThemeProvider'

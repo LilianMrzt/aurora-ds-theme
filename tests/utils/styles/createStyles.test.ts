@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { createStyles, setThemeContextGetter } from '@/index'
 import { mockTheme } from '@tests/utils/styles/mockTheme'
 
-import type { BaseTheme } from '@/types/Theme'
+import type { BaseTheme } from '@/types'
 
 describe('createStyles', () => {
     let previousGetter: (() => BaseTheme | undefined) | null

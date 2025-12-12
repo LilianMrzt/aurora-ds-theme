@@ -1,6 +1,5 @@
+// Theme types
 export type {
-    Theme,
-    BaseTheme,
     BaseColors,
     BaseSpacing,
     BaseRadius,
@@ -10,11 +9,16 @@ export type {
     BaseLineHeight,
     BaseZIndex,
     BaseTransition,
+    BaseTheme,
+    Theme,
     ExtendTheme,
     DeepPartial,
     ThemeOverride,
-} from './Theme'
+} from './theme'
 
-export type { ColorScale, ColorName, ColorShade } from './Colors'
-export type { PaletteName } from './Palette'
+// Color types
+export type { ColorScale, ColorName, ColorShade } from './colors'
+
+// Palette types
+export type { PaletteName } from './palettes'
 

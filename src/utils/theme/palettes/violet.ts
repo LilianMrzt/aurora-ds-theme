@@ -1,7 +1,7 @@
 import { neutralDark, neutralLight } from './shared'
 import { violet, pink, gray, emerald, amber, red, blue, purple, white } from '../colors'
 
-import type { BaseTheme } from '@/types/Theme'
+import type { BaseTheme } from '@/types'
 
 type ColorPalette = BaseTheme['colors']
 
