@@ -1,5 +1,5 @@
 {
-  "name": "@aurora-dev-ui/theme",
+  "name": "@aurora-ds/theme",
   "version": "1.0.3",
   "description": "A performant CSS-in-JS theme management library for React",
   "author": "Lilian MARZET <lilian.marzet@gmail.com>",
