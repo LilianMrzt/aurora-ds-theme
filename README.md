@@ -15,13 +15,13 @@ A performant, type-safe, and **fully customizable** CSS-in-JS theme management l
 ## Installation
 
 ```bash
-npm install @aurora-dev-ui/theme
+npm install @aurora-ds/theme
 ```
 
 ## Quick Start
 
 ```tsx
-import { defaultTheme, ThemeProvider, createStyles } from '@aurora-dev-ui/theme'
+import { defaultTheme, ThemeProvider, createStyles } from '@aurora-ds/theme'
 
 // 1. Wrap your app
 <ThemeProvider theme={defaultTheme}>
@@ -64,7 +64,7 @@ Aurora provides **20 color scales** with **12 shades each** (25, 50, 100, 200, 3
 ### Usage
 
 ```tsx
-import { colors, indigo, emerald } from '@aurora-ui/theme'
+import { colors, indigo, emerald } from '@aurora-ds/theme'
 
 // Via the colors object
 colors.indigo[500]  // '#6366f1'
@@ -84,7 +84,7 @@ colors.transparent  // 'transparent'
 ### Build Custom Theme Colors
 
 ```tsx
-import { colors, defaultTheme, createTheme } from '@aurora-ui/theme'
+import { colors, defaultTheme, createTheme } from '@aurora-ds/theme'
 
 const myTheme = createTheme(defaultTheme, {
     colors: {
@@ -125,7 +125,7 @@ import {
     roseDark,
     createTheme, 
     defaultTheme 
-} from '@aurora-ui/theme'
+} from '@aurora-ds/theme'
 
 // Option 1: Import directly
 const roseTheme = createTheme(defaultTheme, { colors: roseLight })
@@ -168,13 +168,13 @@ import {
     defaultLineHeight,
     defaultZIndex,
     defaultTransition,
-} from '@aurora-ui/theme'
+} from '@aurora-ds/theme'
 ```
 
 ### Customize Only Colors
 
 ```tsx
-import { defaultTheme, defaultColors, createTheme } from '@aurora-ui/theme'
+import { defaultTheme, defaultColors, createTheme } from '@aurora-ds/theme'
 
 const myTheme = createTheme(defaultTheme, {
     colors: {
@@ -188,7 +188,7 @@ const myTheme = createTheme(defaultTheme, {
 ### Customize Only Spacing
 
 ```tsx
-import { defaultTheme, defaultSpacing, createTheme } from '@aurora-ui/theme'
+import { defaultTheme, defaultSpacing, createTheme } from '@aurora-ds/theme'
 
 const myTheme = createTheme(defaultTheme, {
     spacing: {
@@ -209,7 +209,7 @@ import {
     emeraldLight,
     createTheme,
     defaultTheme,
-} from '@aurora-ui/theme'
+} from '@aurora-ds/theme'
 
 const myTheme = createTheme(defaultTheme, {
     colors: emeraldLight,           // Use emerald palette
@@ -271,7 +271,7 @@ spacing: {
 Add custom tokens with full TypeScript support:
 
 ```tsx
-import type { BaseColors, ExtendTheme } from '@aurora-ui/theme'
+import type { BaseColors, ExtendTheme } from '@aurora-ds/theme'
 
 // Extend colors
 type MyColors = BaseColors & {
@@ -318,7 +318,7 @@ const STYLES = createStyles((theme) => ({
 ## SSR Support
 
 ```tsx
-import { getSSRStyles, clearSSRRules } from '@aurora-ui/theme'
+import { getSSRStyles, clearSSRRules } from '@aurora-ds/theme'
 
 // Server-side
 const html = renderToString(<App />)
@@ -387,4 +387,6 @@ Interested in contributing? Check out the [Developer Guide](./README.dev.md) for
 ## License
 
 MIT
+
+
 
