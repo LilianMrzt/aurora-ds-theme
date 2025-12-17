@@ -1,6 +1,6 @@
 # Aurora Theme - Developer Guide
 
-This document is intended for developers who want to contribute to the Aurora Theme library.
+This document contains development notes and guidelines for maintaining the Aurora Theme library.
 
 ## Prerequisites
 
