@@ -8,6 +8,7 @@ import type { Theme } from '@/types'
  */
 export const defaultSpacing: Theme['spacing'] = {
     none: '0',
+    '2xs': '0.125rem', // 2px
     xs: '0.25rem',     // 4px
     sm: '0.5rem',      // 8px
     md: '1rem',        // 16px
@@ -44,6 +45,7 @@ export const defaultShadows: Theme['shadows'] = {
  * Default font size scale
  */
 export const defaultFontSize: Theme['fontSize'] = {
+    '2xs': '0.625rem', // 10px
     xs: '0.75rem',     // 12px
     sm: '0.875rem',    // 14px
     md: '1rem',        // 16px

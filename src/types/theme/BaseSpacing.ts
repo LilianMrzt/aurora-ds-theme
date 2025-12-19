@@ -4,6 +4,7 @@
  */
 export type BaseSpacing = {
     none: string
+    '2xs': string
     xs: string
     sm: string
     md: string
