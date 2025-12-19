@@ -51,6 +51,10 @@ export const defaultFontSize: Theme['fontSize'] = {
     md: '1rem',        // 16px
     lg: '1.25rem',     // 20px
     xl: '1.5rem',      // 24px
+    '2xl': '2rem',     // 32px
+    '3xl': '2.5rem',   // 40px
+    '4xl': '3rem',     // 48px
+    '5xl': '4rem',     // 64px
 }
 
 /**
