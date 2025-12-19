@@ -70,6 +70,7 @@ export const mockTheme: Theme = {
 
     spacing: {
         none: '0',
+        '2xs': '0.125rem',
         xs: '0.25rem',
         sm: '0.5rem',
         md: '1rem',
@@ -97,6 +98,7 @@ export const mockTheme: Theme = {
     },
 
     fontSize: {
+        '2xs': '0.625rem',
         xs: '0.75rem',
         sm: '0.875rem',
         md: '1rem',
