@@ -1,4 +1,4 @@
-import { gray, white } from '../colors'
+import { slate, white } from '../colors'
 
 import type { Theme } from '@/types'
 
@@ -6,6 +6,7 @@ type ColorPalette = Theme['colors']
 
 /**
  * Shared neutral colors for light themes
+ * Follows WCAG AA contrast guidelines with slate palette
  */
 export const neutralLight: Omit<ColorPalette,
     | 'primary' | 'onPrimary' | 'primaryHover' | 'primaryActive' | 'primarySubtle'
@@ -17,25 +18,26 @@ export const neutralLight: Omit<ColorPalette,
     | 'error' | 'onError' | 'errorHover' | 'errorSubtle'
     | 'info' | 'onInfo' | 'infoHover' | 'infoSubtle'
 > = {
-    background: white,
-    surface: gray[50],
-    surfaceHover: gray[100],
-    surfaceActive: gray[200],
+    background: slate[50],
+    surface: white,
+    surfaceHover: slate[200],
+    surfaceActive: slate[300],
     elevated: white,
-    overlay: 'rgba(9, 9, 11, 0.5)',
-    text: gray[950],
-    textSecondary: gray[600],
-    textTertiary: gray[400],
-    textInverse: gray[50],
-    border: gray[200],
-    borderHover: gray[300],
-    borderSubtle: gray[100],
-    disabled: gray[100],
-    disabledText: gray[400],
+    overlay: 'rgba(15, 23, 42, 0.6)',
+    text: slate[800],
+    textSecondary: slate[500],
+    textTertiary: slate[400],
+    textInverse: white,
+    border: slate[200],
+    borderHover: slate[300],
+    borderSubtle: slate[100],
+    disabled: slate[300],
+    disabledText: slate[400],
 }
 
 /**
  * Shared neutral colors for dark themes
+ * Follows WCAG AA contrast guidelines with slate palette
  */
 export const neutralDark: Omit<ColorPalette,
     | 'primary' | 'onPrimary' | 'primaryHover' | 'primaryActive' | 'primarySubtle'
@@ -47,20 +49,20 @@ export const neutralDark: Omit<ColorPalette,
     | 'error' | 'onError' | 'errorHover' | 'errorSubtle'
     | 'info' | 'onInfo' | 'infoHover' | 'infoSubtle'
 > = {
-    background: gray[950],
-    surface: gray[900],
-    surfaceHover: gray[800],
-    surfaceActive: gray[700],
-    elevated: gray[800],
+    background: slate[950],
+    surface: slate[900],
+    surfaceHover: slate[800],
+    surfaceActive: slate[700],
+    elevated: slate[800],
     overlay: 'rgba(0, 0, 0, 0.8)',
-    text: gray[50],
-    textSecondary: gray[400],
-    textTertiary: gray[500],
-    textInverse: gray[900],
-    border: gray[800],
-    borderHover: gray[700],
-    borderSubtle: gray[900],
-    disabled: gray[800],
-    disabledText: gray[600],
+    text: slate[50],
+    textSecondary: slate[400],
+    textTertiary: slate[500],
+    textInverse: slate[900],
+    border: slate[800],
+    borderHover: slate[700],
+    borderSubtle: slate[900],
+    disabled: slate[700],
+    disabledText: slate[500],
 }
 

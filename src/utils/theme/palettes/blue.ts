@@ -1,34 +1,34 @@
 import { neutralDark, neutralLight } from './shared'
-import { slate, blue, green, amber, red, white } from '../colors'
+import { blue, slate, green, red, amber, violet, white } from '../colors'
 
 import type { Theme } from '@/types'
 
 type ColorPalette = Theme['colors']
 
 /**
- * Slate light palette - Modern, accessible color scheme
+ * Blue light palette - Modern, accessible color scheme
  * Follows WCAG AA contrast guidelines
  */
-export const slateLight: ColorPalette = {
+export const blueLight: ColorPalette = {
     ...neutralLight,
-    // Primary - Slate palette
-    primary: slate[700],
+    // Primary - Blue palette
+    primary: blue[600],
     onPrimary: white,
-    primaryHover: slate[800],
-    primaryActive: slate[900],
-    primarySubtle: slate[100],
-    // Secondary - Neutral
+    primaryHover: blue[700],
+    primaryActive: blue[800],
+    primarySubtle: blue[50],
+    // Secondary - Neutral with slight blue tint
     secondary: slate[100],
     onSecondary: slate[700],
     secondaryHover: slate[200],
     secondaryActive: slate[300],
     secondarySubtle: slate[50],
-    // Accent
+    // Accent (using primary for consistency)
     accent: blue[600],
     onAccent: white,
     accentHover: blue[700],
     accentSubtle: blue[50],
-    borderFocus: slate[600],
+    borderFocus: blue[500],
     // Semantic colors - Soft and subtle
     success: green[500],
     onSuccess: white,
@@ -47,36 +47,36 @@ export const slateLight: ColorPalette = {
     infoHover: blue[500],
     infoSubtle: blue[50],
     // Interactive
-    link: slate[700],
-    linkHover: slate[800],
-    linkVisited: slate[600],
-    focus: slate[600],
+    link: blue[500],
+    linkHover: blue[600],
+    linkVisited: violet[600],
+    focus: blue[500],
 }
 
 /**
- * Slate dark palette - Modern, accessible color scheme
+ * Blue dark palette - Modern, accessible color scheme
  * Follows WCAG AA contrast guidelines
  */
-export const slateDark: ColorPalette = {
+export const blueDark: ColorPalette = {
     ...neutralDark,
-    // Primary - Slate palette
-    primary: slate[300],
-    onPrimary: slate[900],
-    primaryHover: slate[200],
-    primaryActive: slate[400],
-    primarySubtle: slate[900],
-    // Secondary - Neutral
+    // Primary - Blue palette
+    primary: blue[500],
+    onPrimary: white,
+    primaryHover: blue[400],
+    primaryActive: blue[600],
+    primarySubtle: blue[950],
+    // Secondary - Neutral with slight blue tint
     secondary: slate[800],
     onSecondary: slate[200],
     secondaryHover: slate[700],
     secondaryActive: slate[600],
     secondarySubtle: slate[900],
-    // Accent
+    // Accent (using primary for consistency)
     accent: blue[500],
     onAccent: white,
     accentHover: blue[400],
     accentSubtle: blue[950],
-    borderFocus: slate[300],
+    borderFocus: blue[400],
     // Semantic colors
     success: green[400],
     onSuccess: green[950],
@@ -95,9 +95,9 @@ export const slateDark: ColorPalette = {
     infoHover: blue[300],
     infoSubtle: blue[950],
     // Interactive
-    link: slate[300],
-    linkHover: slate[200],
-    linkVisited: slate[400],
-    focus: slate[300],
+    link: blue[400],
+    linkHover: blue[300],
+    linkVisited: violet[400],
+    focus: blue[400],
 }
 

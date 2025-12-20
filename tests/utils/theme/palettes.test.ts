@@ -4,10 +4,14 @@ import {
     palettes,
     indigoLight,
     indigoDark,
+    blueLight,
+    blueDark,
     roseLight,
     roseDark,
     emeraldLight,
     emeraldDark,
+    tealLight,
+    tealDark,
     violetLight,
     violetDark,
     amberLight,
@@ -39,10 +43,12 @@ const requiredColorKeys: (keyof BaseColors)[] = [
 
 describe('Palettes', () => {
     describe('palettes object', () => {
-        it('should contain all 8 palettes', () => {
+        it('should contain all 10 palettes', () => {
             expect(palettes.indigo).toBeDefined()
+            expect(palettes.blue).toBeDefined()
             expect(palettes.rose).toBeDefined()
             expect(palettes.emerald).toBeDefined()
+            expect(palettes.teal).toBeDefined()
             expect(palettes.violet).toBeDefined()
             expect(palettes.amber).toBeDefined()
             expect(palettes.cyan).toBeDefined()
@@ -62,10 +68,14 @@ describe('Palettes', () => {
         const allPalettes = [
             { name: 'indigoLight', palette: indigoLight },
             { name: 'indigoDark', palette: indigoDark },
+            { name: 'blueLight', palette: blueLight },
+            { name: 'blueDark', palette: blueDark },
             { name: 'roseLight', palette: roseLight },
             { name: 'roseDark', palette: roseDark },
             { name: 'emeraldLight', palette: emeraldLight },
             { name: 'emeraldDark', palette: emeraldDark },
+            { name: 'tealLight', palette: tealLight },
+            { name: 'tealDark', palette: tealDark },
             { name: 'violetLight', palette: violetLight },
             { name: 'violetDark', palette: violetDark },
             { name: 'amberLight', palette: amberLight },
@@ -141,8 +151,10 @@ describe('Palettes', () => {
         it('each palette should have a distinct primary color', () => {
             const primaries = [
                 indigoLight.primary,
+                blueLight.primary,
                 roseLight.primary,
                 emeraldLight.primary,
+                tealLight.primary,
                 violetLight.primary,
                 amberLight.primary,
                 cyanLight.primary,

@@ -1,82 +1,100 @@
 import { neutralDark, neutralLight } from './shared'
-import { amber, indigo, gray, emerald, orange, red, sky, yellow, white } from '../colors'
+import { amber, indigo, slate, green, red, blue, yellow, white } from '../colors'
 
 import type { Theme } from '@/types'
 
 type ColorPalette = Theme['colors']
 
+/**
+ * Amber light palette - Modern, accessible color scheme
+ * Follows WCAG AA contrast guidelines
+ */
 export const amberLight: ColorPalette = {
     ...neutralLight,
+    // Primary - Amber palette (darker shade for better contrast)
     primary: amber[500],
-    onPrimary: white,
+    onPrimary: amber[900],
     primaryHover: amber[600],
     primaryActive: amber[700],
     primarySubtle: amber[50],
-    secondary: gray[500],
-    onSecondary: white,
-    secondaryHover: gray[600],
-    secondaryActive: gray[700],
-    secondarySubtle: gray[100],
-    accent: indigo[500],
+    // Secondary - Neutral with slight tint
+    secondary: slate[100],
+    onSecondary: slate[700],
+    secondaryHover: slate[200],
+    secondaryActive: slate[300],
+    secondarySubtle: slate[50],
+    // Accent
+    accent: indigo[600],
     onAccent: white,
-    accentHover: indigo[600],
+    accentHover: indigo[700],
     accentSubtle: indigo[50],
     borderFocus: amber[500],
-    success: emerald[500],
+    // Semantic colors - Soft and subtle
+    success: green[500],
     onSuccess: white,
-    successHover: emerald[600],
-    successSubtle: emerald[50],
-    warning: orange[500],
-    onWarning: white,
-    warningHover: orange[600],
-    warningSubtle: orange[50],
-    error: red[500],
+    successHover: green[600],
+    successSubtle: green[50],
+    warning: amber[400],
+    onWarning: amber[900],
+    warningHover: amber[500],
+    warningSubtle: amber[50],
+    error: red[400],
     onError: white,
-    errorHover: red[600],
+    errorHover: red[500],
     errorSubtle: red[50],
-    info: sky[500],
+    info: blue[400],
     onInfo: white,
-    infoHover: sky[600],
-    infoSubtle: sky[50],
+    infoHover: blue[500],
+    infoSubtle: blue[50],
+    // Interactive
     link: amber[600],
     linkHover: amber[700],
     linkVisited: yellow[700],
     focus: amber[500],
 }
 
+/**
+ * Amber dark palette - Modern, accessible color scheme
+ * Follows WCAG AA contrast guidelines
+ */
 export const amberDark: ColorPalette = {
     ...neutralDark,
-    primary: amber[400],
+    // Primary - Amber palette
+    primary: amber[500],
     onPrimary: amber[950],
-    primaryHover: amber[300],
-    primaryActive: amber[500],
-    primarySubtle: amber[900],
-    secondary: gray[400],
-    onSecondary: gray[900],
-    secondaryHover: gray[300],
-    secondaryActive: gray[200],
-    secondarySubtle: gray[800],
-    accent: indigo[400],
-    onAccent: indigo[950],
-    accentHover: indigo[300],
-    accentSubtle: indigo[900],
+    primaryHover: amber[400],
+    primaryActive: amber[600],
+    primarySubtle: amber[950],
+    // Secondary - Neutral with slight tint
+    secondary: slate[800],
+    onSecondary: slate[200],
+    secondaryHover: slate[700],
+    secondaryActive: slate[600],
+    secondarySubtle: slate[900],
+    // Accent
+    accent: indigo[500],
+    onAccent: white,
+    accentHover: indigo[400],
+    accentSubtle: indigo[950],
     borderFocus: amber[400],
-    success: emerald[400],
-    onSuccess: emerald[950],
-    successHover: emerald[300],
-    successSubtle: emerald[900],
-    warning: orange[400],
-    onWarning: orange[950],
-    warningHover: orange[300],
-    warningSubtle: orange[900],
+    // Semantic colors
+    success: green[400],
+    onSuccess: green[950],
+    successHover: green[300],
+    successSubtle: green[950],
+    warning: amber[400],
+    onWarning: amber[950],
+    warningHover: amber[300],
+    warningSubtle: amber[950],
     error: red[400],
     onError: red[950],
     errorHover: red[300],
-    errorSubtle: red[900],
-    info: sky[400],
-    onInfo: sky[950],
-    infoHover: sky[300],
-    infoSubtle: sky[900],
+    errorSubtle: red[950],
+    info: blue[400],
+    onInfo: blue[950],
+    infoHover: blue[300],
+    infoSubtle: blue[950],
+    // Interactive
     link: amber[400],
     linkHover: amber[300],
     linkVisited: yellow[400],

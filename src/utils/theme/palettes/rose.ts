@@ -1,82 +1,100 @@
 import { neutralDark, neutralLight } from './shared'
-import { rose, violet, gray, emerald, amber, red, sky, purple, white } from '../colors'
+import { rose, violet, slate, green, amber, red, blue, purple, white } from '../colors'
 
 import type { Theme } from '@/types'
 
 type ColorPalette = Theme['colors']
 
+/**
+ * Rose light palette - Modern, accessible color scheme
+ * Follows WCAG AA contrast guidelines
+ */
 export const roseLight: ColorPalette = {
     ...neutralLight,
-    primary: rose[500],
+    // Primary - Rose palette
+    primary: rose[600],
     onPrimary: white,
-    primaryHover: rose[600],
-    primaryActive: rose[700],
+    primaryHover: rose[700],
+    primaryActive: rose[800],
     primarySubtle: rose[50],
-    secondary: gray[500],
-    onSecondary: white,
-    secondaryHover: gray[600],
-    secondaryActive: gray[700],
-    secondarySubtle: gray[100],
-    accent: violet[500],
+    // Secondary - Neutral with slight tint
+    secondary: slate[100],
+    onSecondary: slate[700],
+    secondaryHover: slate[200],
+    secondaryActive: slate[300],
+    secondarySubtle: slate[50],
+    // Accent
+    accent: violet[600],
     onAccent: white,
-    accentHover: violet[600],
+    accentHover: violet[700],
     accentSubtle: violet[50],
     borderFocus: rose[500],
-    success: emerald[500],
+    // Semantic colors - Soft and subtle
+    success: green[500],
     onSuccess: white,
-    successHover: emerald[600],
-    successSubtle: emerald[50],
-    warning: amber[500],
-    onWarning: white,
-    warningHover: amber[600],
+    successHover: green[600],
+    successSubtle: green[50],
+    warning: amber[400],
+    onWarning: amber[900],
+    warningHover: amber[500],
     warningSubtle: amber[50],
-    error: red[500],
+    error: red[400],
     onError: white,
-    errorHover: red[600],
+    errorHover: red[500],
     errorSubtle: red[50],
-    info: sky[500],
+    info: blue[400],
     onInfo: white,
-    infoHover: sky[600],
-    infoSubtle: sky[50],
+    infoHover: blue[500],
+    infoSubtle: blue[50],
+    // Interactive
     link: rose[500],
     linkHover: rose[600],
-    linkVisited: purple[500],
+    linkVisited: purple[600],
     focus: rose[500],
 }
 
+/**
+ * Rose dark palette - Modern, accessible color scheme
+ * Follows WCAG AA contrast guidelines
+ */
 export const roseDark: ColorPalette = {
     ...neutralDark,
-    primary: rose[400],
-    onPrimary: rose[950],
-    primaryHover: rose[300],
-    primaryActive: rose[500],
-    primarySubtle: rose[900],
-    secondary: gray[400],
-    onSecondary: gray[900],
-    secondaryHover: gray[300],
-    secondaryActive: gray[200],
-    secondarySubtle: gray[800],
-    accent: violet[400],
-    onAccent: violet[950],
-    accentHover: violet[300],
-    accentSubtle: violet[900],
+    // Primary - Rose palette
+    primary: rose[500],
+    onPrimary: white,
+    primaryHover: rose[400],
+    primaryActive: rose[600],
+    primarySubtle: rose[950],
+    // Secondary - Neutral with slight tint
+    secondary: slate[800],
+    onSecondary: slate[200],
+    secondaryHover: slate[700],
+    secondaryActive: slate[600],
+    secondarySubtle: slate[900],
+    // Accent
+    accent: violet[500],
+    onAccent: white,
+    accentHover: violet[400],
+    accentSubtle: violet[950],
     borderFocus: rose[400],
-    success: emerald[400],
-    onSuccess: emerald[950],
-    successHover: emerald[300],
-    successSubtle: emerald[900],
+    // Semantic colors
+    success: green[400],
+    onSuccess: green[950],
+    successHover: green[300],
+    successSubtle: green[950],
     warning: amber[400],
     onWarning: amber[950],
     warningHover: amber[300],
-    warningSubtle: amber[900],
+    warningSubtle: amber[950],
     error: red[400],
     onError: red[950],
     errorHover: red[300],
-    errorSubtle: red[900],
-    info: sky[400],
-    onInfo: sky[950],
-    infoHover: sky[300],
-    infoSubtle: sky[900],
+    errorSubtle: red[950],
+    info: blue[400],
+    onInfo: blue[950],
+    infoHover: blue[300],
+    infoSubtle: blue[950],
+    // Interactive
     link: rose[400],
     linkHover: rose[300],
     linkVisited: purple[400],

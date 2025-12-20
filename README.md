@@ -101,15 +101,17 @@ const myTheme = createTheme(defaultTheme, {
 
 ## Theme Palettes (Presets)
 
-Aurora includes **8 ready-to-use color palettes**, each with light and dark variants.
+Aurora includes **10 ready-to-use color palettes**, each with light and dark variants, designed with improved contrast ratios.
 
 ### Available Palettes
 
 | Palette | Style | Best For |
 |---------|-------|----------|
-| `indigo` | Modern, professional | SaaS, business apps |
+| `indigo` | Modern, professional | SaaS, business apps (default) |
+| `blue` | Clean, trustworthy | Corporate, fintech |
 | `rose` | Warm, friendly | Social, lifestyle |
-| `emerald` | Fresh, natural | Health, fintech |
+| `emerald` | Fresh, natural | Health, eco-friendly |
+| `teal` | Balanced, calming | Healthcare, wellness |
 | `violet` | Creative, bold | Creative, gaming |
 | `amber` | Energetic, warm | Food, education |
 | `cyan` | Tech, modern | Tech, startups |
@@ -121,15 +123,15 @@ Aurora includes **8 ready-to-use color palettes**, each with light and dark vari
 ```tsx
 import { 
     palettes, 
-    roseLight, 
-    roseDark,
+    blueLight, 
+    blueDark,
     createTheme, 
     defaultTheme 
 } from '@aurora-ds/theme'
 
 // Option 1: Import directly
-const roseTheme = createTheme(defaultTheme, { colors: roseLight })
-const roseDarkTheme = createTheme(defaultTheme, { colors: roseDark })
+const blueTheme = createTheme(defaultTheme, { colors: blueLight })
+const blueDarkTheme = createTheme(defaultTheme, { colors: blueDark })
 
 // Option 2: Via palettes object
 const theme = createTheme(defaultTheme, { 
@@ -139,7 +141,7 @@ const theme = createTheme(defaultTheme, {
 // Option 3: Dynamic switching
 const [isDark, setIsDark] = useState(false)
 const theme = createTheme(defaultTheme, {
-    colors: palettes.violet[isDark ? 'dark' : 'light']
+    colors: palettes.teal[isDark ? 'dark' : 'light']
 })
 ```
 

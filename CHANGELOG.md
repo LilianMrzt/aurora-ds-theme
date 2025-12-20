@@ -7,7 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **New Color Palettes** - Added 2 new palettes for a total of 10
+  - `blue` - Clean, trustworthy palette ideal for corporate and fintech apps
+  - `teal` - Balanced, calming palette ideal for healthcare and wellness apps
+
 ### Changed
+
+- **Improved Color Contrast** - Enhanced contrast ratios across all palettes
+  - Primary colors use `600` shade for better contrast on light backgrounds
+  - Warning colors use `amber[400]` with `amber[900]` text for improved readability
+  - Secondary buttons now use ghost style (`slate[100]` background, `slate[700]` text)
+  - Error and info colors use softer `400` shades
+  - Switched neutral base from `gray` to `slate` for better visual hierarchy
+
+- **Indigo Palette Restored** - `indigo` palette now uses true indigo colors instead of blue
+  - Primary: `indigo[600]` (was `blue[600]`)
+  - Accent: `cyan[500]` for complementary contrast
 
 - **Simplified Token Scales** - Reduced token options for a cleaner, more usable API
   - `spacing`: Removed `px`, `2xl`, `3xl`, `4xl` → Now `none`, `xs`, `sm`, `md`, `lg`, `xl`
@@ -37,7 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Colors: `red`, `orange`, `amber`, `yellow`, `lime`, `green`, `emerald`, `teal`, `cyan`, `sky`, `blue`, `indigo`, `violet`, `purple`, `fuchsia`, `pink`, `rose`
 
 - **Theme Palettes**
-  - 8 ready-to-use palettes: `indigo`, `rose`, `emerald`, `violet`, `amber`, `cyan`, `slate`, `gray`
+  - 10 ready-to-use palettes: `indigo`, `blue`, `rose`, `emerald`, `teal`, `violet`, `amber`, `cyan`, `slate`, `gray`
   - Light and dark variants for each palette
 
 - **Styling Utilities**
