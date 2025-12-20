@@ -231,15 +231,15 @@ const myTheme = createTheme(defaultTheme, {
 
 | Token | Description |
 |-------|-------------|
-| `primary`, `onPrimary`, `primaryHover`, `primaryActive`, `primarySubtle` | Primary brand color |
-| `secondary`, `onSecondary`, `secondaryHover`, `secondaryActive`, `secondarySubtle` | Secondary actions |
-| `tertiary`, `onTertiary`, `tertiaryHover`, `tertiaryActive`, `tertiarySubtle` | Tertiary actions |
-| `accent`, `onAccent`, `accentHover`, `accentSubtle` | Accent/highlight |
+| `primary`, `onPrimary`, `primaryHover`, `primaryActive`, `primarySubtle`, `primaryDisabled` | Primary brand color |
+| `secondary`, `onSecondary`, `secondaryHover`, `secondaryActive`, `secondarySubtle`, `secondaryDisabled` | Secondary actions |
+| `tertiary`, `onTertiary`, `tertiaryHover`, `tertiaryActive`, `tertiarySubtle`, `tertiaryDisabled` | Tertiary actions |
+| `accent`, `onAccent`, `accentHover`, `accentActive`, `accentSubtle` | Accent/highlight |
 | `background`, `surface`, `surfaceHover`, `surfaceActive`, `elevated`, `overlay` | Surfaces |
 | `text`, `textSecondary`, `textTertiary`, `textInverse` | Text hierarchy |
 | `border`, `borderHover`, `borderFocus`, `borderSubtle` | Borders |
 | `success`, `warning`, `error`, `info` + variants | Semantic colors |
-| `link`, `linkHover`, `linkVisited`, `focus` | Interactive |
+| `link`, `linkHover`, `linkActive`, `linkVisited`, `focus` | Interactive |
 | `disabled`, `disabledText` | Disabled states |
 
 ### Spacing
@@ -255,17 +255,32 @@ spacing: {
 }
 ```
 
+### Opacity
+
+```tsx
+opacity: {
+    none: 0,       // Fully transparent
+    lowest: 0.05,  // Very subtle
+    low: 0.1,      // Subtle
+    medium: 0.25,  // Noticeable
+    high: 0.5,     // Semi-transparent
+    higher: 0.75,  // Mostly opaque
+    full: 1,       // Fully opaque
+}
+```
+
 ### Other Tokens
 
 | Token | Values |
 |-------|--------|
-| `radius` | `none`, `xs`, `sm`, `md`, `lg`, `xl`, `full` |
-| `shadows` | `none`, `xs`, `sm`, `md`, `lg`, `xl` |
-| `fontSize` | `xs`, `sm`, `md`, `lg`, `xl` |
+| `radius` | `none`, `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `full` |
+| `shadows` | `none`, `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `inner`, `focus` |
+| `fontSize` | `2xs`, `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `3xl`, `4xl`, `5xl` |
 | `fontWeight` | `light`, `regular`, `medium`, `semibold`, `bold` |
-| `lineHeight` | `none`, `tight`, `normal`, `relaxed` |
-| `zIndex` | `behind`, `base`, `dropdown`, `sticky`, `fixed`, `overlay`, `modal`, `popover`, `tooltip`, `toast` |
+| `lineHeight` | `none`, `tight`, `normal`, `relaxed`, `loose` |
+| `zIndex` | `behind`, `base`, `dropdown`, `sticky`, `overlay`, `modal`, `popover`, `tooltip`, `toast` |
 | `transition` | `fast`, `normal`, `slow` |
+| `opacity` | `none`, `lowest`, `low`, `medium`, `high`, `higher`, `full` |
 
 ---
 
@@ -351,6 +366,7 @@ clearSSRRules() // Reset for next request
 | `Theme` | Complete theme structure |
 | `BaseColors` | Color token type |
 | `BaseSpacing` | Spacing token type |
+| `BaseOpacity` | Opacity token type |
 | `ColorScale` | Color scale type (25-950) |
 | `ColorName` | Union of color scale names |
 | `PaletteName` | Union of palette names |
@@ -372,6 +388,33 @@ clearSSRRules() // Reset for next request
 | `keyframes()` | CSS keyframe animations |
 | `fontFace()` | @font-face rules |
 | `cssVariables()` | CSS custom properties |
+
+### Accessibility (WCAG Contrast)
+
+| Export | Description |
+|--------|-------------|
+| `getContrastRatio(fg, bg)` | Calculate contrast ratio between two hex colors (1-21) |
+| `meetsWCAG(fg, bg, level, largeText?)` | Check if colors meet WCAG AA/AAA requirements |
+| `checkContrast(fg, bg)` | Get detailed contrast info (ratio, passes AA/AAA) |
+| `checkThemeContrast(theme, level?)` | Validate all color pairs in a theme |
+| `suggestContrastColor(fg, bg, ratio?)` | Suggest an adjusted color that meets contrast requirements |
+
+```tsx
+import { getContrastRatio, meetsWCAG, checkThemeContrast } from '@aurora-ds/theme'
+
+// Check contrast between two colors
+getContrastRatio('#ffffff', '#6366f1') // 4.54
+
+// Check WCAG compliance
+meetsWCAG('#ffffff', '#6366f1', 'AA') // true
+meetsWCAG('#ffffff', '#6366f1', 'AAA') // false
+
+// Validate entire theme
+const issues = checkThemeContrast(myTheme, 'AA')
+if (issues.length > 0) {
+    console.warn('Contrast issues found:', issues)
+}
+```
 
 ---
 

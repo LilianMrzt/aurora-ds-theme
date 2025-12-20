@@ -17,22 +17,26 @@ export const grayLight: ColorPalette = {
     primaryHover: gray[900],
     primaryActive: gray[950],
     primarySubtle: gray[100],
+    primaryDisabled: gray[400],
     // Secondary - Neutral
     secondary: gray[100],
     onSecondary: gray[700],
     secondaryHover: gray[200],
     secondaryActive: gray[300],
     secondarySubtle: gray[50],
+    secondaryDisabled: gray[100],
     // Tertiary - Warm gray variant
     tertiary: gray[600],
     onTertiary: white,
     tertiaryHover: gray[700],
     tertiaryActive: gray[800],
     tertiarySubtle: gray[100],
+    tertiaryDisabled: gray[400],
     // Accent - Vibrant indigo for highlights
     accent: indigo[600],
     onAccent: white,
     accentHover: indigo[700],
+    accentActive: indigo[800],
     accentSubtle: indigo[50],
     borderFocus: indigo[500],
     // Semantic colors
@@ -55,6 +59,7 @@ export const grayLight: ColorPalette = {
     // Interactive
     link: indigo[600],
     linkHover: indigo[700],
+    linkActive: indigo[800],
     linkVisited: violet[700],
     focus: indigo[500],
 }
@@ -71,22 +76,26 @@ export const grayDark: ColorPalette = {
     primaryHover: gray[50],
     primaryActive: gray[200],
     primarySubtle: gray[900],
+    primaryDisabled: gray[600],
     // Secondary - Neutral
     secondary: gray[700],
     onSecondary: gray[100],
     secondaryHover: gray[600],
     secondaryActive: gray[500],
     secondarySubtle: gray[800],
+    secondaryDisabled: gray[800],
     // Tertiary - Warm gray variant
     tertiary: gray[400],
     onTertiary: gray[950],
     tertiaryHover: gray[300],
     tertiaryActive: gray[500],
     tertiarySubtle: gray[900],
+    tertiaryDisabled: gray[600],
     // Accent - Vibrant indigo for highlights
     accent: indigo[400],
     onAccent: indigo[950],
     accentHover: indigo[300],
+    accentActive: indigo[500],
     accentSubtle: indigo[950],
     borderFocus: indigo[400],
     // Semantic colors
@@ -109,6 +118,7 @@ export const grayDark: ColorPalette = {
     // Interactive
     link: indigo[400],
     linkHover: indigo[300],
+    linkActive: indigo[500],
     linkVisited: violet[400],
     focus: indigo[400],
 }

@@ -17,22 +17,26 @@ export const cyanLight: ColorPalette = {
     primaryHover: cyan[700],
     primaryActive: cyan[800],
     primarySubtle: cyan[50],
+    primaryDisabled: cyan[300],
     // Secondary - Neutral with slight tint
     secondary: slate[100],
     onSecondary: slate[700],
     secondaryHover: slate[200],
     secondaryActive: slate[300],
     secondarySubtle: slate[50],
+    secondaryDisabled: slate[100],
     // Tertiary - Complementary sky blue
     tertiary: sky[500],
     onTertiary: white,
     tertiaryHover: sky[600],
     tertiaryActive: sky[700],
     tertiarySubtle: sky[50],
+    tertiaryDisabled: sky[300],
     // Accent - Warm rose contrast
     accent: rose[500],
     onAccent: white,
     accentHover: rose[600],
+    accentActive: rose[700],
     accentSubtle: rose[50],
     borderFocus: cyan[500],
     // Semantic colors
@@ -55,6 +59,7 @@ export const cyanLight: ColorPalette = {
     // Interactive
     link: cyan[600],
     linkHover: cyan[700],
+    linkActive: cyan[800],
     linkVisited: teal[700],
     focus: cyan[500],
 }
@@ -71,22 +76,26 @@ export const cyanDark: ColorPalette = {
     primaryHover: cyan[300],
     primaryActive: cyan[500],
     primarySubtle: cyan[950],
+    primaryDisabled: cyan[700],
     // Secondary - Neutral with slight tint
     secondary: slate[700],
     onSecondary: slate[100],
     secondaryHover: slate[600],
     secondaryActive: slate[500],
     secondarySubtle: slate[800],
+    secondaryDisabled: slate[800],
     // Tertiary - Complementary sky blue
     tertiary: sky[400],
     onTertiary: sky[950],
     tertiaryHover: sky[300],
     tertiaryActive: sky[500],
     tertiarySubtle: sky[950],
+    tertiaryDisabled: sky[700],
     // Accent - Warm rose contrast
     accent: rose[400],
     onAccent: rose[950],
     accentHover: rose[300],
+    accentActive: rose[500],
     accentSubtle: rose[950],
     borderFocus: cyan[400],
     // Semantic colors
@@ -109,6 +118,7 @@ export const cyanDark: ColorPalette = {
     // Interactive
     link: cyan[400],
     linkHover: cyan[300],
+    linkActive: cyan[500],
     linkVisited: teal[400],
     focus: cyan[400],
 }

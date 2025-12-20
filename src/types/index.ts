@@ -9,6 +9,7 @@ export type {
     BaseLineHeight,
     BaseZIndex,
     BaseTransition,
+    BaseOpacity,
     Theme,
     ExtendedTheme,
     ExtendTheme,

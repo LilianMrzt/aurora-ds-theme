@@ -14,6 +14,7 @@ export type {
     BaseLineHeight,
     BaseZIndex,
     BaseTransition,
+    BaseOpacity,
     ExtendTheme,
     DeepPartial,
     ThemeOverride,
@@ -46,6 +47,7 @@ export {
     defaultLineHeight,
     defaultZIndex,
     defaultTransition,
+    defaultOpacity,
 } from './utils/theme/defaultTheme'
 
 // Color scales (25-950 shades)
@@ -118,6 +120,20 @@ export {
     insertRule,
     sanitizeCssValue,
 } from './utils/styles/styleEngine'
+
+// Contrast utilities (WCAG compliance)
+export {
+    getContrastRatio,
+    meetsWCAG,
+    checkContrast,
+    checkThemeContrast,
+    suggestContrastColor,
+} from './utils/contrast'
+export type {
+    WCAGLevel,
+    ContrastResult,
+    ThemeContrastIssue,
+} from './utils/contrast'
 
 // Types for style utilities
 export type { StyleWithPseudos, StyleFunction, FontFaceOptions, CSSProperties } from './utils/styles/types'

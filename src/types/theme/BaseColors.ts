@@ -8,6 +8,7 @@ export type BaseColors = {
     primaryHover: string
     primaryActive: string
     primarySubtle: string
+    primaryDisabled: string
 
     // === SECONDARY ===
     secondary: string
@@ -15,11 +16,13 @@ export type BaseColors = {
     secondaryHover: string
     secondaryActive: string
     secondarySubtle: string
+    secondaryDisabled: string
 
     // === ACCENT ===
     accent: string
     onAccent: string
     accentHover: string
+    accentActive: string
     accentSubtle: string
 
     // === TERTIARY ===
@@ -28,6 +31,7 @@ export type BaseColors = {
     tertiaryHover: string
     tertiaryActive: string
     tertiarySubtle: string
+    tertiaryDisabled: string
 
     // === NEUTRAL / SURFACE ===
     background: string
@@ -76,6 +80,7 @@ export type BaseColors = {
     // === INTERACTIVE ===
     link: string
     linkHover: string
+    linkActive: string
     linkVisited: string
     focus: string
 

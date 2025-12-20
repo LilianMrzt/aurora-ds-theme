@@ -8,6 +8,7 @@ export type BaseRadius = {
     md: string
     lg: string
     xl: string
+    '2xl': string
     full: string
 }
 

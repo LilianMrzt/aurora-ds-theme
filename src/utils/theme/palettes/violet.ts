@@ -17,22 +17,26 @@ export const violetLight: ColorPalette = {
     primaryHover: violet[700],
     primaryActive: violet[800],
     primarySubtle: violet[50],
+    primaryDisabled: violet[300],
     // Secondary - Neutral with slight tint
     secondary: slate[100],
     onSecondary: slate[700],
     secondaryHover: slate[200],
     secondaryActive: slate[300],
     secondarySubtle: slate[50],
+    secondaryDisabled: slate[100],
     // Tertiary - Complementary purple
     tertiary: purple[500],
     onTertiary: white,
     tertiaryHover: purple[600],
     tertiaryActive: purple[700],
     tertiarySubtle: purple[50],
+    tertiaryDisabled: purple[300],
     // Accent - Vibrant pink
     accent: pink[500],
     onAccent: white,
     accentHover: pink[600],
+    accentActive: pink[700],
     accentSubtle: pink[50],
     borderFocus: violet[500],
     // Semantic colors
@@ -55,6 +59,7 @@ export const violetLight: ColorPalette = {
     // Interactive
     link: violet[600],
     linkHover: violet[700],
+    linkActive: violet[800],
     linkVisited: purple[700],
     focus: violet[500],
 }
@@ -71,22 +76,26 @@ export const violetDark: ColorPalette = {
     primaryHover: violet[300],
     primaryActive: violet[500],
     primarySubtle: violet[950],
+    primaryDisabled: violet[700],
     // Secondary - Neutral with slight tint
     secondary: slate[700],
     onSecondary: slate[100],
     secondaryHover: slate[600],
     secondaryActive: slate[500],
     secondarySubtle: slate[800],
+    secondaryDisabled: slate[800],
     // Tertiary - Complementary purple
     tertiary: purple[400],
     onTertiary: purple[950],
     tertiaryHover: purple[300],
     tertiaryActive: purple[500],
     tertiarySubtle: purple[950],
+    tertiaryDisabled: purple[700],
     // Accent - Vibrant pink
     accent: pink[400],
     onAccent: pink[950],
     accentHover: pink[300],
+    accentActive: pink[500],
     accentSubtle: pink[950],
     borderFocus: violet[400],
     // Semantic colors
@@ -109,6 +118,7 @@ export const violetDark: ColorPalette = {
     // Interactive
     link: violet[400],
     linkHover: violet[300],
+    linkActive: violet[500],
     linkVisited: purple[400],
     focus: violet[400],
 }

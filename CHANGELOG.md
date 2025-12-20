@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2025-12-21
+
+### Added
+
+- **Disabled State Colors** - Added disabled state tokens for primary, secondary and tertiary colors
+  - `primaryDisabled` - Disabled state for primary buttons/actions
+  - `secondaryDisabled` - Disabled state for secondary buttons/actions
+  - `tertiaryDisabled` - Disabled state for tertiary buttons/actions
+
+- **Accent Active State** - Added `accentActive` token for active/pressed state on accent elements
+
+- **Link Active State** - Added `linkActive` token for active/pressed state on links
+
+- **Opacity Tokens** - New `opacity` scale for consistent transparency values
+  - `none` (0), `lowest` (0.05), `low` (0.1), `medium` (0.25), `high` (0.5), `higher` (0.75), `full` (1)
+  - Accessible via `theme.opacity.medium`, etc.
+
+- **Enhanced Token Scales** - Extended existing token scales with new values:
+  - `radius`: Added `2xl` (16px) for larger rounded corners
+  - `shadows`: Added `2xl` (large shadow), `inner` (inset shadow), `focus` (focus ring)
+  - `lineHeight`: Added `loose` (2) for extra-spaced text
+  - `zIndex`: Added `sticky` (1100), `popover` (1500), `toast` (1700)
+
+- **WCAG Contrast Utilities** - New utilities for checking color accessibility
+  - `getContrastRatio(fg, bg)` - Calculate contrast ratio between two colors
+  - `meetsWCAG(fg, bg, level)` - Check if colors meet WCAG AA/AAA requirements
+  - `checkContrast(fg, bg)` - Get detailed contrast information
+  - `checkThemeContrast(theme)` - Validate all color pairs in a theme
+  - `suggestContrastColor(fg, bg)` - Get a suggested color that meets contrast requirements
+
+### Changed
+
+- **Improved Dark Mode Surface Colors** - Adjusted dark mode surface hierarchy for better visibility
+  - `background`: `slate[900]` (was `slate[950]`)
+  - `surface`: `slate[800]` (was `slate[900]`)
+  - Better contrast between layers
+
 ## [1.3.0] - 2025-12-20
 
 ### Added

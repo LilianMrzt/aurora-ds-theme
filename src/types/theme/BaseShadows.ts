@@ -8,5 +8,8 @@ export type BaseShadows = {
     md: string
     lg: string
     xl: string
+    '2xl': string
+    inner: string
+    focus: string
 }
 

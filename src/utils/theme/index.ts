@@ -22,6 +22,7 @@ export {
     defaultLineHeight,
     defaultZIndex,
     defaultTransition,
+    defaultOpacity,
 } from './defaultTheme'
 
 // Color scales (25-950 shades)

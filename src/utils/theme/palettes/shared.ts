@@ -9,11 +9,11 @@ type ColorPalette = Theme['colors']
  * Follows WCAG AA contrast guidelines with slate palette
  */
 export const neutralLight: Omit<ColorPalette,
-    | 'primary' | 'onPrimary' | 'primaryHover' | 'primaryActive' | 'primarySubtle'
-    | 'secondary' | 'onSecondary' | 'secondaryHover' | 'secondaryActive' | 'secondarySubtle'
+    | 'primary' | 'onPrimary' | 'primaryHover' | 'primaryActive' | 'primarySubtle' | 'primaryDisabled'
+    | 'secondary' | 'onSecondary' | 'secondaryHover' | 'secondaryActive' | 'secondarySubtle' | 'secondaryDisabled'
     | 'accent' | 'onAccent' | 'accentHover' | 'accentSubtle'
     | 'tertiary' | 'onTertiary' | 'tertiaryHover' | 'tertiaryActive' | 'tertiarySubtle'
-    | 'borderFocus' | 'link' | 'linkHover' | 'linkVisited' | 'focus'
+    | 'borderFocus' | 'link' | 'linkHover' | 'linkActive' | 'linkVisited' | 'focus'
     | 'success' | 'onSuccess' | 'successHover' | 'successSubtle'
     | 'warning' | 'onWarning' | 'warningHover' | 'warningSubtle'
     | 'error' | 'onError' | 'errorHover' | 'errorSubtle'
@@ -41,11 +41,11 @@ export const neutralLight: Omit<ColorPalette,
  * Follows WCAG AA contrast guidelines with slate palette
  */
 export const neutralDark: Omit<ColorPalette,
-    | 'primary' | 'onPrimary' | 'primaryHover' | 'primaryActive' | 'primarySubtle'
-    | 'secondary' | 'onSecondary' | 'secondaryHover' | 'secondaryActive' | 'secondarySubtle'
+    | 'primary' | 'onPrimary' | 'primaryHover' | 'primaryActive' | 'primarySubtle' | 'primaryDisabled'
+    | 'secondary' | 'onSecondary' | 'secondaryHover' | 'secondaryActive' | 'secondarySubtle' | 'secondaryDisabled'
     | 'accent' | 'onAccent' | 'accentHover' | 'accentSubtle'
     | 'tertiary' | 'onTertiary' | 'tertiaryHover' | 'tertiaryActive' | 'tertiarySubtle'
-    | 'borderFocus' | 'link' | 'linkHover' | 'linkVisited' | 'focus'
+    | 'borderFocus' | 'link' | 'linkHover' | 'linkActive' | 'linkVisited' | 'focus'
     | 'success' | 'onSuccess' | 'successHover' | 'successSubtle'
     | 'warning' | 'onWarning' | 'warningHover' | 'warningSubtle'
     | 'error' | 'onError' | 'errorHover' | 'errorSubtle'

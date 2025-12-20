@@ -6,5 +6,6 @@ export type BaseLineHeight = {
     tight: number
     normal: number
     relaxed: number
+    loose: number
 }
 

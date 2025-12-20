@@ -1,4 +1,4 @@
-import type { BaseColors , BaseFontSize , BaseFontWeight , BaseLineHeight , BaseShadows , BaseSpacing , BaseTransition , BaseZIndex , BaseRadius } from '@/types'
+import type { BaseColors , BaseFontSize , BaseFontWeight , BaseLineHeight , BaseOpacity , BaseShadows , BaseSpacing , BaseTransition , BaseZIndex , BaseRadius } from '@/types'
 
 /**
  * Standard theme type with all required tokens
@@ -13,5 +13,6 @@ export type Theme = {
     lineHeight: BaseLineHeight
     zIndex: BaseZIndex
     transition: BaseTransition
+    opacity: BaseOpacity
 }
 

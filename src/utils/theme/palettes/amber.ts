@@ -17,22 +17,26 @@ export const amberLight: ColorPalette = {
     primaryHover: amber[600],
     primaryActive: amber[700],
     primarySubtle: amber[50],
+    primaryDisabled: amber[300],
     // Secondary - Neutral with warm tint
     secondary: slate[100],
     onSecondary: slate[700],
     secondaryHover: slate[200],
     secondaryActive: slate[300],
     secondarySubtle: slate[50],
+    secondaryDisabled: slate[100],
     // Tertiary - Warm orange complement
     tertiary: orange[500],
     onTertiary: white,
     tertiaryHover: orange[600],
     tertiaryActive: orange[700],
     tertiarySubtle: orange[50],
+    tertiaryDisabled: orange[300],
     // Accent - Contrasting indigo
     accent: indigo[600],
     onAccent: white,
     accentHover: indigo[700],
+    accentActive: indigo[800],
     accentSubtle: indigo[50],
     borderFocus: amber[500],
     // Semantic colors
@@ -55,6 +59,7 @@ export const amberLight: ColorPalette = {
     // Interactive
     link: amber[700],
     linkHover: amber[800],
+    linkActive: amber[900],
     linkVisited: orange[700],
     focus: amber[500],
 }
@@ -71,22 +76,26 @@ export const amberDark: ColorPalette = {
     primaryHover: amber[300],
     primaryActive: amber[500],
     primarySubtle: amber[950],
+    primaryDisabled: amber[700],
     // Secondary - Neutral with warm tint
     secondary: slate[700],
     onSecondary: slate[100],
     secondaryHover: slate[600],
     secondaryActive: slate[500],
     secondarySubtle: slate[800],
+    secondaryDisabled: slate[800],
     // Tertiary - Warm orange complement
     tertiary: orange[400],
     onTertiary: orange[950],
     tertiaryHover: orange[300],
     tertiaryActive: orange[500],
     tertiarySubtle: orange[950],
+    tertiaryDisabled: orange[700],
     // Accent - Contrasting indigo
     accent: indigo[400],
     onAccent: indigo[950],
     accentHover: indigo[300],
+    accentActive: indigo[500],
     accentSubtle: indigo[950],
     borderFocus: amber[400],
     // Semantic colors
@@ -109,6 +118,7 @@ export const amberDark: ColorPalette = {
     // Interactive
     link: amber[400],
     linkHover: amber[300],
+    linkActive: amber[500],
     linkVisited: orange[400],
     focus: amber[400],
 }

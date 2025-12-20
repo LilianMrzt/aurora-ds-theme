@@ -17,22 +17,26 @@ export const slateLight: ColorPalette = {
     primaryHover: slate[800],
     primaryActive: slate[900],
     primarySubtle: slate[100],
+    primaryDisabled: slate[400],
     // Secondary - Neutral
     secondary: slate[100],
     onSecondary: slate[700],
     secondaryHover: slate[200],
     secondaryActive: slate[300],
     secondarySubtle: slate[50],
+    secondaryDisabled: slate[100],
     // Tertiary - Complementary blue-gray
     tertiary: slate[600],
     onTertiary: white,
     tertiaryHover: slate[700],
     tertiaryActive: slate[800],
     tertiarySubtle: slate[100],
+    tertiaryDisabled: slate[400],
     // Accent - Vibrant blue for highlights
     accent: blue[600],
     onAccent: white,
     accentHover: blue[700],
+    accentActive: blue[800],
     accentSubtle: blue[50],
     borderFocus: blue[500],
     // Semantic colors
@@ -55,6 +59,7 @@ export const slateLight: ColorPalette = {
     // Interactive
     link: blue[600],
     linkHover: blue[700],
+    linkActive: blue[800],
     linkVisited: indigo[700],
     focus: blue[500],
 }
@@ -71,22 +76,26 @@ export const slateDark: ColorPalette = {
     primaryHover: slate[100],
     primaryActive: slate[300],
     primarySubtle: slate[900],
+    primaryDisabled: slate[600],
     // Secondary - Neutral
     secondary: slate[700],
     onSecondary: slate[100],
     secondaryHover: slate[600],
     secondaryActive: slate[500],
     secondarySubtle: slate[800],
+    secondaryDisabled: slate[800],
     // Tertiary - Complementary blue-gray
     tertiary: slate[400],
     onTertiary: slate[950],
     tertiaryHover: slate[300],
     tertiaryActive: slate[500],
     tertiarySubtle: slate[900],
+    tertiaryDisabled: slate[600],
     // Accent - Vibrant blue for highlights
     accent: blue[400],
     onAccent: blue[950],
     accentHover: blue[300],
+    accentActive: blue[500],
     accentSubtle: blue[950],
     borderFocus: blue[400],
     // Semantic colors
@@ -109,6 +118,7 @@ export const slateDark: ColorPalette = {
     // Interactive
     link: blue[400],
     linkHover: blue[300],
+    linkActive: blue[500],
     linkVisited: indigo[400],
     focus: blue[400],
 }

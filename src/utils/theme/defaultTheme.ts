@@ -89,9 +89,12 @@ export const defaultZIndex: Theme['zIndex'] = {
     behind: -1,
     base: 0,
     dropdown: 1000,
+    sticky: 1100,
     overlay: 1300,
     modal: 1400,
+    popover: 1500,
     tooltip: 1600,
+    toast: 1700,
 }
 
 /**
@@ -101,6 +104,19 @@ export const defaultTransition: Theme['transition'] = {
     fast: '150ms ease-out',
     normal: '250ms ease-out',
     slow: '350ms ease-out',
+}
+
+/**
+ * Default opacity scale
+ */
+export const defaultOpacity: Theme['opacity'] = {
+    none: 0,
+    lowest: 0.05,
+    low: 0.1,
+    medium: 0.25,
+    high: 0.5,
+    higher: 0.75,
+    full: 1,
 }
 
 /**
@@ -126,6 +142,7 @@ export const defaultTheme: Theme = {
     lineHeight: defaultLineHeight,
     zIndex: defaultZIndex,
     transition: defaultTransition,
+    opacity: defaultOpacity,
 }
 
 /**

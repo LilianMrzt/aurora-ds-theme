@@ -17,22 +17,26 @@ export const emeraldLight: ColorPalette = {
     primaryHover: emerald[700],
     primaryActive: emerald[800],
     primarySubtle: emerald[50],
+    primaryDisabled: emerald[300],
     // Secondary - Neutral with slight tint
     secondary: slate[100],
     onSecondary: slate[700],
     secondaryHover: slate[200],
     secondaryActive: slate[300],
     secondarySubtle: slate[50],
+    secondaryDisabled: slate[100],
     // Tertiary - Complementary teal
     tertiary: teal[500],
     onTertiary: white,
     tertiaryHover: teal[600],
     tertiaryActive: teal[700],
     tertiarySubtle: teal[50],
+    tertiaryDisabled: teal[300],
     // Accent - Warm amber contrast
     accent: amber[500],
     onAccent: amber[950],
     accentHover: amber[600],
+    accentActive: amber[700],
     accentSubtle: amber[50],
     borderFocus: emerald[500],
     // Semantic colors
@@ -55,6 +59,7 @@ export const emeraldLight: ColorPalette = {
     // Interactive
     link: emerald[600],
     linkHover: emerald[700],
+    linkActive: emerald[800],
     linkVisited: teal[700],
     focus: emerald[500],
 }
@@ -71,22 +76,26 @@ export const emeraldDark: ColorPalette = {
     primaryHover: emerald[300],
     primaryActive: emerald[500],
     primarySubtle: emerald[950],
+    primaryDisabled: emerald[700],
     // Secondary - Neutral with slight tint
     secondary: slate[700],
     onSecondary: slate[100],
     secondaryHover: slate[600],
     secondaryActive: slate[500],
     secondarySubtle: slate[800],
+    secondaryDisabled: slate[800],
     // Tertiary - Complementary teal
     tertiary: teal[400],
     onTertiary: teal[950],
     tertiaryHover: teal[300],
     tertiaryActive: teal[500],
     tertiarySubtle: teal[950],
+    tertiaryDisabled: teal[700],
     // Accent - Warm amber contrast
     accent: amber[400],
     onAccent: amber[950],
     accentHover: amber[300],
+    accentActive: amber[500],
     accentSubtle: amber[950],
     borderFocus: emerald[400],
     // Semantic colors
@@ -109,6 +118,7 @@ export const emeraldDark: ColorPalette = {
     // Interactive
     link: emerald[400],
     linkHover: emerald[300],
+    linkActive: emerald[500],
     linkVisited: teal[400],
     focus: emerald[400],
 }

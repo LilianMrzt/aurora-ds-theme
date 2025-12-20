@@ -8,6 +8,7 @@ export type { BaseFontWeight } from './BaseFontWeight'
 export type { BaseLineHeight } from './BaseLineHeight'
 export type { BaseZIndex } from './BaseZIndex'
 export type { BaseTransition } from './BaseTransition'
+export type { BaseOpacity } from './BaseOpacity'
 export type { Theme } from './BaseTheme'
 
 // Theme utilities
