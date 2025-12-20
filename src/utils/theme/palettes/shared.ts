@@ -11,8 +11,8 @@ type ColorPalette = Theme['colors']
 export const neutralLight: Omit<ColorPalette,
     | 'primary' | 'onPrimary' | 'primaryHover' | 'primaryActive' | 'primarySubtle' | 'primaryDisabled'
     | 'secondary' | 'onSecondary' | 'secondaryHover' | 'secondaryActive' | 'secondarySubtle' | 'secondaryDisabled'
-    | 'accent' | 'onAccent' | 'accentHover' | 'accentSubtle'
-    | 'tertiary' | 'onTertiary' | 'tertiaryHover' | 'tertiaryActive' | 'tertiarySubtle'
+    | 'accent' | 'onAccent' | 'accentHover' | 'accentActive' | 'accentSubtle'
+    | 'tertiary' | 'onTertiary' | 'tertiaryHover' | 'tertiaryActive' | 'tertiarySubtle' | 'tertiaryDisabled'
     | 'borderFocus' | 'link' | 'linkHover' | 'linkActive' | 'linkVisited' | 'focus'
     | 'success' | 'onSuccess' | 'successHover' | 'successSubtle'
     | 'warning' | 'onWarning' | 'warningHover' | 'warningSubtle'
@@ -43,8 +43,8 @@ export const neutralLight: Omit<ColorPalette,
 export const neutralDark: Omit<ColorPalette,
     | 'primary' | 'onPrimary' | 'primaryHover' | 'primaryActive' | 'primarySubtle' | 'primaryDisabled'
     | 'secondary' | 'onSecondary' | 'secondaryHover' | 'secondaryActive' | 'secondarySubtle' | 'secondaryDisabled'
-    | 'accent' | 'onAccent' | 'accentHover' | 'accentSubtle'
-    | 'tertiary' | 'onTertiary' | 'tertiaryHover' | 'tertiaryActive' | 'tertiarySubtle'
+    | 'accent' | 'onAccent' | 'accentHover' | 'accentActive' | 'accentSubtle'
+    | 'tertiary' | 'onTertiary' | 'tertiaryHover' | 'tertiaryActive' | 'tertiarySubtle' | 'tertiaryDisabled'
     | 'borderFocus' | 'link' | 'linkHover' | 'linkActive' | 'linkVisited' | 'focus'
     | 'success' | 'onSuccess' | 'successHover' | 'successSubtle'
     | 'warning' | 'onWarning' | 'warningHover' | 'warningSubtle'
