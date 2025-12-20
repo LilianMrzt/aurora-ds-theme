@@ -72,5 +72,8 @@ export {
     slateDark,
     grayLight,
     grayDark,
+    blueLight,
+    blueDark,
+    tealLight,
+    tealDark,
 } from './palettes'
-
