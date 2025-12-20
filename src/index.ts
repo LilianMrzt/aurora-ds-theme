@@ -96,6 +96,10 @@ export {
     slateDark,
     grayLight,
     grayDark,
+    blueLight,
+    blueDark,
+    tealLight,
+    tealDark,
 } from './utils/theme/palettes'
 
 // Style utilities
