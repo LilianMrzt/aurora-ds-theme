@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2025-12-20
+
+### Added
+
+- **Tertiary Colors** - Added tertiary color tokens to all palettes
+  - `tertiary` - Tertiary action color
+  - `onTertiary` - Text color on tertiary backgrounds
+  - `tertiaryHover` - Hover state for tertiary
+  - `tertiaryActive` - Active/pressed state for tertiary
+  - `tertiarySubtle` - Subtle background variant
+
+- **Harmonious Tertiary Palettes** - Each palette now includes a complementary tertiary color:
+  - `indigo` → Purple
+  - `blue` → Sky
+  - `rose` → Pink
+  - `emerald` → Teal
+  - `teal` → Cyan
+  - `violet` → Purple
+  - `amber` → Orange
+  - `cyan` → Sky
+  - `slate` → Slate (variation)
+  - `gray` → Gray (variation)
+
+### Changed
+
+- **Improved Dark Mode Contrast** - Dark mode palettes now use `[400]` shades for primary colors with `[950]` backgrounds for better readability
+- **Consistent Semantic Colors** - Unified semantic colors to use `[600]` for light mode and `[400]` for dark mode
+
 ## [Unreleased]
 
 ### Added

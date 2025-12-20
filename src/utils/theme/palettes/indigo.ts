@@ -1,5 +1,5 @@
 import { neutralDark, neutralLight } from './shared'
-import { indigo, cyan, slate, green, red, amber, blue, violet, white } from '../colors'
+import { indigo, cyan, slate, green, red, amber, blue, violet, purple, white } from '../colors'
 
 import type { Theme } from '@/types'
 
@@ -23,33 +23,39 @@ export const indigoLight: ColorPalette = {
     secondaryHover: slate[200],
     secondaryActive: slate[300],
     secondarySubtle: slate[50],
-    // Accent
+    // Tertiary - Complementary purple
+    tertiary: purple[600],
+    onTertiary: white,
+    tertiaryHover: purple[700],
+    tertiaryActive: purple[800],
+    tertiarySubtle: purple[50],
+    // Accent - Contrasting cyan
     accent: cyan[500],
     onAccent: white,
     accentHover: cyan[600],
     accentSubtle: cyan[50],
     borderFocus: indigo[500],
-    // Semantic colors - Soft and subtle
-    success: green[500],
+    // Semantic colors
+    success: green[600],
     onSuccess: white,
-    successHover: green[600],
+    successHover: green[700],
     successSubtle: green[50],
-    warning: amber[400],
-    onWarning: amber[900],
-    warningHover: amber[500],
+    warning: amber[500],
+    onWarning: amber[950],
+    warningHover: amber[600],
     warningSubtle: amber[50],
-    error: red[400],
+    error: red[500],
     onError: white,
-    errorHover: red[500],
+    errorHover: red[600],
     errorSubtle: red[50],
-    info: blue[400],
+    info: blue[500],
     onInfo: white,
-    infoHover: blue[500],
+    infoHover: blue[600],
     infoSubtle: blue[50],
     // Interactive
-    link: indigo[500],
-    linkHover: indigo[600],
-    linkVisited: violet[600],
+    link: indigo[600],
+    linkHover: indigo[700],
+    linkVisited: violet[700],
     focus: indigo[500],
 }
 
@@ -59,22 +65,28 @@ export const indigoLight: ColorPalette = {
  */
 export const indigoDark: ColorPalette = {
     ...neutralDark,
-    // Primary - Indigo palette
-    primary: indigo[500],
-    onPrimary: white,
-    primaryHover: indigo[400],
-    primaryActive: indigo[600],
+    // Primary - Indigo palette (lighter for dark mode)
+    primary: indigo[400],
+    onPrimary: indigo[950],
+    primaryHover: indigo[300],
+    primaryActive: indigo[500],
     primarySubtle: indigo[950],
     // Secondary - Neutral with slight tint
-    secondary: slate[800],
-    onSecondary: slate[200],
-    secondaryHover: slate[700],
-    secondaryActive: slate[600],
-    secondarySubtle: slate[900],
-    // Accent
-    accent: cyan[500],
-    onAccent: white,
-    accentHover: cyan[400],
+    secondary: slate[700],
+    onSecondary: slate[100],
+    secondaryHover: slate[600],
+    secondaryActive: slate[500],
+    secondarySubtle: slate[800],
+    // Tertiary - Complementary purple
+    tertiary: purple[400],
+    onTertiary: purple[950],
+    tertiaryHover: purple[300],
+    tertiaryActive: purple[500],
+    tertiarySubtle: purple[950],
+    // Accent - Contrasting cyan
+    accent: cyan[400],
+    onAccent: cyan[950],
+    accentHover: cyan[300],
     accentSubtle: cyan[950],
     borderFocus: indigo[400],
     // Semantic colors

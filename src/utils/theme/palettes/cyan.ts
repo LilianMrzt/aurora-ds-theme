@@ -1,12 +1,12 @@
 import { neutralDark, neutralLight } from './shared'
-import { cyan, rose, slate, green, amber, red, blue, teal, white } from '../colors'
+import { cyan, rose, slate, green, amber, red, blue, teal, sky, white } from '../colors'
 
 import type { Theme } from '@/types'
 
 type ColorPalette = Theme['colors']
 
 /**
- * Cyan light palette - Modern, accessible color scheme
+ * Cyan light palette - Fresh, accessible color scheme
  * Follows WCAG AA contrast guidelines
  */
 export const cyanLight: ColorPalette = {
@@ -23,28 +23,34 @@ export const cyanLight: ColorPalette = {
     secondaryHover: slate[200],
     secondaryActive: slate[300],
     secondarySubtle: slate[50],
-    // Accent
+    // Tertiary - Complementary sky blue
+    tertiary: sky[500],
+    onTertiary: white,
+    tertiaryHover: sky[600],
+    tertiaryActive: sky[700],
+    tertiarySubtle: sky[50],
+    // Accent - Warm rose contrast
     accent: rose[500],
     onAccent: white,
     accentHover: rose[600],
     accentSubtle: rose[50],
     borderFocus: cyan[500],
-    // Semantic colors - Soft and subtle
-    success: green[500],
+    // Semantic colors
+    success: green[600],
     onSuccess: white,
-    successHover: green[600],
+    successHover: green[700],
     successSubtle: green[50],
-    warning: amber[400],
-    onWarning: amber[900],
-    warningHover: amber[500],
+    warning: amber[500],
+    onWarning: amber[950],
+    warningHover: amber[600],
     warningSubtle: amber[50],
-    error: red[400],
+    error: red[500],
     onError: white,
-    errorHover: red[500],
+    errorHover: red[600],
     errorSubtle: red[50],
-    info: blue[400],
+    info: blue[500],
     onInfo: white,
-    infoHover: blue[500],
+    infoHover: blue[600],
     infoSubtle: blue[50],
     // Interactive
     link: cyan[600],
@@ -54,27 +60,33 @@ export const cyanLight: ColorPalette = {
 }
 
 /**
- * Cyan dark palette - Modern, accessible color scheme
+ * Cyan dark palette - Fresh, accessible color scheme
  * Follows WCAG AA contrast guidelines
  */
 export const cyanDark: ColorPalette = {
     ...neutralDark,
-    // Primary - Cyan palette
-    primary: cyan[500],
-    onPrimary: white,
-    primaryHover: cyan[400],
-    primaryActive: cyan[600],
+    // Primary - Cyan palette (lighter for dark mode)
+    primary: cyan[400],
+    onPrimary: cyan[950],
+    primaryHover: cyan[300],
+    primaryActive: cyan[500],
     primarySubtle: cyan[950],
     // Secondary - Neutral with slight tint
-    secondary: slate[800],
-    onSecondary: slate[200],
-    secondaryHover: slate[700],
-    secondaryActive: slate[600],
-    secondarySubtle: slate[900],
-    // Accent
-    accent: rose[500],
-    onAccent: white,
-    accentHover: rose[400],
+    secondary: slate[700],
+    onSecondary: slate[100],
+    secondaryHover: slate[600],
+    secondaryActive: slate[500],
+    secondarySubtle: slate[800],
+    // Tertiary - Complementary sky blue
+    tertiary: sky[400],
+    onTertiary: sky[950],
+    tertiaryHover: sky[300],
+    tertiaryActive: sky[500],
+    tertiarySubtle: sky[950],
+    // Accent - Warm rose contrast
+    accent: rose[400],
+    onAccent: rose[950],
+    accentHover: rose[300],
     accentSubtle: rose[950],
     borderFocus: cyan[400],
     // Semantic colors

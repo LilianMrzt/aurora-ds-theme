@@ -6,7 +6,7 @@ import type { Theme } from '@/types'
 type ColorPalette = Theme['colors']
 
 /**
- * Emerald light palette - Modern, accessible color scheme
+ * Emerald light palette - Fresh, accessible color scheme
  * Follows WCAG AA contrast guidelines
  */
 export const emeraldLight: ColorPalette = {
@@ -23,28 +23,34 @@ export const emeraldLight: ColorPalette = {
     secondaryHover: slate[200],
     secondaryActive: slate[300],
     secondarySubtle: slate[50],
-    // Accent
+    // Tertiary - Complementary teal
+    tertiary: teal[500],
+    onTertiary: white,
+    tertiaryHover: teal[600],
+    tertiaryActive: teal[700],
+    tertiarySubtle: teal[50],
+    // Accent - Warm amber contrast
     accent: amber[500],
-    onAccent: amber[900],
+    onAccent: amber[950],
     accentHover: amber[600],
     accentSubtle: amber[50],
     borderFocus: emerald[500],
-    // Semantic colors - Soft and subtle
-    success: green[500],
+    // Semantic colors
+    success: green[600],
     onSuccess: white,
-    successHover: green[600],
+    successHover: green[700],
     successSubtle: green[50],
-    warning: amber[400],
-    onWarning: amber[900],
-    warningHover: amber[500],
+    warning: amber[500],
+    onWarning: amber[950],
+    warningHover: amber[600],
     warningSubtle: amber[50],
-    error: red[400],
+    error: red[500],
     onError: white,
-    errorHover: red[500],
+    errorHover: red[600],
     errorSubtle: red[50],
-    info: blue[400],
+    info: blue[500],
     onInfo: white,
-    infoHover: blue[500],
+    infoHover: blue[600],
     infoSubtle: blue[50],
     // Interactive
     link: emerald[600],
@@ -54,27 +60,33 @@ export const emeraldLight: ColorPalette = {
 }
 
 /**
- * Emerald dark palette - Modern, accessible color scheme
+ * Emerald dark palette - Fresh, accessible color scheme
  * Follows WCAG AA contrast guidelines
  */
 export const emeraldDark: ColorPalette = {
     ...neutralDark,
-    // Primary - Emerald palette
-    primary: emerald[500],
-    onPrimary: white,
-    primaryHover: emerald[400],
-    primaryActive: emerald[600],
+    // Primary - Emerald palette (lighter for dark mode)
+    primary: emerald[400],
+    onPrimary: emerald[950],
+    primaryHover: emerald[300],
+    primaryActive: emerald[500],
     primarySubtle: emerald[950],
     // Secondary - Neutral with slight tint
-    secondary: slate[800],
-    onSecondary: slate[200],
-    secondaryHover: slate[700],
-    secondaryActive: slate[600],
-    secondarySubtle: slate[900],
-    // Accent
-    accent: amber[500],
+    secondary: slate[700],
+    onSecondary: slate[100],
+    secondaryHover: slate[600],
+    secondaryActive: slate[500],
+    secondarySubtle: slate[800],
+    // Tertiary - Complementary teal
+    tertiary: teal[400],
+    onTertiary: teal[950],
+    tertiaryHover: teal[300],
+    tertiaryActive: teal[500],
+    tertiarySubtle: teal[950],
+    // Accent - Warm amber contrast
+    accent: amber[400],
     onAccent: amber[950],
-    accentHover: amber[400],
+    accentHover: amber[300],
     accentSubtle: amber[950],
     borderFocus: emerald[400],
     // Semantic colors

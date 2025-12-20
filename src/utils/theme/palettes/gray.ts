@@ -1,82 +1,94 @@
 import { neutralDark, neutralLight } from './shared'
-import { gray, indigo, slate, green, amber, red, blue, white } from '../colors'
+import { gray, indigo, green, amber, red, blue, violet, white } from '../colors'
 
 import type { Theme } from '@/types'
 
 type ColorPalette = Theme['colors']
 
 /**
- * Gray light palette - Modern, accessible color scheme
+ * Gray light palette - Clean, accessible color scheme
  * Follows WCAG AA contrast guidelines
  */
 export const grayLight: ColorPalette = {
     ...neutralLight,
     // Primary - Gray palette
-    primary: gray[900],
+    primary: gray[800],
     onPrimary: white,
-    primaryHover: gray[800],
+    primaryHover: gray[900],
     primaryActive: gray[950],
     primarySubtle: gray[100],
     // Secondary - Neutral
-    secondary: slate[100],
-    onSecondary: slate[700],
-    secondaryHover: slate[200],
-    secondaryActive: slate[300],
-    secondarySubtle: slate[50],
-    // Accent
+    secondary: gray[100],
+    onSecondary: gray[700],
+    secondaryHover: gray[200],
+    secondaryActive: gray[300],
+    secondarySubtle: gray[50],
+    // Tertiary - Warm gray variant
+    tertiary: gray[600],
+    onTertiary: white,
+    tertiaryHover: gray[700],
+    tertiaryActive: gray[800],
+    tertiarySubtle: gray[100],
+    // Accent - Vibrant indigo for highlights
     accent: indigo[600],
     onAccent: white,
     accentHover: indigo[700],
     accentSubtle: indigo[50],
-    borderFocus: gray[900],
-    // Semantic colors - Soft and subtle
-    success: green[500],
+    borderFocus: indigo[500],
+    // Semantic colors
+    success: green[600],
     onSuccess: white,
-    successHover: green[600],
+    successHover: green[700],
     successSubtle: green[50],
-    warning: amber[400],
-    onWarning: amber[900],
-    warningHover: amber[500],
+    warning: amber[500],
+    onWarning: amber[950],
+    warningHover: amber[600],
     warningSubtle: amber[50],
-    error: red[400],
+    error: red[500],
     onError: white,
-    errorHover: red[500],
+    errorHover: red[600],
     errorSubtle: red[50],
-    info: blue[400],
+    info: blue[500],
     onInfo: white,
-    infoHover: blue[500],
+    infoHover: blue[600],
     infoSubtle: blue[50],
     // Interactive
-    link: gray[900],
-    linkHover: gray[700],
-    linkVisited: gray[600],
-    focus: gray[900],
+    link: indigo[600],
+    linkHover: indigo[700],
+    linkVisited: violet[700],
+    focus: indigo[500],
 }
 
 /**
- * Gray dark palette - Modern, accessible color scheme
+ * Gray dark palette - Clean, accessible color scheme
  * Follows WCAG AA contrast guidelines
  */
 export const grayDark: ColorPalette = {
     ...neutralDark,
-    // Primary - Gray palette
-    primary: gray[50],
+    // Primary - Gray palette (lighter for dark mode)
+    primary: gray[100],
     onPrimary: gray[900],
-    primaryHover: gray[100],
+    primaryHover: gray[50],
     primaryActive: gray[200],
     primarySubtle: gray[900],
     // Secondary - Neutral
-    secondary: slate[800],
-    onSecondary: slate[200],
-    secondaryHover: slate[700],
-    secondaryActive: slate[600],
-    secondarySubtle: slate[900],
-    // Accent
-    accent: indigo[500],
-    onAccent: white,
-    accentHover: indigo[400],
+    secondary: gray[700],
+    onSecondary: gray[100],
+    secondaryHover: gray[600],
+    secondaryActive: gray[500],
+    secondarySubtle: gray[800],
+    // Tertiary - Warm gray variant
+    tertiary: gray[400],
+    onTertiary: gray[950],
+    tertiaryHover: gray[300],
+    tertiaryActive: gray[500],
+    tertiarySubtle: gray[900],
+    // Accent - Vibrant indigo for highlights
+    accent: indigo[400],
+    onAccent: indigo[950],
+    accentHover: indigo[300],
     accentSubtle: indigo[950],
-    borderFocus: gray[50],
+    borderFocus: indigo[400],
     // Semantic colors
     success: green[400],
     onSuccess: green[950],
@@ -95,9 +107,9 @@ export const grayDark: ColorPalette = {
     infoHover: blue[300],
     infoSubtle: blue[950],
     // Interactive
-    link: gray[50],
-    linkHover: gray[200],
-    linkVisited: gray[300],
-    focus: gray[50],
+    link: indigo[400],
+    linkHover: indigo[300],
+    linkVisited: violet[400],
+    focus: indigo[400],
 }
 

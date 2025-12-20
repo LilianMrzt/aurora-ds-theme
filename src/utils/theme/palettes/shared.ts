@@ -12,16 +12,17 @@ export const neutralLight: Omit<ColorPalette,
     | 'primary' | 'onPrimary' | 'primaryHover' | 'primaryActive' | 'primarySubtle'
     | 'secondary' | 'onSecondary' | 'secondaryHover' | 'secondaryActive' | 'secondarySubtle'
     | 'accent' | 'onAccent' | 'accentHover' | 'accentSubtle'
+    | 'tertiary' | 'onTertiary' | 'tertiaryHover' | 'tertiaryActive' | 'tertiarySubtle'
     | 'borderFocus' | 'link' | 'linkHover' | 'linkVisited' | 'focus'
     | 'success' | 'onSuccess' | 'successHover' | 'successSubtle'
     | 'warning' | 'onWarning' | 'warningHover' | 'warningSubtle'
     | 'error' | 'onError' | 'errorHover' | 'errorSubtle'
     | 'info' | 'onInfo' | 'infoHover' | 'infoSubtle'
 > = {
-    background: slate[50],
+    background: slate[25],
     surface: white,
-    surfaceHover: slate[200],
-    surfaceActive: slate[300],
+    surfaceHover: slate[100],
+    surfaceActive: slate[200],
     elevated: white,
     overlay: 'rgba(15, 23, 42, 0.6)',
     text: slate[800],
@@ -43,26 +44,27 @@ export const neutralDark: Omit<ColorPalette,
     | 'primary' | 'onPrimary' | 'primaryHover' | 'primaryActive' | 'primarySubtle'
     | 'secondary' | 'onSecondary' | 'secondaryHover' | 'secondaryActive' | 'secondarySubtle'
     | 'accent' | 'onAccent' | 'accentHover' | 'accentSubtle'
+    | 'tertiary' | 'onTertiary' | 'tertiaryHover' | 'tertiaryActive' | 'tertiarySubtle'
     | 'borderFocus' | 'link' | 'linkHover' | 'linkVisited' | 'focus'
     | 'success' | 'onSuccess' | 'successHover' | 'successSubtle'
     | 'warning' | 'onWarning' | 'warningHover' | 'warningSubtle'
     | 'error' | 'onError' | 'errorHover' | 'errorSubtle'
     | 'info' | 'onInfo' | 'infoHover' | 'infoSubtle'
 > = {
-    background: slate[950],
-    surface: slate[900],
-    surfaceHover: slate[800],
-    surfaceActive: slate[700],
-    elevated: slate[800],
-    overlay: 'rgba(0, 0, 0, 0.8)',
-    text: slate[50],
+    background: slate[900],
+    surface: slate[800],
+    surfaceHover: slate[700],
+    surfaceActive: slate[600],
+    elevated: slate[700],
+    overlay: 'rgba(0, 0, 0, 0.7)',
+    text: slate[100],
     textSecondary: slate[400],
     textTertiary: slate[500],
     textInverse: slate[900],
-    border: slate[800],
-    borderHover: slate[700],
-    borderSubtle: slate[900],
-    disabled: slate[700],
+    border: slate[600],
+    borderHover: slate[500],
+    borderSubtle: slate[700],
+    disabled: slate[600],
     disabledText: slate[500],
 }
 

@@ -101,22 +101,22 @@ const myTheme = createTheme(defaultTheme, {
 
 ## Theme Palettes (Presets)
 
-Aurora includes **10 ready-to-use color palettes**, each with light and dark variants, designed with improved contrast ratios.
+Aurora includes **10 ready-to-use color palettes**, each with light and dark variants, designed with improved contrast ratios. Each palette includes harmonious **tertiary colors** for additional design flexibility.
 
 ### Available Palettes
 
-| Palette | Style | Best For |
-|---------|-------|----------|
-| `indigo` | Modern, professional | SaaS, business apps (default) |
-| `blue` | Clean, trustworthy | Corporate, fintech |
-| `rose` | Warm, friendly | Social, lifestyle |
-| `emerald` | Fresh, natural | Health, eco-friendly |
-| `teal` | Balanced, calming | Healthcare, wellness |
-| `violet` | Creative, bold | Creative, gaming |
-| `amber` | Energetic, warm | Food, education |
-| `cyan` | Tech, modern | Tech, startups |
-| `slate` | Minimal, corporate | Enterprise, B2B |
-| `gray` | Ultra minimal | Portfolios, luxury |
+| Palette | Style | Tertiary | Best For |
+|---------|-------|----------|----------|
+| `indigo` | Modern, professional | Purple | SaaS, business apps (default) |
+| `blue` | Clean, trustworthy | Sky | Corporate, fintech |
+| `rose` | Warm, friendly | Pink | Social, lifestyle |
+| `emerald` | Fresh, natural | Teal | Health, eco-friendly |
+| `teal` | Balanced, calming | Cyan | Healthcare, wellness |
+| `violet` | Creative, bold | Purple | Creative, gaming |
+| `amber` | Energetic, warm | Orange | Food, education |
+| `cyan` | Tech, modern | Sky | Tech, startups |
+| `slate` | Minimal, corporate | Slate | Enterprise, B2B |
+| `gray` | Ultra minimal | Gray | Portfolios, luxury |
 
 ### Usage
 
@@ -233,6 +233,7 @@ const myTheme = createTheme(defaultTheme, {
 |-------|-------------|
 | `primary`, `onPrimary`, `primaryHover`, `primaryActive`, `primarySubtle` | Primary brand color |
 | `secondary`, `onSecondary`, `secondaryHover`, `secondaryActive`, `secondarySubtle` | Secondary actions |
+| `tertiary`, `onTertiary`, `tertiaryHover`, `tertiaryActive`, `tertiarySubtle` | Tertiary actions |
 | `accent`, `onAccent`, `accentHover`, `accentSubtle` | Accent/highlight |
 | `background`, `surface`, `surfaceHover`, `surfaceActive`, `elevated`, `overlay` | Surfaces |
 | `text`, `textSecondary`, `textTertiary`, `textInverse` | Text hierarchy |

@@ -1,12 +1,12 @@
 import { neutralDark, neutralLight } from './shared'
-import { blue, slate, green, red, amber, violet, white } from '../colors'
+import { blue, sky, slate, green, red, amber, violet, cyan, white } from '../colors'
 
 import type { Theme } from '@/types'
 
 type ColorPalette = Theme['colors']
 
 /**
- * Blue light palette - Modern, accessible color scheme
+ * Blue light palette - Classic, accessible color scheme
  * Follows WCAG AA contrast guidelines
  */
 export const blueLight: ColorPalette = {
@@ -23,59 +23,71 @@ export const blueLight: ColorPalette = {
     secondaryHover: slate[200],
     secondaryActive: slate[300],
     secondarySubtle: slate[50],
-    // Accent (using primary for consistency)
-    accent: blue[600],
+    // Tertiary - Complementary sky blue
+    tertiary: sky[500],
+    onTertiary: white,
+    tertiaryHover: sky[600],
+    tertiaryActive: sky[700],
+    tertiarySubtle: sky[50],
+    // Accent - Contrasting cyan
+    accent: cyan[500],
     onAccent: white,
-    accentHover: blue[700],
-    accentSubtle: blue[50],
+    accentHover: cyan[600],
+    accentSubtle: cyan[50],
     borderFocus: blue[500],
-    // Semantic colors - Soft and subtle
-    success: green[500],
+    // Semantic colors
+    success: green[600],
     onSuccess: white,
-    successHover: green[600],
+    successHover: green[700],
     successSubtle: green[50],
-    warning: amber[400],
-    onWarning: amber[900],
-    warningHover: amber[500],
+    warning: amber[500],
+    onWarning: amber[950],
+    warningHover: amber[600],
     warningSubtle: amber[50],
-    error: red[400],
+    error: red[500],
     onError: white,
-    errorHover: red[500],
+    errorHover: red[600],
     errorSubtle: red[50],
-    info: blue[400],
+    info: blue[500],
     onInfo: white,
-    infoHover: blue[500],
+    infoHover: blue[600],
     infoSubtle: blue[50],
     // Interactive
-    link: blue[500],
-    linkHover: blue[600],
-    linkVisited: violet[600],
+    link: blue[600],
+    linkHover: blue[700],
+    linkVisited: violet[700],
     focus: blue[500],
 }
 
 /**
- * Blue dark palette - Modern, accessible color scheme
+ * Blue dark palette - Classic, accessible color scheme
  * Follows WCAG AA contrast guidelines
  */
 export const blueDark: ColorPalette = {
     ...neutralDark,
-    // Primary - Blue palette
-    primary: blue[500],
-    onPrimary: white,
-    primaryHover: blue[400],
-    primaryActive: blue[600],
+    // Primary - Blue palette (lighter for dark mode)
+    primary: blue[400],
+    onPrimary: blue[950],
+    primaryHover: blue[300],
+    primaryActive: blue[500],
     primarySubtle: blue[950],
     // Secondary - Neutral with slight blue tint
-    secondary: slate[800],
-    onSecondary: slate[200],
-    secondaryHover: slate[700],
-    secondaryActive: slate[600],
-    secondarySubtle: slate[900],
-    // Accent (using primary for consistency)
-    accent: blue[500],
-    onAccent: white,
-    accentHover: blue[400],
-    accentSubtle: blue[950],
+    secondary: slate[700],
+    onSecondary: slate[100],
+    secondaryHover: slate[600],
+    secondaryActive: slate[500],
+    secondarySubtle: slate[800],
+    // Tertiary - Complementary sky blue
+    tertiary: sky[400],
+    onTertiary: sky[950],
+    tertiaryHover: sky[300],
+    tertiaryActive: sky[500],
+    tertiarySubtle: sky[950],
+    // Accent - Contrasting cyan
+    accent: cyan[400],
+    onAccent: cyan[950],
+    accentHover: cyan[300],
+    accentSubtle: cyan[950],
     borderFocus: blue[400],
     // Semantic colors
     success: green[400],

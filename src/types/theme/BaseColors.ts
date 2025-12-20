@@ -22,6 +22,13 @@ export type BaseColors = {
     accentHover: string
     accentSubtle: string
 
+    // === TERTIARY ===
+    tertiary: string
+    onTertiary: string
+    tertiaryHover: string
+    tertiaryActive: string
+    tertiarySubtle: string
+
     // === NEUTRAL / SURFACE ===
     background: string
     surface: string
