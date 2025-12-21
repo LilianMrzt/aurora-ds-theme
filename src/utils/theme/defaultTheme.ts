@@ -125,6 +125,18 @@ export const defaultOpacity: Theme['opacity'] = {
 }
 
 /**
+ * Default responsive breakpoints
+ */
+export const defaultBreakpoints: Theme['breakpoints'] = {
+    xs: '480px',   // Extra small devices (phones in landscape)
+    sm: '640px',   // Small devices (large phones, small tablets)
+    md: '768px',   // Medium devices (tablets)
+    lg: '1024px',  // Large devices (desktops)
+    xl: '1280px',  // Extra large devices (large desktops)
+    '2xl': '1536px', // Extra extra large devices (wide screens)
+}
+
+/**
  * Default colors (using indigo palette)
  */
 export const defaultColors = indigoLight
@@ -148,6 +160,7 @@ export const defaultTheme: Theme = {
     zIndex: defaultZIndex,
     transition: defaultTransition,
     opacity: defaultOpacity,
+    breakpoints: defaultBreakpoints,
 }
 
 /**

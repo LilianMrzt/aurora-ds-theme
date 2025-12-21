@@ -1,4 +1,5 @@
 // Base types
+export type { BaseBreakpoints } from './BaseBreakpoints'
 export type { BaseColors } from './BaseColors'
 export type { BaseSpacing } from './BaseSpacing'
 export type { BaseRadius } from './BaseRadius'

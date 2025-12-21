@@ -5,6 +5,7 @@ export type {
     // Theme types
     Theme,
     ExtendedTheme,
+    BaseBreakpoints,
     BaseColors,
     BaseSpacing,
     BaseRadius,
@@ -48,6 +49,7 @@ export {
     defaultZIndex,
     defaultTransition,
     defaultOpacity,
+    defaultBreakpoints,
 } from './utils/theme/defaultTheme'
 
 // Color scales (25-950 shades)

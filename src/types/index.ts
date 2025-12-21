@@ -1,5 +1,6 @@
 // Theme types
 export type {
+    BaseBreakpoints,
     BaseColors,
     BaseSpacing,
     BaseRadius,

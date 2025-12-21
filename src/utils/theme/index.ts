@@ -23,6 +23,7 @@ export {
     defaultZIndex,
     defaultTransition,
     defaultOpacity,
+    defaultBreakpoints,
 } from './defaultTheme'
 
 // Color scales (25-950 shades)
