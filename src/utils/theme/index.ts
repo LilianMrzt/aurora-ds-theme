@@ -2,6 +2,7 @@ export {
     createTheme,
     mergeThemes,
     createThemeVariant,
+    createCustomTheme,
     clearThemeCache,
     getThemeCacheSize,
     MAX_THEME_CACHE_SIZE,

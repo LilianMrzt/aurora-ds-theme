@@ -4,11 +4,14 @@ import {
     createTheme,
     mergeThemes,
     createThemeVariant,
+    createCustomTheme,
     defaultTheme,
     defaultDarkTheme,
     clearThemeCache,
     getThemeCacheSize,
     MAX_THEME_CACHE_SIZE,
+    defaultSpacing,
+    defaultRadius,
 } from '@/utils/theme'
 
 import type { DeepPartial, Theme } from '@/types'
@@ -265,6 +268,174 @@ describe('theme cache utilities', () => {
 
     it('MAX_THEME_CACHE_SIZE should be exported', () => {
         expect(MAX_THEME_CACHE_SIZE).toBe(50)
+    })
+})
+
+describe('createTheme with replace mode', () => {
+    beforeEach(() => {
+        clearThemeCache()
+    })
+
+    it('should replace entire category when mode is replace', () => {
+        type MinimalColors = {
+            brand: string
+            surface: string
+            text: string
+        }
+
+        const customColors: MinimalColors = {
+            brand: '#007bff',
+            surface: '#ffffff',
+            text: '#212529',
+        }
+
+        const customTheme = createTheme(
+            defaultTheme,
+            { colors: customColors as unknown as DeepPartial<Theme>['colors'] },
+            { mode: 'replace' }
+        )
+
+        // Should have ONLY the custom colors, not merged with defaults
+        expect(customTheme.colors).toEqual(customColors)
+        // primary should not exist after replace
+        expect((customTheme.colors as Record<string, unknown>).primary).toBeUndefined()
+    })
+
+    it('should still use merge by default', () => {
+        const customTheme = createTheme(defaultTheme, {
+            colors: { primary: '#ff0000' },
+        })
+
+        // Default merge behavior - preserves other tokens
+        expect(customTheme.colors.primary).toBe('#ff0000')
+        expect(customTheme.colors.secondary).toBe(defaultTheme.colors.secondary)
+    })
+
+    it('should cache differently for merge vs replace mode', () => {
+        const overrides = { colors: { primary: '#ff0000' } }
+
+        const mergedTheme = createTheme(defaultTheme, overrides, { mode: 'merge' })
+        const replacedTheme = createTheme(defaultTheme, overrides, { mode: 'replace' })
+
+        expect(mergedTheme).not.toBe(replacedTheme)
+        expect(mergedTheme.colors.secondary).toBe(defaultTheme.colors.secondary)
+        // secondary should not exist after replace
+        expect((replacedTheme.colors as Record<string, unknown>).secondary).toBeUndefined()
+    })
+
+    it('should only replace specified categories, preserve others', () => {
+        const customTheme = createTheme(
+            defaultTheme,
+            {
+                colors: { brand: '#007bff' } as unknown as DeepPartial<Theme>['colors'],
+            },
+            { mode: 'replace' }
+        )
+
+        // Colors are replaced
+        expect(customTheme.colors).toEqual({ brand: '#007bff' })
+
+        // Other categories are preserved
+        expect(customTheme.spacing).toEqual(defaultTheme.spacing)
+        expect(customTheme.radius).toEqual(defaultTheme.radius)
+    })
+})
+
+describe('createCustomTheme', () => {
+    it('should create a theme with custom color tokens', () => {
+        type MyColors = {
+            brand: string
+            brandHover: string
+            surface: string
+            text: string
+        }
+
+        const myTheme = createCustomTheme<MyColors>({
+            colors: {
+                brand: '#007bff',
+                brandHover: '#0056b3',
+                surface: '#ffffff',
+                text: '#212529',
+            },
+        })
+
+        expect(myTheme.colors.brand).toBe('#007bff')
+        expect(myTheme.colors.brandHover).toBe('#0056b3')
+        expect(myTheme.colors.surface).toBe('#ffffff')
+        expect(myTheme.colors.text).toBe('#212529')
+    })
+
+    it('should use default values for non-color tokens', () => {
+        type MyColors = { primary: string }
+
+        const myTheme = createCustomTheme<MyColors>({
+            colors: { primary: '#ff0000' },
+        })
+
+        expect(myTheme.spacing).toEqual(defaultSpacing)
+        expect(myTheme.radius).toEqual(defaultRadius)
+    })
+
+    it('should allow overriding non-color tokens', () => {
+        type MyColors = { primary: string }
+
+        const customSpacing = {
+            ...defaultSpacing,
+            md: '2rem',
+        }
+
+        const myTheme = createCustomTheme<MyColors, typeof customSpacing>({
+            colors: { primary: '#ff0000' },
+            spacing: customSpacing,
+        })
+
+        expect(myTheme.spacing.md).toBe('2rem')
+    })
+
+    it('should not include base color tokens', () => {
+        type MinimalColors = {
+            accent: string
+            background: string
+        }
+
+        const theme = createCustomTheme<MinimalColors>({
+            colors: {
+                accent: '#ff0000',
+                background: '#ffffff',
+            },
+        })
+
+        // TypeScript should not allow accessing primary
+        // @ts-expect-error - primary does not exist on MinimalColors
+        expect(theme.colors.primary).toBeUndefined()
+
+        // Only our defined colors exist
+        expect(Object.keys(theme.colors)).toEqual(['accent', 'background'])
+    })
+
+    it('should work with completely custom token structures', () => {
+        type BrandColors = {
+            'brand-50': string
+            'brand-100': string
+            'brand-500': string
+            'brand-900': string
+            'neutral-light': string
+            'neutral-dark': string
+        }
+
+        const theme = createCustomTheme<BrandColors>({
+            colors: {
+                'brand-50': '#eff6ff',
+                'brand-100': '#dbeafe',
+                'brand-500': '#3b82f6',
+                'brand-900': '#1e3a8a',
+                'neutral-light': '#f8fafc',
+                'neutral-dark': '#0f172a',
+            },
+        })
+
+        expect(theme.colors['brand-500']).toBe('#3b82f6')
+        expect(theme.colors['neutral-light']).toBe('#f8fafc')
     })
 })
 

@@ -225,6 +225,188 @@ const myTheme = createTheme(defaultTheme, {
 
 ---
 
+## Custom Themes (Complete Token Replacement)
+
+Need a completely different color token structure? Aurora supports **full customization** where you can define your own semantic tokens without inheriting `BaseColors`.
+
+### Option 1: Replace Mode
+
+Use `{ mode: 'replace' }` to completely replace a token category instead of deep-merging:
+
+```tsx
+import { createTheme, defaultTheme } from '@aurora-ds/theme'
+
+// Replace the entire colors object (no merge with defaults)
+const myTheme = createTheme(defaultTheme, {
+    colors: {
+        brand: '#007bff',
+        brandHover: '#0056b3',
+        surface: '#ffffff',
+        text: '#212529',
+    },
+}, { mode: 'replace' })
+
+// Result: theme.colors = { brand, brandHover, surface, text }
+// Note: theme.colors.primary no longer exists!
+```
+
+### Option 2: Custom Theme Function
+
+For full type safety with your own color tokens, use `createCustomTheme`:
+
+```tsx
+import { createCustomTheme } from '@aurora-ds/theme'
+import type { CustomTheme } from '@aurora-ds/theme'
+
+// 1. Define your own color token structure
+type MyBrandColors = {
+    brand: string
+    brandHover: string
+    brandActive: string
+    surface: string
+    surfaceElevated: string
+    textPrimary: string
+    textSecondary: string
+    border: string
+}
+
+// 2. Create your theme with full type safety
+const myTheme = createCustomTheme<MyBrandColors>({
+    colors: {
+        brand: '#007bff',
+        brandHover: '#0056b3',
+        brandActive: '#004085',
+        surface: '#ffffff',
+        surfaceElevated: '#f8f9fa',
+        textPrimary: '#212529',
+        textSecondary: '#6c757d',
+        border: '#dee2e6',
+    },
+    // Other tokens use defaults, or provide your own:
+    // spacing: { ... },
+    // radius: { ... },
+})
+
+// 3. TypeScript knows your exact token structure!
+myTheme.colors.brand        // ✅ OK - string
+myTheme.colors.primary      // ❌ Error - property doesn't exist
+
+// 4. Type your theme for components
+type MyTheme = typeof myTheme
+// or: type MyTheme = CustomTheme<MyBrandColors>
+```
+
+### Use Custom Theme in Components
+
+```tsx
+import { ThemeProvider, createTypedStyles, useTheme } from '@aurora-ds/theme'
+
+// ✨ Create a pre-typed createStyles function ONCE
+export const createStyles = createTypedStyles<MyTheme>()
+
+// Now use it everywhere WITHOUT specifying the type!
+const STYLES = createStyles((theme) => ({
+    button: {
+        backgroundColor: theme.colors.brand,      // ✅ TypeScript knows!
+        color: theme.colors.textPrimary,          // ✅ Works
+        // backgroundColor: theme.colors.primary,  // ❌ Would error
+    },
+}))
+
+// Access in components
+function MyComponent() {
+    const theme = useTheme<MyTheme>()
+    return <div style={{ color: theme.colors.textSecondary }}>Hello</div>
+}
+
+// Wrap your app
+<ThemeProvider theme={myTheme}>
+    <App />
+</ThemeProvider>
+```
+
+### Project Setup (Recommended)
+
+Create a `theme.ts` file in your project to centralize your custom theme:
+
+```tsx
+// src/theme.ts
+import { 
+    createCustomTheme, 
+    createTypedStyles,
+    ThemeProvider as BaseThemeProvider,
+    useTheme as baseUseTheme,
+} from '@aurora-ds/theme'
+import type { CustomTheme } from '@aurora-ds/theme'
+
+// 1. Define your color tokens
+type MyColors = {
+    brand: string
+    brandHover: string
+    brandActive: string
+    surface: string
+    surfaceElevated: string
+    textPrimary: string
+    textSecondary: string
+    border: string
+}
+
+// 2. Create your theme
+export const theme = createCustomTheme<MyColors>({
+    colors: {
+        brand: '#007bff',
+        brandHover: '#0056b3',
+        brandActive: '#004085',
+        surface: '#ffffff',
+        surfaceElevated: '#f8f9fa',
+        textPrimary: '#212529',
+        textSecondary: '#6c757d',
+        border: '#dee2e6',
+    },
+})
+
+// 3. Export typed utilities (use these throughout your app!)
+export type MyTheme = typeof theme
+export const createStyles = createTypedStyles<MyTheme>()
+export const useTheme = () => baseUseTheme<MyTheme>()
+export const ThemeProvider = BaseThemeProvider
+```
+
+Then use in your components:
+
+```tsx
+// src/components/Button.tsx
+import { createStyles } from '../theme'
+
+// No need to specify <MyTheme> - it's already typed!
+const STYLES = createStyles((theme) => ({
+    root: {
+        backgroundColor: theme.colors.brand,
+        color: theme.colors.textPrimary,
+        padding: theme.spacing.md,
+        borderRadius: theme.radius.md,
+        ':hover': {
+            backgroundColor: theme.colors.brandHover,
+        },
+    },
+}))
+
+export const Button = ({ children }) => (
+    <button className={STYLES.root}>{children}</button>
+)
+```
+
+### When to Use Each Approach
+
+| Approach | Use Case |
+|----------|----------|
+| `createTheme()` (default merge) | Extend default tokens, keep compatibility |
+| `createTheme()` with `{ mode: 'replace' }` | Quick replacement without type safety |
+| `createCustomTheme<T>()` | Full type safety with custom token structure |
+| `createTypedStyles<T>()` | Pre-type your `createStyles` for DX (recommended with custom themes) |
+
+---
+
 ## Theme Structure
 
 ### Colors
@@ -372,6 +554,9 @@ clearSSRRules() // Reset for next request
 | `PaletteName` | Union of palette names |
 | `ExtendTheme<T>` | Helper to extend theme |
 | `DeepPartial<T>` | For partial overrides |
+| `CustomTheme<TColors, ...>` | Generic type for fully custom themes |
+| `CustomThemeBase<TColors>` | Base type for custom color themes |
+| `CreateThemeOptions` | Options for `createTheme()` (`{ mode: 'merge' \| 'replace' }`) |
 
 ### Components & Hooks
 
@@ -380,11 +565,21 @@ clearSSRRules() // Reset for next request
 | `ThemeProvider` | Theme context provider |
 | `useTheme<T>()` | Access current theme |
 
+### Theme Creation
+
+| Export | Description |
+|--------|-------------|
+| `createTheme(base, overrides, options?)` | Create theme by merging/replacing base with overrides |
+| `createCustomTheme<TColors>(config)` | Create theme with fully custom color tokens |
+| `mergeThemes(base, ...overrides)` | Merge multiple theme overrides |
+| `createThemeVariant(overrides)` | Create a reusable theme variant factory |
+
 ### Styling
 
 | Export | Description |
 |--------|-------------|
 | `createStyles<T>()` | Create themed styles |
+| `createTypedStyles<T>()` | Create a pre-typed `createStyles` function for custom themes |
 | `keyframes()` | CSS keyframe animations |
 | `fontFace()` | @font-face rules |
 | `cssVariables()` | CSS custom properties |

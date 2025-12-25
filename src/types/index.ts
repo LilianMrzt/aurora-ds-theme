@@ -16,6 +16,11 @@ export type {
     ExtendTheme,
     DeepPartial,
     ThemeOverride,
+    // Custom theme types for complete token replacement
+    CustomTheme,
+    CustomThemeBase,
+    CreateThemeOptions,
+    CreateCustomThemeOptions,
 } from './theme'
 
 // Color types

@@ -13,5 +13,15 @@ export type { BaseOpacity } from './BaseOpacity'
 export type { Theme } from './BaseTheme'
 
 // Theme utilities
-export type { ExtendedTheme, ExtendTheme, DeepPartial, ThemeOverride } from './Theme'
+export type {
+    ExtendedTheme,
+    ExtendTheme,
+    DeepPartial,
+    ThemeOverride,
+    // Custom theme types for complete token replacement
+    CustomTheme,
+    CustomThemeBase,
+    CreateThemeOptions,
+    CreateCustomThemeOptions,
+} from './Theme'
 

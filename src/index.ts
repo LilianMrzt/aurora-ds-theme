@@ -19,6 +19,11 @@ export type {
     ExtendTheme,
     DeepPartial,
     ThemeOverride,
+    // Custom theme types
+    CustomTheme,
+    CustomThemeBase,
+    CreateThemeOptions,
+    CreateCustomThemeOptions,
     // Color types
     ColorScale,
     ColorName,
@@ -32,7 +37,7 @@ export { ThemeProvider, useTheme } from './providers/ThemeProvider'
 export type { ThemeProviderProps } from './providers/ThemeProvider'
 
 // Theme utilities
-export { createTheme, mergeThemes, createThemeVariant } from './utils/theme/createTheme'
+export { createTheme, mergeThemes, createThemeVariant, createCustomTheme } from './utils/theme/createTheme'
 export {
     // Complete themes
     defaultTheme,
@@ -107,7 +112,7 @@ export {
 } from './utils/theme/palettes'
 
 // Style utilities
-export { createStyles } from './utils/styles/createStyles'
+export { createStyles, createTypedStyles } from './utils/styles/createStyles'
 export { keyframes } from './utils/styles/keyframes'
 export { fontFace } from './utils/styles/fontFace'
 export { cssVariables, cssVar, injectCssVariables } from './utils/styles/cssVariables'

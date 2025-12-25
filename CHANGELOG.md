@@ -5,6 +5,74 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2025-12-25
+
+### Added
+
+- **Custom Theme Support** - New utilities for creating themes with completely custom color tokens
+  - `createCustomTheme<TColors>()` - Create a theme with your own color token structure, without inheriting `BaseColors`
+  - `CustomTheme<TColors, ...>` - Type for fully customizable themes
+  - `CustomThemeBase<TColors>` - Base type for custom themes with user-defined colors
+  
+- **Replace Mode for createTheme** - New option to replace entire token categories instead of deep merging
+  - `createTheme(base, overrides, { mode: 'replace' })` - Replaces specified categories completely
+  - Default behavior (`mode: 'merge'`) unchanged - still deep merges overrides
+
+- **Pre-typed createStyles Factory** - Eliminate repetitive type annotations
+  - `createTypedStyles<TTheme>()` - Create a pre-typed `createStyles` function for your custom theme
+  - Use once, then call `createStyles()` everywhere without specifying the type
+  
+- **New Types**
+  - `CreateThemeOptions` - Options for `createTheme` function
+  - `CreateCustomThemeOptions` - Options for custom theme creation
+
+### Usage Examples
+
+```typescript
+// 1. Replace mode - replace entire color category
+const myTheme = createTheme(defaultTheme, {
+    colors: {
+        brand: '#007bff',
+        surface: '#ffffff',
+        text: '#000000',
+    },
+}, { mode: 'replace' })
+// Result: Only brand, surface, text exist (no primary, secondary, etc.)
+
+// 2. Custom theme - define your own color tokens with full type safety
+type MyColors = {
+    brand: string
+    brandHover: string
+    surface: string
+    textPrimary: string
+}
+
+const customTheme = createCustomTheme<MyColors>({
+    colors: {
+        brand: '#007bff',
+        brandHover: '#0056b3',
+        surface: '#ffffff',
+        textPrimary: '#212529',
+    },
+    // Other tokens use defaults (spacing, radius, etc.)
+})
+
+// TypeScript knows your theme structure:
+customTheme.colors.brand      // ✅ OK
+customTheme.colors.primary    // ❌ Error - doesn't exist
+
+// 3. Pre-typed createStyles - no more <MyTheme> everywhere!
+type MyTheme = typeof customTheme
+export const createStyles = createTypedStyles<MyTheme>()
+
+// Now use without type annotation:
+const STYLES = createStyles((theme) => ({
+    button: {
+        backgroundColor: theme.colors.brand,  // ✅ TypeScript knows!
+    },
+}))
+```
+
 ## [1.4.0] - 2025-12-21
 
 ### Added

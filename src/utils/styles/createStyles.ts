@@ -118,3 +118,38 @@ export const createStyles = <
     return processStyles(stylesOrCreator, componentName) as Result
 }
 
+/**
+ * Create a typed createStyles function pre-configured with your custom theme type.
+ * This eliminates the need to specify the theme type on every createStyles call.
+ *
+ * @example
+ * ```ts
+ * // 1. Define your custom theme
+ * type MyTheme = CustomTheme<{
+ *     brand: string
+ *     brandHover: string
+ *     surface: string
+ * }>
+ *
+ * // 2. Create a pre-typed createStyles function (do this once)
+ * export const createStyles = createTypedStyles<MyTheme>()
+ *
+ * // 3. Use it everywhere without specifying the type!
+ * const STYLES = createStyles((theme) => ({
+ *     button: {
+ *         backgroundColor: theme.colors.brand,    // ✅ TypeScript knows!
+ *         // backgroundColor: theme.colors.primary, // ❌ Error - doesn't exist
+ *     },
+ * }))
+ * ```
+ */
+export const createTypedStyles = <TTheme extends Record<string, unknown>>() => {
+    return <T extends Record<string, StyleWithPseudos | StyleFunction>>(
+        stylesOrCreator: T | ((theme: TTheme) => T)
+    ): { [K in keyof T]: T[K] extends (...args: infer TArgs) => StyleWithPseudos ? (...args: TArgs) => string : string } => {
+        // Cast to Theme for internal processing - the actual theme structure doesn't matter
+        // as long as it's passed through correctly to the user's callback
+        return createStyles<Theme, T>(stylesOrCreator as T | ((theme: Theme) => T))
+    }
+}
+
