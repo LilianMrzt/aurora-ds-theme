@@ -584,35 +584,7 @@ clearSSRRules() // Reset for next request
 | `fontFace()` | @font-face rules |
 | `cssVariables()` | CSS custom properties |
 
-### Accessibility (WCAG Contrast)
-
-| Export | Description |
-|--------|-------------|
-| `getContrastRatio(fg, bg)` | Calculate contrast ratio between two hex colors (1-21) |
-| `meetsWCAG(fg, bg, level, largeText?)` | Check if colors meet WCAG AA/AAA requirements |
-| `checkContrast(fg, bg)` | Get detailed contrast info (ratio, passes AA/AAA) |
-| `checkThemeContrast(theme, level?)` | Validate all color pairs in a theme |
-| `suggestContrastColor(fg, bg, ratio?)` | Suggest an adjusted color that meets contrast requirements |
-
-```tsx
-import { getContrastRatio, meetsWCAG, checkThemeContrast } from '@aurora-ds/theme'
-
-// Check contrast between two colors
-getContrastRatio('#ffffff', '#6366f1') // 4.54
-
-// Check WCAG compliance
-meetsWCAG('#ffffff', '#6366f1', 'AA') // true
-meetsWCAG('#ffffff', '#6366f1', 'AAA') // false
-
-// Validate entire theme
-const issues = checkThemeContrast(myTheme, 'AA')
-if (issues.length > 0) {
-    console.warn('Contrast issues found:', issues)
-}
-```
-
 ---
-
 
 ## License
 
