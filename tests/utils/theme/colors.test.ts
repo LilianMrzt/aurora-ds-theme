@@ -2,15 +2,6 @@ import { describe, it, expect } from 'vitest'
 
 import {
     colors,
-    gray,
-    slate,
-    stone,
-    red,
-    indigo,
-    emerald,
-    white,
-    black,
-    transparent,
 } from '@/utils/theme/colors'
 
 describe('Color Scales', () => {
@@ -50,18 +41,18 @@ describe('Color Scales', () => {
             const shades = [25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const
 
             shades.forEach(shade => {
-                expect(gray[shade]).toBeDefined()
-                expect(indigo[shade]).toBeDefined()
-                expect(emerald[shade]).toBeDefined()
+                expect(colors.gray[shade]).toBeDefined()
+                expect(colors.indigo[shade]).toBeDefined()
+                expect(colors.emerald[shade]).toBeDefined()
             })
         })
 
         it('should have valid hex color values', () => {
             const hexRegex = /^#[0-9a-f]{6}$/i
 
-            expect(gray[500]).toMatch(hexRegex)
-            expect(indigo[500]).toMatch(hexRegex)
-            expect(red[500]).toMatch(hexRegex)
+            expect(colors.gray[500]).toMatch(hexRegex)
+            expect(colors.indigo[500]).toMatch(hexRegex)
+            expect(colors.red[500]).toMatch(hexRegex)
         })
 
         it('should have progressively darker shades', () => {
@@ -74,15 +65,15 @@ describe('Color Scales', () => {
                 return r + g + b
             }
 
-            expect(parseHex(gray[50])).toBeGreaterThan(parseHex(gray[900]))
-            expect(parseHex(indigo[50])).toBeGreaterThan(parseHex(indigo[900]))
+            expect(parseHex(colors.gray[50])).toBeGreaterThan(parseHex(colors.gray[900]))
+            expect(parseHex(colors.indigo[50])).toBeGreaterThan(parseHex(colors.indigo[900]))
         })
     })
 
     describe('neutral scales', () => {
         it('gray should be pure neutral', () => {
             // Gray 500 should have similar R, G, B values
-            const hex = gray[500]
+            const hex = colors.gray[500]
             const r = parseInt(hex.slice(1, 3), 16)
             const g = parseInt(hex.slice(3, 5), 16)
             const b = parseInt(hex.slice(5, 7), 16)
@@ -92,7 +83,7 @@ describe('Color Scales', () => {
         })
 
         it('slate should have blue undertone', () => {
-            const hex = slate[500]
+            const hex = colors.slate[500]
             const r = parseInt(hex.slice(1, 3), 16)
             const b = parseInt(hex.slice(5, 7), 16)
 
@@ -101,7 +92,7 @@ describe('Color Scales', () => {
         })
 
         it('stone should have warm undertone', () => {
-            const hex = stone[500]
+            const hex = colors.stone[500]
             const r = parseInt(hex.slice(1, 3), 16)
             const b = parseInt(hex.slice(5, 7), 16)
 
@@ -112,15 +103,19 @@ describe('Color Scales', () => {
 
     describe('special exports', () => {
         it('should export white correctly', () => {
-            expect(white).toBe('#ffffff')
+            expect(colors.white).toBe('#ffffff')
         })
 
         it('should export black correctly', () => {
-            expect(black).toBe('#000000')
+            expect(colors.black).toBe('#000000')
         })
 
         it('should export transparent correctly', () => {
-            expect(transparent).toBe('transparent')
+            expect(colors.transparent).toBe('transparent')
+        })
+
+        it('should export current correctly', () => {
+            expect(colors.current).toBe('currentColor')
         })
     })
 })

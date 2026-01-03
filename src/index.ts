@@ -52,33 +52,9 @@ export {
     defaultBreakpoints,
 } from './utils/theme/defaultTheme'
 
-// Color scales (25-950 shades)
+// Color scales (25-950 shades) - accessible only via colors object
 export {
     colors,
-    gray,
-    slate,
-    stone,
-    red,
-    orange,
-    amber,
-    yellow,
-    lime,
-    green,
-    emerald,
-    teal,
-    cyan,
-    sky,
-    blue,
-    indigo,
-    violet,
-    purple,
-    fuchsia,
-    pink,
-    rose,
-    white,
-    black,
-    transparent,
-    current,
 } from './utils/theme/colors'
 
 // Theme presets (ready-to-use palette)

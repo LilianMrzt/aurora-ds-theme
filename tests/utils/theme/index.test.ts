@@ -17,32 +17,8 @@ import {
     defaultLineHeight,
     defaultZIndex,
     defaultTransition,
-    // Color scales
+    // Color scales (only accessible via colors object)
     colors,
-    gray,
-    slate,
-    stone,
-    red,
-    orange,
-    amber,
-    yellow,
-    lime,
-    green,
-    emerald,
-    teal,
-    cyan,
-    sky,
-    blue,
-    indigo,
-    violet,
-    purple,
-    fuchsia,
-    pink,
-    rose,
-    white,
-    black,
-    transparent,
-    current,
     // Palette
     defaultPalette,
 } from '@/utils/theme'
@@ -136,37 +112,37 @@ describe('utils/theme/index.ts exports - V2', () => {
             expect(colors.gray).toBeDefined()
         })
 
-        it('should export all neutral scales', () => {
-            expect(gray).toBeDefined()
-            expect(slate).toBeDefined()
-            expect(stone).toBeDefined()
+        it('should have all neutral scales accessible via colors', () => {
+            expect(colors.gray).toBeDefined()
+            expect(colors.slate).toBeDefined()
+            expect(colors.stone).toBeDefined()
         })
 
-        it('should export all color scales', () => {
-            expect(red).toBeDefined()
-            expect(orange).toBeDefined()
-            expect(amber).toBeDefined()
-            expect(yellow).toBeDefined()
-            expect(lime).toBeDefined()
-            expect(green).toBeDefined()
-            expect(emerald).toBeDefined()
-            expect(teal).toBeDefined()
-            expect(cyan).toBeDefined()
-            expect(sky).toBeDefined()
-            expect(blue).toBeDefined()
-            expect(indigo).toBeDefined()
-            expect(violet).toBeDefined()
-            expect(purple).toBeDefined()
-            expect(fuchsia).toBeDefined()
-            expect(pink).toBeDefined()
-            expect(rose).toBeDefined()
+        it('should have all color scales accessible via colors', () => {
+            expect(colors.red).toBeDefined()
+            expect(colors.orange).toBeDefined()
+            expect(colors.amber).toBeDefined()
+            expect(colors.yellow).toBeDefined()
+            expect(colors.lime).toBeDefined()
+            expect(colors.green).toBeDefined()
+            expect(colors.emerald).toBeDefined()
+            expect(colors.teal).toBeDefined()
+            expect(colors.cyan).toBeDefined()
+            expect(colors.sky).toBeDefined()
+            expect(colors.blue).toBeDefined()
+            expect(colors.indigo).toBeDefined()
+            expect(colors.violet).toBeDefined()
+            expect(colors.purple).toBeDefined()
+            expect(colors.fuchsia).toBeDefined()
+            expect(colors.pink).toBeDefined()
+            expect(colors.rose).toBeDefined()
         })
 
         it('should export special colors', () => {
-            expect(white).toBe('#ffffff')
-            expect(black).toBe('#000000')
-            expect(transparent).toBe('transparent')
-            expect(current).toBe('currentColor')
+            expect(colors.white).toBe('#ffffff')
+            expect(colors.black).toBe('#000000')
+            expect(colors.transparent).toBe('transparent')
+            expect(colors.current).toBe('currentColor')
         })
     })
 

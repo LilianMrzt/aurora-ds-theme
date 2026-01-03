@@ -1,46 +1,19 @@
 /**
  * Color Scales - Modern color palettes with shades from 25 to 950
  *
+ * Scales are only accessible via the colors object to maintain consistency
+ *
  * @example
  * ```ts
- * import { colors, indigo, emerald } from '@aurora-ui/theme'
+ * import { colors } from '@aurora-ui/theme'
  *
  * colors.indigo[500]  // '#6366f1'
- * emerald[400]        // '#34d399'
+ * colors.emerald[400] // '#34d399'
+ * colors.gray[900]    // '#18181b'
  * ```
  */
 
-// Neutrals
-export { gray } from './gray'
-export { slate } from './slate'
-export { stone } from './stone'
-
-// Colors
-export { red } from './red'
-export { orange } from './orange'
-export { amber } from './amber'
-export { yellow } from './yellow'
-export { lime } from './lime'
-export { green } from './green'
-export { emerald } from './emerald'
-export { teal } from './teal'
-export { cyan } from './cyan'
-export { sky } from './sky'
-export { blue } from './blue'
-export { indigo } from './indigo'
-export { violet } from './violet'
-export { purple } from './purple'
-export { fuchsia } from './fuchsia'
-export { pink } from './pink'
-export { rose } from './rose'
-
-// Special values
-export const white = '#ffffff'
-export const black = '#000000'
-export const transparent = 'transparent'
-export const current = 'currentColor'
-
-// Import all for the colors object
+// Import all scales for the colors object
 import { amber } from './amber'
 import { blue } from './blue'
 import { cyan } from './cyan'
@@ -64,6 +37,7 @@ import { yellow } from './yellow'
 
 /**
  * All color scales organized by name
+ * All scales and special values are only accessible via this object
  */
 export const colors = {
     // Neutrals
