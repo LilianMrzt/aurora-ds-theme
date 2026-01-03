@@ -28,8 +28,6 @@ export type {
     ColorScale,
     ColorName,
     ColorShade,
-    // Palette types
-    PaletteName,
 } from './types'
 
 // Providers
@@ -41,10 +39,7 @@ export { createTheme, mergeThemes, createThemeVariant, createCustomTheme } from 
 export {
     // Complete themes
     defaultTheme,
-    defaultDarkTheme,
     // Individual presets for modular customization
-    defaultColors,
-    defaultDarkColors,
     defaultSpacing,
     defaultRadius,
     defaultShadows,
@@ -86,29 +81,9 @@ export {
     current,
 } from './utils/theme/colors'
 
-// Theme presets (ready-to-use palettes)
+// Theme presets (ready-to-use palette)
 export {
-    palettes,
-    indigoLight,
-    indigoDark,
-    roseLight,
-    roseDark,
-    emeraldLight,
-    emeraldDark,
-    violetLight,
-    violetDark,
-    amberLight,
-    amberDark,
-    cyanLight,
-    cyanDark,
-    slateLight,
-    slateDark,
-    grayLight,
-    grayDark,
-    blueLight,
-    blueDark,
-    tealLight,
-    tealDark,
+    defaultPalette,
 } from './utils/theme/palettes'
 
 // Style utilities

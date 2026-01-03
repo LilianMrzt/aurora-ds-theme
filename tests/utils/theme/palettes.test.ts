@@ -1,181 +1,100 @@
 import { describe, it, expect } from 'vitest'
 
-import {
-    palettes,
-    indigoLight,
-    indigoDark,
-    blueLight,
-    blueDark,
-    roseLight,
-    roseDark,
-    emeraldLight,
-    emeraldDark,
-    tealLight,
-    tealDark,
-    violetLight,
-    violetDark,
-    amberLight,
-    amberDark,
-    cyanLight,
-    cyanDark,
-    slateLight,
-    slateDark,
-    grayLight,
-    grayDark,
-} from '@/utils/theme/palettes'
+import { defaultPalette } from '@/utils/theme/palettes'
 
 import type { BaseColors } from '@/types'
 
 const requiredColorKeys: (keyof BaseColors)[] = [
-    'primary', 'onPrimary', 'primaryHover', 'primaryActive', 'primarySubtle',
-    'secondary', 'onSecondary', 'secondaryHover', 'secondaryActive', 'secondarySubtle',
-    'accent', 'onAccent', 'accentHover', 'accentSubtle',
-    'background', 'surface', 'surfaceHover', 'surfaceActive', 'elevated', 'overlay',
-    'text', 'textSecondary', 'textTertiary', 'textInverse',
-    'border', 'borderHover', 'borderFocus', 'borderSubtle',
-    'success', 'onSuccess', 'successHover', 'successSubtle',
-    'warning', 'onWarning', 'warningHover', 'warningSubtle',
-    'error', 'onError', 'errorHover', 'errorSubtle',
-    'info', 'onInfo', 'infoHover', 'infoSubtle',
-    'link', 'linkHover', 'linkVisited', 'focus',
+    'background', 'surface', 'surfaceHover', 'surfaceActive',
+    'text', 'textSecondary', 'textTertiary',
+    'primary', 'primaryHover', 'primaryActive', 'primarySubtle', 'primaryDisabled', 'onPrimary',
+    'secondary', 'secondaryHover', 'secondaryActive', 'secondarySubtle', 'secondaryDisabled', 'onSecondary',
+    'border',
     'disabled', 'disabledText',
+    'success', 'successSubtle',
+    'warning', 'warningSubtle',
+    'error', 'errorHover', 'errorSubtle', 'onError',
+    'info', 'infoSubtle',
+    'link', 'linkHover', 'linkActive', 'linkDisabled',
 ]
 
-describe('Palettes', () => {
-    describe('palettes object', () => {
-        it('should contain all 10 palettes', () => {
-            expect(palettes.indigo).toBeDefined()
-            expect(palettes.blue).toBeDefined()
-            expect(palettes.rose).toBeDefined()
-            expect(palettes.emerald).toBeDefined()
-            expect(palettes.teal).toBeDefined()
-            expect(palettes.violet).toBeDefined()
-            expect(palettes.amber).toBeDefined()
-            expect(palettes.cyan).toBeDefined()
-            expect(palettes.slate).toBeDefined()
-            expect(palettes.gray).toBeDefined()
+describe('Palettes V2', () => {
+    describe('defaultPalette', () => {
+        it('should be defined', () => {
+            expect(defaultPalette).toBeDefined()
         })
 
-        it('each palette should have light and dark variants', () => {
-            Object.values(palettes).forEach(palette => {
-                expect(palette.light).toBeDefined()
-                expect(palette.dark).toBeDefined()
+        it('should have all required color tokens', () => {
+            requiredColorKeys.forEach(key => {
+                expect(defaultPalette[key]).toBeDefined()
+                expect(typeof defaultPalette[key]).toBe('string')
+            })
+        })
+
+        it('should only have the required color tokens and no extras', () => {
+            const paletteKeys = Object.keys(defaultPalette)
+            expect(paletteKeys).toHaveLength(requiredColorKeys.length)
+        })
+
+        it('all color values should be valid hex colors', () => {
+            const hexColorRegex = /^#[0-9a-f]{6}$/i
+            Object.entries(defaultPalette).forEach(([key, value]) => {
+                expect(value, `${key} should be a valid hex color`).toMatch(hexColorRegex)
             })
         })
     })
 
-    describe('palette completeness', () => {
-        const allPalettes = [
-            { name: 'indigoLight', palette: indigoLight },
-            { name: 'indigoDark', palette: indigoDark },
-            { name: 'blueLight', palette: blueLight },
-            { name: 'blueDark', palette: blueDark },
-            { name: 'roseLight', palette: roseLight },
-            { name: 'roseDark', palette: roseDark },
-            { name: 'emeraldLight', palette: emeraldLight },
-            { name: 'emeraldDark', palette: emeraldDark },
-            { name: 'tealLight', palette: tealLight },
-            { name: 'tealDark', palette: tealDark },
-            { name: 'violetLight', palette: violetLight },
-            { name: 'violetDark', palette: violetDark },
-            { name: 'amberLight', palette: amberLight },
-            { name: 'amberDark', palette: amberDark },
-            { name: 'cyanLight', palette: cyanLight },
-            { name: 'cyanDark', palette: cyanDark },
-            { name: 'slateLight', palette: slateLight },
-            { name: 'slateDark', palette: slateDark },
-            { name: 'grayLight', palette: grayLight },
-            { name: 'grayDark', palette: grayDark },
-        ]
-
-        allPalettes.forEach(({ name, palette }) => {
-            it(`${name} should have all required color keys`, () => {
-                requiredColorKeys.forEach(key => {
-                    expect(palette[key], `${name} missing ${key}`).toBeDefined()
-                })
-            })
-        })
-    })
-
-    describe('light vs dark contrast', () => {
-        it('light themes should have light backgrounds', () => {
-            const parseHex = (hex: string) => {
-                const r = parseInt(hex.slice(1, 3), 16)
-                const g = parseInt(hex.slice(3, 5), 16)
-                const b = parseInt(hex.slice(5, 7), 16)
-                return (r + g + b) / 3
-            }
-
-            // Light themes should have average RGB > 200 for background
-            expect(parseHex(indigoLight.background)).toBeGreaterThan(200)
-            expect(parseHex(roseLight.background)).toBeGreaterThan(200)
+    describe('color semantics', () => {
+        it('background should be lighter than text (light theme)', () => {
+            const parseHex = (hex: string) => parseInt(hex.slice(1, 3), 16)
+            expect(parseHex(defaultPalette.background)).toBeGreaterThan(parseHex(defaultPalette.text))
         })
 
-        it('dark themes should have dark backgrounds', () => {
-            const parseHex = (hex: string) => {
-                const r = parseInt(hex.slice(1, 3), 16)
-                const g = parseInt(hex.slice(3, 5), 16)
-                const b = parseInt(hex.slice(5, 7), 16)
-                return (r + g + b) / 3
-            }
-
-            // Dark themes should have average RGB < 50 for background
-            expect(parseHex(indigoDark.background)).toBeLessThan(50)
-            expect(parseHex(roseDark.background)).toBeLessThan(50)
+        it('text colors should be darker than background (light theme)', () => {
+            const parseHex = (hex: string) => parseInt(hex.slice(1, 3), 16)
+            expect(parseHex(defaultPalette.text)).toBeLessThan(parseHex(defaultPalette.background))
+            expect(parseHex(defaultPalette.textSecondary)).toBeLessThan(parseHex(defaultPalette.background))
         })
 
-        it('light themes should have dark text', () => {
-            const parseHex = (hex: string) => {
-                const r = parseInt(hex.slice(1, 3), 16)
-                const g = parseInt(hex.slice(3, 5), 16)
-                const b = parseInt(hex.slice(5, 7), 16)
-                return (r + g + b) / 3
-            }
-
-            expect(parseHex(indigoLight.text)).toBeLessThan(50)
+        it('primary hover should be different from primary', () => {
+            expect(defaultPalette.primaryHover).not.toBe(defaultPalette.primary)
         })
 
-        it('dark themes should have light text', () => {
-            const parseHex = (hex: string) => {
-                const r = parseInt(hex.slice(1, 3), 16)
-                const g = parseInt(hex.slice(3, 5), 16)
-                const b = parseInt(hex.slice(5, 7), 16)
-                return (r + g + b) / 3
-            }
-
-            expect(parseHex(indigoDark.text)).toBeGreaterThan(200)
+        it('surface hover should be different from surface', () => {
+            expect(defaultPalette.surfaceHover).not.toBe(defaultPalette.surface)
         })
-    })
 
-    describe('primary color distinctiveness', () => {
-        it('each palette should have a distinct primary color', () => {
-            const primaries = [
-                indigoLight.primary,
-                blueLight.primary,
-                roseLight.primary,
-                emeraldLight.primary,
-                tealLight.primary,
-                violetLight.primary,
-                amberLight.primary,
-                cyanLight.primary,
-            ]
-
-            // All primaries should be unique
-            const unique = new Set(primaries)
-            expect(unique.size).toBe(primaries.length)
+        it('error hover should be different from error', () => {
+            expect(defaultPalette.errorHover).not.toBe(defaultPalette.error)
         })
-    })
 
-    describe('color format validity', () => {
-        it('all colors should be valid hex or rgba', () => {
-            const hexRegex = /^#[0-9a-f]{6}$/i
-            const rgbaRegex = /^rgba?\([^)]+\)$/
+        it('link active should be different from link', () => {
+            expect(defaultPalette.linkActive).not.toBe(defaultPalette.link)
+        })
 
-            Object.entries(indigoLight).forEach(([key, value]) => {
-                const isValid = hexRegex.test(value) || rgbaRegex.test(value)
-                expect(isValid, `${key}: ${value} is not a valid color`).toBe(true)
-            })
+        it('link hover should be different from link', () => {
+            expect(defaultPalette.linkHover).not.toBe(defaultPalette.link)
+        })
+
+        it('link disabled should be different from link', () => {
+            expect(defaultPalette.linkDisabled).not.toBe(defaultPalette.link)
+        })
+
+        it('secondary hover should be different from secondary', () => {
+            expect(defaultPalette.secondaryHover).not.toBe(defaultPalette.secondary)
+        })
+
+        it('secondary subtle should be different from secondary', () => {
+            expect(defaultPalette.secondarySubtle).not.toBe(defaultPalette.secondary)
+        })
+
+        it('secondary disabled should be different from secondary', () => {
+            expect(defaultPalette.secondaryDisabled).not.toBe(defaultPalette.secondary)
+        })
+
+        it('onSecondary should be darker than secondary (text on background)', () => {
+            const parseHex = (hex: string) => parseInt(hex.slice(1, 3), 16)
+            expect(parseHex(defaultPalette.onSecondary)).toBeLessThan(parseHex(defaultPalette.secondary))
         })
     })
 })
-

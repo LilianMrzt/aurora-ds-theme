@@ -9,9 +9,6 @@ import {
     getThemeCacheSize,
     MAX_THEME_CACHE_SIZE,
     defaultTheme,
-    defaultDarkTheme,
-    defaultColors,
-    defaultDarkColors,
     defaultSpacing,
     defaultRadius,
     defaultShadows,
@@ -46,27 +43,11 @@ import {
     black,
     transparent,
     current,
-    // Palettes
-    palettes,
-    indigoLight,
-    indigoDark,
-    roseLight,
-    roseDark,
-    emeraldLight,
-    emeraldDark,
-    violetLight,
-    violetDark,
-    amberLight,
-    amberDark,
-    cyanLight,
-    cyanDark,
-    slateLight,
-    slateDark,
-    grayLight,
-    grayDark,
+    // Palette
+    defaultPalette,
 } from '@/utils/theme'
 
-describe('utils/theme/index.ts exports', () => {
+describe('utils/theme/index.ts exports - V2', () => {
     describe('theme utilities', () => {
         it('should export createTheme', () => {
             expect(createTheme).toBeDefined()
@@ -100,29 +81,14 @@ describe('utils/theme/index.ts exports', () => {
         })
     })
 
-    describe('default themes', () => {
+    describe('default theme', () => {
         it('should export defaultTheme', () => {
             expect(defaultTheme).toBeDefined()
             expect(defaultTheme.colors).toBeDefined()
         })
-
-        it('should export defaultDarkTheme', () => {
-            expect(defaultDarkTheme).toBeDefined()
-            expect(defaultDarkTheme.colors).toBeDefined()
-        })
     })
 
     describe('default presets', () => {
-        it('should export defaultColors', () => {
-            expect(defaultColors).toBeDefined()
-            expect(defaultColors.primary).toBeDefined()
-        })
-
-        it('should export defaultDarkColors', () => {
-            expect(defaultDarkColors).toBeDefined()
-            expect(defaultDarkColors.primary).toBeDefined()
-        })
-
         it('should export defaultSpacing', () => {
             expect(defaultSpacing).toBeDefined()
             expect(defaultSpacing.md).toBeDefined()
@@ -204,32 +170,11 @@ describe('utils/theme/index.ts exports', () => {
         })
     })
 
-    describe('palettes', () => {
-        it('should export palettes object', () => {
-            expect(palettes).toBeDefined()
-            expect(palettes.indigo).toBeDefined()
-        })
-
-        it('should export all light palettes', () => {
-            expect(indigoLight).toBeDefined()
-            expect(roseLight).toBeDefined()
-            expect(emeraldLight).toBeDefined()
-            expect(violetLight).toBeDefined()
-            expect(amberLight).toBeDefined()
-            expect(cyanLight).toBeDefined()
-            expect(slateLight).toBeDefined()
-            expect(grayLight).toBeDefined()
-        })
-
-        it('should export all dark palettes', () => {
-            expect(indigoDark).toBeDefined()
-            expect(roseDark).toBeDefined()
-            expect(emeraldDark).toBeDefined()
-            expect(violetDark).toBeDefined()
-            expect(amberDark).toBeDefined()
-            expect(cyanDark).toBeDefined()
-            expect(slateDark).toBeDefined()
-            expect(grayDark).toBeDefined()
+    describe('palette V2', () => {
+        it('should export defaultPalette', () => {
+            expect(defaultPalette).toBeDefined()
+            expect(defaultPalette.primary).toBeDefined()
+            expect(defaultPalette.background).toBeDefined()
         })
     })
 })

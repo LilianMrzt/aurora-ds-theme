@@ -1,4 +1,4 @@
-import { indigoLight, indigoDark } from './palettes'
+import { defaultPalette } from './palettes'
 
 import type { Theme } from '@/types'
 
@@ -137,20 +137,10 @@ export const defaultBreakpoints: Theme['breakpoints'] = {
 }
 
 /**
- * Default colors (using indigo palette)
- */
-export const defaultColors = indigoLight
-
-/**
- * Default dark colors (using indigo palette)
- */
-export const defaultDarkColors = indigoDark
-
-/**
- * Complete default light theme
+ * Complete default theme V2
  */
 export const defaultTheme: Theme = {
-    colors: defaultColors,
+    colors: defaultPalette,
     spacing: defaultSpacing,
     radius: defaultRadius,
     shadows: defaultShadows,
@@ -163,10 +153,3 @@ export const defaultTheme: Theme = {
     breakpoints: defaultBreakpoints,
 }
 
-/**
- * Complete default dark theme
- */
-export const defaultDarkTheme: Theme = {
-    ...defaultTheme,
-    colors: defaultDarkColors,
-}

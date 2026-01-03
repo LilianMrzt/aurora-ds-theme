@@ -1,82 +1,67 @@
 import type { Theme } from '@/types'
 
 /**
- * Mock theme for tests
+ * Mock theme for tests - V2
  */
 export const mockTheme: Theme = {
     colors: {
-        primary: '#6366f1',
-        onPrimary: '#ffffff',
-        primaryHover: '#4f46e5',
-        primaryActive: '#4338ca',
-        primarySubtle: '#eef2ff',
-        primaryDisabled: '#a5b4fc',
-
-        secondary: '#6b7280',
-        onSecondary: '#ffffff',
-        secondaryHover: '#4b5563',
-        secondaryActive: '#374151',
-        secondarySubtle: '#f3f4f6',
-        secondaryDisabled: '#d1d5db',
-
-        tertiary: '#8b5cf6',
-        onTertiary: '#ffffff',
-        tertiaryHover: '#7c3aed',
-        tertiaryActive: '#6d28d9',
-        tertiarySubtle: '#f5f3ff',
-        tertiaryDisabled: '#c4b5fd',
-
-        accent: '#06b6d4',
-        onAccent: '#ffffff',
-        accentHover: '#0891b2',
-        accentActive: '#0e7490',
-        accentSubtle: '#ecfeff',
-
+        // Surface
         background: '#ffffff',
         surface: '#fafafa',
         surfaceHover: '#f4f4f5',
         surfaceActive: '#e4e4e7',
-        elevated: '#ffffff',
-        overlay: 'rgba(9, 9, 11, 0.5)',
 
+        // Text
         text: '#09090b',
         textSecondary: '#52525b',
         textTertiary: '#a1a1aa',
-        textInverse: '#fafafa',
 
+        // Primary
+        primary: '#6366f1',
+        primaryHover: '#4f46e5',
+        primaryActive: '#4338ca',
+        primarySubtle: '#eef2ff',
+        primaryDisabled: '#a5b4fc',
+        onPrimary: '#ffffff',
+
+        // Secondary
+        secondary: '#f1f5f9',
+        secondaryHover: '#e2e8f0',
+        secondaryActive: '#cbd5e1',
+        secondarySubtle: '#f8fafc',
+        secondaryDisabled: '#e2e8f0',
+        onSecondary: '#334155',
+
+        // Border
         border: '#e4e4e7',
-        borderHover: '#d4d4d8',
-        borderFocus: '#6366f1',
-        borderSubtle: '#f4f4f5',
 
+        // Disabled
+        disabled: '#f4f4f5',
+        disabledText: '#a1a1aa',
+
+        // Success
         success: '#10b981',
-        onSuccess: '#ffffff',
-        successHover: '#059669',
         successSubtle: '#ecfdf5',
 
+        // Warning
         warning: '#f97316',
-        onWarning: '#ffffff',
-        warningHover: '#ea580c',
         warningSubtle: '#fff7ed',
 
+        // Error
         error: '#ef4444',
-        onError: '#ffffff',
         errorHover: '#dc2626',
         errorSubtle: '#fef2f2',
+        onError: '#ffffff',
 
+        // Info
         info: '#3b82f6',
-        onInfo: '#ffffff',
-        infoHover: '#2563eb',
         infoSubtle: '#eff6ff',
 
+        // Links
         link: '#6366f1',
         linkHover: '#4f46e5',
         linkActive: '#4338ca',
-        linkVisited: '#8b5cf6',
-        focus: '#6366f1',
-
-        disabled: '#f4f4f5',
-        disabledText: '#a1a1aa',
+        linkDisabled: '#a5b4fc',
     },
 
     spacing: {

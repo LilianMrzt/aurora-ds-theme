@@ -2,7 +2,7 @@ import { renderHook , render, screen } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 
 import { ThemeProvider, useTheme } from '@/providers/ThemeProvider'
-import { defaultTheme, defaultDarkTheme } from '@/utils/theme'
+import { defaultTheme } from '@/utils/theme'
 
 describe('ThemeProvider', () => {
     it('should provide theme to children', () => {
@@ -48,6 +48,14 @@ describe('ThemeProvider', () => {
     })
 
     it('should update when theme changes', () => {
+        const altTheme = {
+            ...defaultTheme,
+            colors: {
+                ...defaultTheme.colors,
+                background: '#222222',
+            },
+        }
+
         const TestComponent = () => {
             const theme = useTheme()
             return <div data-testid={'bg'}>
@@ -64,12 +72,12 @@ describe('ThemeProvider', () => {
         expect(screen.getByTestId('bg').textContent).toBe(defaultTheme.colors.background)
 
         rerender(
-            <ThemeProvider theme={defaultDarkTheme}>
+            <ThemeProvider theme={altTheme}>
                 <TestComponent />
             </ThemeProvider>
         )
 
-        expect(screen.getByTestId('bg').textContent).toBe(defaultDarkTheme.colors.background)
+        expect(screen.getByTestId('bg').textContent).toBe(altTheme.colors.background)
     })
 
     it('should render children', () => {

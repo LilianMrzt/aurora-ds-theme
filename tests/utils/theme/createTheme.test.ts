@@ -6,7 +6,6 @@ import {
     createThemeVariant,
     createCustomTheme,
     defaultTheme,
-    defaultDarkTheme,
     clearThemeCache,
     getThemeCacheSize,
     MAX_THEME_CACHE_SIZE,
@@ -223,18 +222,6 @@ describe('defaultTheme', () => {
     })
 })
 
-describe('defaultDarkTheme', () => {
-    it('should have different colors than light theme', () => {
-        expect(defaultDarkTheme.colors.background).not.toBe(defaultTheme.colors.background)
-        expect(defaultDarkTheme.colors.text).not.toBe(defaultTheme.colors.text)
-    })
-
-    it('should share non-color properties with light theme', () => {
-        expect(defaultDarkTheme.spacing).toEqual(defaultTheme.spacing)
-        expect(defaultDarkTheme.radius).toEqual(defaultTheme.radius)
-        expect(defaultDarkTheme.fontSize).toEqual(defaultTheme.fontSize)
-    })
-})
 
 describe('theme cache utilities', () => {
     beforeEach(() => {

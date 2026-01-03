@@ -11,10 +11,7 @@ export {
 export {
     // Complete themes
     defaultTheme,
-    defaultDarkTheme,
     // Individual presets for customization
-    defaultColors,
-    defaultDarkColors,
     defaultSpacing,
     defaultRadius,
     defaultShadows,
@@ -56,27 +53,9 @@ export {
     current,
 } from './colors'
 
-// Theme presets (ready-to-use color palettes)
+// Theme presets (ready-to-use color palette)
 export {
-    palettes,
-    indigoLight,
-    indigoDark,
-    roseLight,
-    roseDark,
-    emeraldLight,
-    emeraldDark,
-    violetLight,
-    violetDark,
-    amberLight,
-    amberDark,
-    cyanLight,
-    cyanDark,
-    slateLight,
-    slateDark,
-    grayLight,
-    grayDark,
-    blueLight,
-    blueDark,
-    tealLight,
-    tealDark,
+    defaultPalette,
 } from './palettes'
+
+

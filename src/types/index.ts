@@ -26,5 +26,3 @@ export type {
 // Color types
 export type { ColorScale, ColorName, ColorShade } from './colors'
 
-// Palette types
-export type { PaletteName } from './palettes'

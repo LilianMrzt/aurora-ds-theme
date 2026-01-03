@@ -1,91 +1,63 @@
 /**
- * Base color tokens following modern design system semantics
+ * Base color tokens following modern design system semantics - V2
  */
 export type BaseColors = {
-    // === PRIMARY ===
-    primary: string
-    onPrimary: string
-    primaryHover: string
-    primaryActive: string
-    primarySubtle: string
-    primaryDisabled: string
-
-    // === SECONDARY ===
-    secondary: string
-    onSecondary: string
-    secondaryHover: string
-    secondaryActive: string
-    secondarySubtle: string
-    secondaryDisabled: string
-
-    // === ACCENT ===
-    accent: string
-    onAccent: string
-    accentHover: string
-    accentActive: string
-    accentSubtle: string
-
-    // === TERTIARY ===
-    tertiary: string
-    onTertiary: string
-    tertiaryHover: string
-    tertiaryActive: string
-    tertiarySubtle: string
-    tertiaryDisabled: string
-
-    // === NEUTRAL / SURFACE ===
+    // === SURFACE ===
     background: string
     surface: string
     surfaceHover: string
     surfaceActive: string
-    elevated: string
-    overlay: string
 
     // === TEXT ===
     text: string
     textSecondary: string
     textTertiary: string
-    textInverse: string
+
+    // === PRIMARY ===
+    primary: string
+    primaryHover: string
+    primaryActive: string
+    primarySubtle: string
+    primaryDisabled: string
+    onPrimary: string
+
+    // === SECONDARY ===
+    secondary: string
+    secondaryHover: string
+    secondaryActive: string
+    secondarySubtle: string
+    secondaryDisabled: string
+    onSecondary: string
 
     // === BORDER ===
     border: string
-    borderHover: string
-    borderFocus: string
-    borderSubtle: string
+
+    // === DISABLED ===
+    disabled: string
+    disabledText: string
 
     // === SEMANTIC: SUCCESS ===
     success: string
-    onSuccess: string
-    successHover: string
     successSubtle: string
 
     // === SEMANTIC: WARNING ===
     warning: string
-    onWarning: string
-    warningHover: string
     warningSubtle: string
 
     // === SEMANTIC: ERROR ===
     error: string
-    onError: string
     errorHover: string
     errorSubtle: string
+    onError: string
 
     // === SEMANTIC: INFO ===
     info: string
-    onInfo: string
-    infoHover: string
     infoSubtle: string
 
     // === INTERACTIVE ===
     link: string
     linkHover: string
     linkActive: string
-    linkVisited: string
-    focus: string
-
-    // === DISABLED ===
-    disabled: string
-    disabledText: string
+    linkDisabled: string
 }
 
