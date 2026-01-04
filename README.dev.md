@@ -2,6 +2,37 @@
 
 This document contains development notes and guidelines for maintaining the Aurora Theme library.
 
+## Current Version & Branch Status
+
+- **Stable (v1.x):** `master` branch - v1.6.0
+- **Next Major (v2.0):** `v2` branch - Breaking changes for simplification
+
+### v2.0 Major Changes (Breaking)
+
+The v2 branch introduces significant simplifications:
+
+1. **Removed Pre-built Palettes** (~40% bundle reduction)
+   - Removed 10+ palette exports (`indigoPalette`, `bluePalette`, etc.)
+   - Removed `defaultDarkTheme`
+   - Users build their own themes for better tree-shaking
+
+2. **Restricted Color Scale Imports** (better tree-shaking)
+   - Direct imports removed: `import { indigo } from '@aurora-ds/theme'`
+   - Only via colors object: `import { colors } from '@aurora-ds/theme'`
+
+3. **Removed WCAG Contrast Utilities** (bundle size)
+   - Removed `getContrastRatio`, `meetsWCAG`, `checkContrast`, etc.
+   - Users should use dedicated accessibility tools
+
+4. **Simplified Color Tokens** (60% reduction: 83 → 33 tokens)
+   - Removed accent, tertiary, and many state variations
+   - Focused on core tokens only
+   - Users can extend themes with custom tokens
+
+See [CHANGELOG.md](./CHANGELOG.md#200---2026-01-04) for full migration guide.
+
+---
+
 ## Prerequisites
 
 - **Node.js** >= 18.0.0
@@ -141,17 +172,68 @@ This command runs:
 
 ### Publishing to npm
 
+#### For Patch/Minor Releases
+
 ```bash
 # 1. Update version in package.json
-# 2. Update CHANGELOG.md
+# 2. Move changes from [Unreleased] to new version in CHANGELOG.md
 # 3. Commit and tag
 
-npm version patch  # or minor, major
+npm version patch  # or minor
 git push --follow-tags
 
 # 4. Publish
 npm publish --access public
 ```
+
+#### For Major Releases (Breaking Changes)
+
+**Current Version:** v1.6.0 → **v2.0.0** (current branch: `v2`)
+
+Major releases with breaking changes require extra care:
+
+**1. Finalize Breaking Changes**
+- Review all changes in `[Unreleased]` section of CHANGELOG.md
+- Ensure migration guide is complete and accurate
+- Update README.md with migration summary
+
+**2. Update Version**
+```bash
+npm version major  # 1.6.0 → 2.0.0
+```
+
+**3. Documentation Updates**
+- Move `[Unreleased]` to `[2.0.0] - YYYY-MM-DD` in CHANGELOG.md
+- Ensure migration guide is comprehensive
+- Update any affected code examples
+
+**4. Thorough Testing**
+```bash
+npm run ci              # Full CI pipeline
+npm run test:coverage   # Ensure >80% coverage
+```
+
+**5. Create Release Branch/PR**
+- Title: `Release v2.0.0`
+- Include summary of breaking changes
+- Link to migration guide
+- Get review if working in a team
+
+**6. Merge and Publish**
+```bash
+# After merge to main:
+git checkout main
+git pull
+git tag -a v2.0.0 -m "Release v2.0.0 - Major simplification"
+git push origin v2.0.0
+npm publish --access public
+```
+
+**7. Post-Release Communication**
+- Create GitHub Release with full changelog
+- Announce breaking changes in GitHub Discussions
+- Update any example repositories
+- Consider writing a blog post explaining the changes
 
 > Note: `prepublishOnly` automatically runs `npm run ci` before publishing.
 

@@ -597,6 +597,120 @@ clearSSRRules() // Reset for next request
 
 ---
 
+## Migration Guide (v1 → v2)
+
+Aurora v2 is a **major simplification** focused on flexibility and reduced bundle size. This guide helps you upgrade from v1.x to v2.0.
+
+> 📖 **Full migration guide with all details:** [CHANGELOG.md - Migration Guide](./CHANGELOG.md#migration-guide-v1-to-v2)
+
+### 🚨 Breaking Changes Summary
+
+#### 1. Removed Pre-built Theme Palettes (~40% smaller bundle)
+
+```tsx
+// ❌ v1 - Pre-built palettes (removed)
+import { indigoPalette, bluePalette, defaultDarkTheme } from '@aurora-ds/theme'
+
+// ✅ v2 - Build your own with full control
+import { colors, createTheme, defaultTheme } from '@aurora-ds/theme'
+
+const myTheme = createTheme(defaultTheme, {
+  colors: {
+    primary: colors.indigo[600],
+    primaryHover: colors.indigo[700],
+    // ... full control over all tokens
+  }
+})
+```
+
+#### 2. Color Scales Import Restriction
+
+```tsx
+// ❌ v1 - Direct imports (removed for better tree-shaking)
+import { indigo, blue } from '@aurora-ds/theme'
+
+// ✅ v2 - Import via colors object only
+import { colors } from '@aurora-ds/theme'
+colors.indigo[500]
+colors.blue[600]
+```
+
+#### 3. Removed WCAG Contrast Utilities
+
+```tsx
+// ❌ v1 - Contrast utilities (removed)
+import { getContrastRatio, meetsWCAG } from '@aurora-ds/theme'
+
+// ✅ v2 - Use dedicated accessibility tools
+// - polished / color2k (libraries)
+// - axe DevTools (browser extension)
+// - Lighthouse (Chrome DevTools)
+```
+
+#### 4. Simplified Color Tokens (83 → 33 tokens, 60% reduction)
+
+**Removed color tokens:**
+- ❌ Accent colors (5 tokens): `accent`, `accentHover`, `accentActive`, `onAccent`, `accentSubtle`
+- ❌ Tertiary colors (6 tokens): `tertiary`, `tertiaryHover`, `tertiaryActive`, `onTertiary`, `tertiarySubtle`, `tertiaryDisabled`
+- ❌ Extra surface (2): `elevated`, `overlay`
+- ❌ Extra text (1): `textInverse`
+- ❌ Extra borders (3): `borderHover`, `borderFocus`, `borderSubtle`
+- ❌ Extra semantic (6): `onSuccess`, `successHover`, `onWarning`, `warningHover`, `onInfo`, `infoHover`
+- ❌ Extra interactive (3): `linkVisited`, `linkDisabled`, `focus`
+
+**Migration:**
+
+```tsx
+// ❌ v1
+theme.colors.accent
+theme.colors.tertiary
+theme.colors.elevated
+
+// ✅ v2 - Use existing tokens or extend theme
+theme.colors.primary        // Use existing
+theme.colors.secondary      // Use existing
+theme.colors.surface        // Use existing
+
+// OR extend if needed:
+const myTheme = createTheme(defaultTheme, {
+  colors: {
+    ...defaultTheme.colors,
+    accent: colors.cyan[500],
+    tertiary: colors.violet[500],
+    elevated: colors.slate[100],
+  }
+})
+```
+
+### Quick Migration Steps
+
+1. **Replace color scale imports**
+   ```tsx
+   // Before: import { indigo } from '@aurora-ds/theme'
+   // After:  import { colors } from '@aurora-ds/theme'
+   //         colors.indigo[500]
+   ```
+
+2. **Replace palette imports** - Build your own theme (see [CHANGELOG](./CHANGELOG.md#3-pre-built-palettes-removed))
+
+3. **Replace removed color tokens** - Use existing tokens or extend theme (see [CHANGELOG](./CHANGELOG.md#1-removed-color-tokens))
+
+4. **Replace contrast utilities** - Use external tools
+
+5. **Test thoroughly**
+   ```bash
+   npm run typecheck  # Catch type errors
+   npm run build      # Ensure no import errors
+   npm test           # Run tests
+   ```
+
+### Benefits of v2
+
+- 📦 **~40% smaller bundle** - Only include what you use
+- 🎯 **More flexible** - Full control over color tokens
+- ⚡ **Better tree-shaking** - Optimized exports
+- 🧩 **Simpler** - Fewer built-in tokens = less decision fatigue
+
 ## License
 
 MIT
