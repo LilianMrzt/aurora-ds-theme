@@ -15,6 +15,8 @@ export default defineConfig({
         options.banner = {
             js: '"use client";',
         }
+        // Supprime les commentaires de licence pour réduire la taille
+        options.legalComments = 'none'
     },
 })
 

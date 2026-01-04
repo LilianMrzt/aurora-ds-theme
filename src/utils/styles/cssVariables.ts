@@ -11,12 +11,12 @@ const generateCssVariables = (obj: Record<string, unknown>, prefix: string): str
 
     for (const key in obj) {
         const value = obj[key]
-        const varName = `--${prefix}-${toKebabCase(key)}`
+        const kebabKey = toKebabCase(key)
 
         if (value && typeof value === 'object') {
-            css += generateCssVariables(value as Record<string, unknown>, `${prefix}-${toKebabCase(key)}`)
+            css += generateCssVariables(value as Record<string, unknown>, `${prefix}-${kebabKey}`)
         } else if (value != null) {
-            css += `${varName}:${value};`
+            css += `--${prefix}-${kebabKey}:${value};`
         }
     }
 

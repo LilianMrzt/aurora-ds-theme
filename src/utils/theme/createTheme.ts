@@ -19,7 +19,8 @@ import type { Theme, DeepPartial, CreateThemeOptions, CustomTheme } from '@/type
 const hashObject = (obj: unknown): string => {
     const str = JSON.stringify(obj)
     let hash = 5381
-    for (let i = 0; i < str.length; i++) {
+    const len = str.length
+    for (let i = 0; i < len; i++) {
         hash = ((hash << 5) + hash) ^ str.charCodeAt(i)
     }
     return (hash >>> 0).toString(36)
@@ -57,21 +58,24 @@ const deepMerge = <T extends Record<string, unknown>>(target: T, source: DeepPar
 
     for (const key in source) {
         const sourceValue = source[key]
+        if (sourceValue === undefined) {
+            continue
+        }
+
         const targetValue = target[key]
 
         if (
-            sourceValue !== undefined &&
-            typeof sourceValue === 'object' &&
             sourceValue !== null &&
+            typeof sourceValue === 'object' &&
             !Array.isArray(sourceValue) &&
-            typeof targetValue === 'object' &&
-            targetValue !== null
+            targetValue !== null &&
+            typeof targetValue === 'object'
         ) {
             result[key] = deepMerge(
                 targetValue as Record<string, unknown>,
                 sourceValue as DeepPartial<Record<string, unknown>>
             ) as T[Extract<keyof T, string>]
-        } else if (sourceValue !== undefined) {
+        } else {
             result[key] = sourceValue as T[Extract<keyof T, string>]
         }
     }
@@ -83,17 +87,7 @@ const deepMerge = <T extends Record<string, unknown>>(target: T, source: DeepPar
  * Shallow merge that replaces entire categories instead of deep merging
  */
 const shallowMerge = <T extends Record<string, unknown>>(target: T, source: DeepPartial<T>): T => {
-    const result = { ...target }
-
-    for (const key in source) {
-        const sourceValue = source[key]
-        if (sourceValue !== undefined) {
-            // Replace the entire category instead of deep merging
-            result[key] = sourceValue as T[Extract<keyof T, string>]
-        }
-    }
-
-    return result
+    return { ...target, ...source } as T
 }
 
 /**

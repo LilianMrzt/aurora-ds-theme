@@ -148,17 +148,12 @@ export const sanitizeCssValue = (value: string): string => {
 
     // Check for dangerous patterns
     if (CSS_INJECTION_PATTERNS.test(cleaned)) {
-        if (__DEV__) {
-            console.warn(`[Aurora] Potentially dangerous CSS value blocked: "${value.slice(0, 50)}..."`)
-        }
         return 'unset'
     }
 
     return cleaned
 }
 
-// Development mode flag (will be tree-shaken in production)
-const __DEV__ = typeof process !== 'undefined' && process.env?.NODE_ENV !== 'production'
 
 /**
  * Convert values to valid CSS with sanitization
@@ -175,21 +170,21 @@ export const toCssValue = (key: string, value: unknown): string => {
  * Optimized to avoid unnecessary allocations
  */
 export const objectToCss = (obj: Record<string, unknown>): string => {
-    const parts: string[] = []
+    let result = ''
     for (const key in obj) {
         const value = obj[key]
         if (value != null && typeof value !== 'object') {
-            parts.push(`${toKebabCase(key)}:${toCssValue(key, value)}`)
+            result += `${toKebabCase(key)}:${toCssValue(key, value)};`
         }
     }
-    return parts.join(';') + (parts.length ? ';' : '')
+    return result
 }
 
 /**
  * Convert an & selector to a valid CSS selector
  */
 export const resolveAmpersandSelector = (selector: string, className: string): string => {
-    return selector.replace(/&/g, `.${className}`)
+    return selector.includes('&') ? selector.replace(/&/g, `.${className}`) : `.${className}${selector}`
 }
 
 /**
@@ -197,6 +192,15 @@ export const resolveAmpersandSelector = (selector: string, className: string): s
  */
 export const createCacheKey = (args: unknown[]): string => {
     const len = args.length
+    if (len === 0) {return ''}
+    if (len === 1) {
+        const arg = args[0]
+        if (arg === undefined) {return 'u'}
+        if (arg === null) {return 'n'}
+        if (typeof arg === 'string' || typeof arg === 'number' || typeof arg === 'boolean') {
+            return String(arg)
+        }
+    }
     if (len <= 4) {
         let result = ''
         for (let i = 0; i < len; i++) {
@@ -221,14 +225,36 @@ export const createCacheKey = (args: unknown[]): string => {
  * Convert cacheKey to a valid CSS suffix
  */
 export const cacheKeyToSuffix = (key: string): string => {
-    if (key === 'true' || key === 'false' || /^-?\d+$/.test(key)) {
-        return key
+    // Fast path for simple keys
+    const firstChar = key.charCodeAt(0)
+    if (key.length < 20) {
+        if ((firstChar >= 97 && firstChar <= 122) || (firstChar >= 65 && firstChar <= 90)) {
+            // Starts with letter, check if alphanumeric
+            let valid = true
+            for (let i = 1; i < key.length; i++) {
+                const c = key.charCodeAt(i)
+                if (!((c >= 97 && c <= 122) || (c >= 65 && c <= 90) || (c >= 48 && c <= 57))) {
+                    valid = false
+                    break
+                }
+            }
+            if (valid) {return toKebabCaseClassName(key)}
+        } else if (firstChar === 45 || (firstChar >= 48 && firstChar <= 57)) {
+            // Number or negative number
+            let valid = true
+            for (let i = 1; i < key.length; i++) {
+                if (key.charCodeAt(i) < 48 || key.charCodeAt(i) > 57) {
+                    valid = false
+                    break
+                }
+            }
+            if (valid) {return key}
+        }
     }
-    if (/^[a-z][a-z0-9]*$/i.test(key)) {
-        return toKebabCaseClassName(key)
-    }
+    // Hash for complex keys
     let hash = 5381
-    for (let i = 0; i < key.length; i++) {
+    const len = key.length
+    for (let i = 0; i < len; i++) {
         hash = ((hash << 5) + hash) ^ key.charCodeAt(i)
     }
     return (hash >>> 0).toString(36)
@@ -266,7 +292,8 @@ export const createLRUCache = <V>(maxSize: number): { getOrSet: (key: string, fa
 export const hashStyles = (styles: StyleWithPseudos): string => {
     const str = JSON.stringify(styles)
     let hash = 5381
-    for (let i = 0; i < str.length; i++) {
+    const len = str.length
+    for (let i = 0; i < len; i++) {
         hash = ((hash << 5) + hash) ^ str.charCodeAt(i)
     }
     return (hash >>> 0).toString(36)
@@ -277,7 +304,8 @@ export const hashStyles = (styles: StyleWithPseudos): string => {
  */
 export const hashString = (str: string): string => {
     let hash = 5381
-    for (let i = 0; i < str.length; i++) {
+    const len = str.length
+    for (let i = 0; i < len; i++) {
         hash = ((hash << 5) + hash) ^ str.charCodeAt(i)
     }
     return (hash >>> 0).toString(36)
@@ -292,10 +320,10 @@ export const getUniqueClassName = (baseName: string): string => {
         return baseName
     }
     let counter = 2
-    let name = `${baseName}-${counter}`
-    while (usedClassNames.has(name)) {
-        name = `${baseName}-${++counter}`
+    while (usedClassNames.has(`${baseName}-${counter}`)) {
+        counter++
     }
+    const name = `${baseName}-${counter}`
     usedClassNames.add(name)
     return name
 }
@@ -312,8 +340,8 @@ export const generateCssClass = (styles: StyleWithPseudos, className: string, us
     }
 
     const uniqueName = getUniqueClassName(className)
-    const baseParts: string[] = []
-    const specialRules: string[] = []
+    let baseCss = ''
+    let specialRules = ''
 
     for (const key in styles) {
         const value = (styles as Record<string, unknown>)[key]
@@ -323,33 +351,32 @@ export const generateCssClass = (styles: StyleWithPseudos, className: string, us
             // @media, @container, @supports
             const innerCss = objectToCss(value as Record<string, unknown>)
             if (innerCss) {
-                specialRules.push(`${key}{.${uniqueName}{${innerCss}}}`)
+                specialRules += `${key}{.${uniqueName}{${innerCss}}}`
             }
         } else if (firstChar === '&') {
             // Complex selectors (& > div, &:nth-child, etc.)
             const innerCss = objectToCss(value as Record<string, unknown>)
             if (innerCss) {
-                const resolvedSelector = key.replace(/&/g, `.${uniqueName}`)
-                specialRules.push(`${resolvedSelector}{${innerCss}}`)
+                specialRules += `${key.replace(/&/g, `.${uniqueName}`)}{${innerCss}}`
             }
         } else if (firstChar === ':') {
             // Pseudo-classes (:hover, :focus, etc.)
             const innerCss = objectToCss(value as Record<string, unknown>)
             if (innerCss) {
-                specialRules.push(`.${uniqueName}${key}{${innerCss}}`)
+                specialRules += `.${uniqueName}${key}{${innerCss}}`
             }
         } else if (value != null && typeof value !== 'object') {
             // Simple CSS properties
-            baseParts.push(`${toKebabCase(key)}:${toCssValue(key, value)}`)
+            baseCss += `${toKebabCase(key)}:${toCssValue(key, value)};`
         }
     }
 
     // Inject rules
-    if (baseParts.length) {
-        insertRule(`.${uniqueName}{${baseParts.join(';')}}`)
+    if (baseCss) {
+        insertRule(`.${uniqueName}{${baseCss}}`)
     }
-    for (const rule of specialRules) {
-        insertRule(rule)
+    if (specialRules) {
+        insertRule(specialRules)
     }
 
     if (useCache) {
