@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-01-04
+
+### Fixed
+- **Critical:** Fixed hover and pseudo-class styles not being applied. Multiple pseudo-classes (`:hover`, `:active`, `:focus`, etc.) were being concatenated and inserted as a single invalid CSS rule, causing them to fail silently. Each pseudo-class rule is now inserted individually, ensuring proper hover effects and state changes on components.
+
 ## [2.0.0] - 2026-01-04
 
 ### 🚨 Breaking Changes

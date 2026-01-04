@@ -341,7 +341,6 @@ export const generateCssClass = (styles: StyleWithPseudos, className: string, us
 
     const uniqueName = getUniqueClassName(className)
     let baseCss = ''
-    let specialRules = ''
 
     for (const key in styles) {
         const value = (styles as Record<string, unknown>)[key]
@@ -351,19 +350,19 @@ export const generateCssClass = (styles: StyleWithPseudos, className: string, us
             // @media, @container, @supports
             const innerCss = objectToCss(value as Record<string, unknown>)
             if (innerCss) {
-                specialRules += `${key}{.${uniqueName}{${innerCss}}}`
+                insertRule(`${key}{.${uniqueName}{${innerCss}}}`)
             }
         } else if (firstChar === '&') {
             // Complex selectors (& > div, &:nth-child, etc.)
             const innerCss = objectToCss(value as Record<string, unknown>)
             if (innerCss) {
-                specialRules += `${key.replace(/&/g, `.${uniqueName}`)}{${innerCss}}`
+                insertRule(`${key.replace(/&/g, `.${uniqueName}`)}{${innerCss}}`)
             }
         } else if (firstChar === ':') {
             // Pseudo-classes (:hover, :focus, etc.)
             const innerCss = objectToCss(value as Record<string, unknown>)
             if (innerCss) {
-                specialRules += `.${uniqueName}${key}{${innerCss}}`
+                insertRule(`.${uniqueName}${key}{${innerCss}}`)
             }
         } else if (value != null && typeof value !== 'object') {
             // Simple CSS properties
@@ -371,12 +370,9 @@ export const generateCssClass = (styles: StyleWithPseudos, className: string, us
         }
     }
 
-    // Inject rules
+    // Inject base rule
     if (baseCss) {
         insertRule(`.${uniqueName}{${baseCss}}`)
-    }
-    if (specialRules) {
-        insertRule(specialRules)
     }
 
     if (useCache) {
