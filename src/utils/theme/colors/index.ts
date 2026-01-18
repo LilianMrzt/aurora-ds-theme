@@ -28,7 +28,6 @@ import { pink } from './pink'
 import { purple } from './purple'
 import { red } from './red'
 import { rose } from './rose'
-import { sky } from './sky'
 import { slate } from './slate'
 import { stone } from './stone'
 import { teal } from './teal'
@@ -54,7 +53,6 @@ export const colors = {
     emerald,
     teal,
     cyan,
-    sky,
     blue,
     indigo,
     violet,
