@@ -192,7 +192,7 @@ describe('useTheme', () => {
         console.error = originalError
     })
 
-    it('should return typed theme with generic', () => {
+    it('should return typed theme', () => {
         type CustomTheme = typeof defaultTheme & {
             custom: { value: string }
         }
@@ -202,7 +202,7 @@ describe('useTheme', () => {
             custom: { value: 'test' },
         }
 
-        const { result } = renderHook(() => useTheme<CustomTheme>(), {
+        const { result } = renderHook(() => useTheme(), {
             wrapper: ({ children }) => (
                 <ThemeProvider theme={customTheme}>
                     {children}
@@ -210,7 +210,7 @@ describe('useTheme', () => {
             ),
         })
 
-        expect(result.current.custom.value).toBe('test')
+        expect((result.current as CustomTheme).custom.value).toBe('test')
     })
 })
 
