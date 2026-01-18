@@ -1,4 +1,4 @@
-import type { ColorScale } from '@/types'
+import { ColorScale } from '@/types/colors'
 
 export const pink: ColorScale = {
     25: '#fef5f9',

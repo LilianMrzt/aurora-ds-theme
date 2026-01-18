@@ -1,4 +1,4 @@
-import type { ColorScale } from '@/types'
+import { ColorScale } from '@/types/colors'
 
 export const rose: ColorScale = {
     25: '#fff5f6',

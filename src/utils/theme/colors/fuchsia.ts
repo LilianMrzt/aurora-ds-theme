@@ -1,4 +1,4 @@
-import type { ColorScale } from '@/types'
+import { ColorScale } from '@/types/colors'
 
 export const fuchsia: ColorScale = {
     25: '#fef5ff',

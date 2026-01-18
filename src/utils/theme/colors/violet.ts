@@ -1,4 +1,4 @@
-import type { ColorScale } from '@/types'
+import { ColorScale } from '@/types/colors'
 
 export const violet: ColorScale = {
     25: '#f8f5ff',
