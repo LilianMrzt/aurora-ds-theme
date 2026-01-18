@@ -1,77 +1,68 @@
-// Main exports for @aurora-ui/theme
+/**
+ * @aurora-ds/theme - Minimalist and Type-Safe API
+ *
+ * Philosophy:
+ * 1. The library provides NO default theming
+ * 2. You define the ENTIRE structure via `defineTheme`
+ * 3. `defineTheme` is required - `createTheme` needs a definition
+ *
+ * @example
+ * ```typescript
+ * // 1. Define the structure
+ * const themeDefinition = defineTheme({
+ *   colors: { primary: null, secondary: null },
+ *   spacing: { sm: null, md: null }
+ * })
+ *
+ * // 2. Create a conforming theme
+ * const myTheme = createTheme(themeDefinition, {
+ *   colors: { primary: '#007bff', secondary: '#6c757d' },
+ *   spacing: { sm: '8px', md: '16px' }
+ * })
+ *
+ * // 3. Use with full type-safety
+ * const useStyles = createStyles((theme) => ({
+ *   root: { color: theme.colors.primary }
+ * }))
+ *
+ * // 4. Extract theme type for your components
+ * type AppTheme = typeof myTheme  // ✅ Automatically inferred
+ * ```
+ */
 
-// Types
-export type {
-    // Theme types
-    Theme,
-    ExtendedTheme,
-    BaseBreakpoints,
-    BaseColors,
-    BaseSpacing,
-    BaseRadius,
-    BaseShadows,
-    BaseFontSize,
-    BaseFontWeight,
-    BaseLineHeight,
-    BaseZIndex,
-    BaseTransition,
-    BaseOpacity,
-    ExtendTheme,
-    DeepPartial,
-    ThemeOverride,
-    // Custom theme types
-    CustomTheme,
-    CustomThemeBase,
-    CreateThemeOptions,
-    CreateCustomThemeOptions,
-    // Color types
-    ColorScale,
-    ColorName,
-    ColorShade,
-} from './types'
 
-// Providers
+// ============================================================================
+// Core API
+// ============================================================================
+
+export { defineTheme, createTheme } from './utils/theme'
+
+// ============================================================================
+// Providers & Hooks
+// ============================================================================
+
 export { ThemeProvider, useTheme } from './providers/ThemeProvider'
 export type { ThemeProviderProps } from './providers/ThemeProvider'
 
-// Theme utilities
-export { createTheme, mergeThemes, createThemeVariant, createCustomTheme } from './utils/theme/createTheme'
-export {
-    // Complete themes
-    defaultTheme,
-    // Individual presets for modular customization
-    defaultSpacing,
-    defaultRadius,
-    defaultShadows,
-    defaultFontSize,
-    defaultFontWeight,
-    defaultLineHeight,
-    defaultZIndex,
-    defaultTransition,
-    defaultOpacity,
-    defaultBreakpoints,
-} from './utils/theme/defaultTheme'
+// ============================================================================
+// Style Utilities
+// ============================================================================
 
-// Color scales (25-950 shades) - accessible only via colors object
-export {
-    colors,
-} from './utils/theme/colors'
-
-// Theme presets (ready-to-use palette)
-export {
-    defaultPalette,
-} from './utils/theme/palettes'
-
-// Style utilities
-export { createStyles, createTypedStyles } from './utils/styles/createStyles'
+export { createStyles } from './utils/styles/createStyles'
 export { keyframes } from './utils/styles/keyframes'
 export { fontFace } from './utils/styles/fontFace'
 export { cssVariables, cssVar, injectCssVariables } from './utils/styles/cssVariables'
 
-// SSR utilities
+// ============================================================================
+// SSR Utilities
+// ============================================================================
+
 export { getSSRStyles, getSSRStyleTag, clearSSRRules, getSSRRulesArray } from './utils/styles/ssr'
 
-// Style engine internals (for advanced use cases)
+// ============================================================================
+// Style Engine (Advanced)
+// ============================================================================
+
 export {
     setThemeContextGetter,
     getTheme,
@@ -79,6 +70,8 @@ export {
     sanitizeCssValue,
 } from './utils/styles/styleEngine'
 
+// ============================================================================
+// Types for Style Utilities
+// ============================================================================
 
-// Types for style utilities
 export type { StyleWithPseudos, StyleFunction, FontFaceOptions, CSSProperties } from './utils/styles/types'

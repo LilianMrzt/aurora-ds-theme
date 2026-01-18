@@ -1,37 +1,10 @@
-export {
-    createTheme,
-    mergeThemes,
-    createThemeVariant,
-    createCustomTheme,
-    clearThemeCache,
-    getThemeCacheSize,
-    MAX_THEME_CACHE_SIZE,
-} from './createTheme'
+/**
+ * Aurora DS Theme - Minimalist and Type-Safe API
+ *
+ * This new API is based on the theme definition (contract) concept.
+ * The library provides NO default theming - you define the entire structure.
+ */
 
-export {
-    // Default theme
-    defaultTheme,
-    // Individual presets for customization
-    defaultSpacing,
-    defaultRadius,
-    defaultShadows,
-    defaultFontSize,
-    defaultFontWeight,
-    defaultLineHeight,
-    defaultZIndex,
-    defaultTransition,
-    defaultOpacity,
-    defaultBreakpoints,
-} from './defaultTheme'
-
-// Color scales (25-950 shades)
-export {
-    colors,
-} from './colors'
-
-// Theme preset (ready-to-use color palette)
-export {
-    defaultPalette,
-} from './palettes'
-
+export { defineTheme } from './defineTheme'
+export { createTheme } from './createTheme'
 

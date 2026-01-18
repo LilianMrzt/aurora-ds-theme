@@ -1,28 +1,8 @@
-// Theme types
-export type {
-    BaseBreakpoints,
-    BaseColors,
-    BaseSpacing,
-    BaseRadius,
-    BaseShadows,
-    BaseFontSize,
-    BaseFontWeight,
-    BaseLineHeight,
-    BaseZIndex,
-    BaseTransition,
-    BaseOpacity,
-    Theme,
-    ExtendedTheme,
-    ExtendTheme,
-    DeepPartial,
-    ThemeOverride,
-    // Custom theme types for complete token replacement
-    CustomTheme,
-    CustomThemeBase,
-    CreateThemeOptions,
-    CreateCustomThemeOptions,
-} from './theme'
+/**
+ * Aurora DS Theme - Types
+ *
+ * Minimalist API with generic types only.
+ */
 
-// Color types
-export type { ColorScale, ColorName, ColorShade } from './colors'
-
+// Core theme types
+export type { Theme, ThemeDefinition } from './theme'
