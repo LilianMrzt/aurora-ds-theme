@@ -60,29 +60,51 @@ const processStyles = <T extends Record<string, StyleWithPseudos | StyleFunction
 }
 
 /**
- * Create typed styles with support for pseudo-classes, media queries, container queries, feature queries and complex selectors
+z * Creates type-safe styles with theme support.
  *
- * Supports custom extended themes via generic parameter.
+ * Supports pseudo-classes, media queries, container queries, feature queries and complex selectors.
+ * Theme type is automatically inferred from your theme definition.
+ *
+ * @template TTheme - Theme type (automatically inferred from context)
+ * @template T - Styles object type
  *
  * @example
  * ```ts
- * // Basic usage with default theme
- * const STYLES = createStyles((theme) => ({
- *     root: {
- *         display: 'flex',
- *         padding: theme.spacing.md,
- *         ':hover': { backgroundColor: theme.colors.backgroundHover },
- *     }
- * }))
+ * // Define your theme structure
+ * const themeDefinition = defineTheme({
+ *   colors: { primary: null, secondary: null },
+ *   spacing: { sm: null, md: null }
+ * })
  *
- * // With custom extended theme
- * type MyTheme = Theme & { colors: BaseColors & { accent: string } }
+ * const myTheme = createTheme(themeDefinition, {
+ *   colors: { primary: '#007bff', secondary: '#6c757d' },
+ *   spacing: { sm: '8px', md: '16px' }
+ * })
  *
- * const STYLES = createStyles<MyTheme>((theme) => ({
- *     root: {
- *         backgroundColor: theme.colors.accent, // TypeScript knows about accent!
+ * type AppTheme = typeof myTheme
+ *
+ * // Use with full type-safety
+ * const useStyles = createStyles<AppTheme>((theme) => ({
+ *   root: {
+ *     display: 'flex',
+ *     padding: theme.spacing.sm,        // ✅ Autocomplete works
+ *     color: theme.colors.primary,      // ✅ Type-safe
+ *     ':hover': {
+ *       color: theme.colors.secondary   // ✅ Full IntelliSense
  *     }
+ *   }
  * }))
+ * ```
+ *
+ * @example
+ * ```ts
+ * // Without theme parameter (static styles)
+ * const useStyles = createStyles({
+ *   root: {
+ *     display: 'flex',
+ *     padding: '16px'
+ *   }
+ * })
  * ```
  */
 export const createStyles = <
@@ -119,27 +141,35 @@ export const createStyles = <
 }
 
 /**
- * Create a typed createStyles function pre-configured with your custom theme type.
- * This eliminates the need to specify the theme type on every createStyles call.
+ * Creates a pre-typed createStyles function for your custom theme.
+ * Eliminates the need to specify the theme type on every createStyles call.
+ *
+ * @template TTheme - Your theme type (use `typeof myTheme`)
  *
  * @example
  * ```ts
- * // 1. Define your custom theme
- * type MyTheme = CustomTheme<{
- *     brand: string
- *     brandHover: string
- *     surface: string
- * }>
+ * // 1. Define and create your theme
+ * const themeDefinition = defineTheme({
+ *   colors: { brand: null, accent: null },
+ *   spacing: { sm: null, md: null }
+ * })
  *
- * // 2. Create a pre-typed createStyles function (do this once)
- * export const createStyles = createTypedStyles<MyTheme>()
+ * const myTheme = createTheme(themeDefinition, {
+ *   colors: { brand: '#007bff', accent: '#9c27b0' },
+ *   spacing: { sm: '8px', md: '16px' }
+ * })
  *
- * // 3. Use it everywhere without specifying the type!
- * const STYLES = createStyles((theme) => ({
- *     button: {
- *         backgroundColor: theme.colors.brand,    // ✅ TypeScript knows!
- *         // backgroundColor: theme.colors.primary, // ❌ Error - doesn't exist
- *     },
+ * type AppTheme = typeof myTheme
+ *
+ * // 2. Create a pre-typed createStyles (do this once in a shared file)
+ * export const createStyles = createTypedStyles<AppTheme>()
+ *
+ * // 3. Use everywhere without specifying the type!
+ * const useStyles = createStyles((theme) => ({
+ *   button: {
+ *     backgroundColor: theme.colors.brand,    // ✅ Full autocomplete
+ *     padding: theme.spacing.md,              // ✅ Type-safe
+ *   }
  * }))
  * ```
  */
