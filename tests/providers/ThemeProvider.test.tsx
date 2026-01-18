@@ -2,7 +2,36 @@ import { renderHook , render, screen } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 
 import { ThemeProvider, useTheme } from '@/providers/ThemeProvider'
-import { defaultTheme } from '@/utils/theme'
+import { createTheme } from '@/utils/theme'
+
+// Test theme type
+type TestTheme = {
+    colors: {
+        primary: string
+        secondary: string
+        background: string
+        text: string
+    }
+    spacing: {
+        sm: string
+        md: string
+        lg: string
+    }
+}
+
+const defaultTheme = createTheme<TestTheme>({
+    colors: {
+        primary: '#007bff',
+        secondary: '#6c757d',
+        background: '#ffffff',
+        text: '#000000',
+    },
+    spacing: {
+        sm: '8px',
+        md: '16px',
+        lg: '24px',
+    },
+})
 
 describe('ThemeProvider', () => {
     it('should provide theme to children', () => {
@@ -23,13 +52,19 @@ describe('ThemeProvider', () => {
     })
 
     it('should provide custom theme', () => {
-        const customTheme = {
-            ...defaultTheme,
+        const customTheme = createTheme<TestTheme>({
             colors: {
-                ...defaultTheme.colors,
                 primary: '#custom123',
+                secondary: '#6c757d',
+                background: '#ffffff',
+                text: '#000000',
             },
-        }
+            spacing: {
+                sm: '8px',
+                md: '16px',
+                lg: '24px',
+            },
+        })
 
         const TestComponent = () => {
             const theme = useTheme()
@@ -48,13 +83,19 @@ describe('ThemeProvider', () => {
     })
 
     it('should update when theme changes', () => {
-        const altTheme = {
-            ...defaultTheme,
+        const altTheme = createTheme<TestTheme>({
             colors: {
-                ...defaultTheme.colors,
+                primary: '#007bff',
+                secondary: '#6c757d',
                 background: '#222222',
+                text: '#000000',
             },
-        }
+            spacing: {
+                sm: '8px',
+                md: '16px',
+                lg: '24px',
+            },
+        })
 
         const TestComponent = () => {
             const theme = useTheme()
@@ -93,13 +134,19 @@ describe('ThemeProvider', () => {
     })
 
     it('should handle nested ThemeProviders', () => {
-        const innerTheme = {
-            ...defaultTheme,
+        const innerTheme = createTheme<TestTheme>({
             colors: {
-                ...defaultTheme.colors,
                 primary: '#nested123',
+                secondary: '#6c757d',
+                background: '#ffffff',
+                text: '#000000',
             },
-        }
+            spacing: {
+                sm: '8px',
+                md: '16px',
+                lg: '24px',
+            },
+        })
 
         const TestComponent = () => {
             const theme = useTheme()

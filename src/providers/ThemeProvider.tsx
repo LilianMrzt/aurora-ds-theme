@@ -4,6 +4,7 @@ import { setThemeContextGetter } from '@/utils/styles/styleEngine'
 
 import type { Theme } from '@/types'
 
+
 const ThemeContext = createContext<Theme | undefined>(undefined)
 
 export type ThemeProviderProps<T extends Theme = Theme> = {
@@ -12,19 +13,27 @@ export type ThemeProviderProps<T extends Theme = Theme> = {
 }
 
 /**
- * Theme provider component
- * Provides theme context to all child components
+ * Theme provider component.
+ * Provides theme context to all child components.
+ *
+ * **Type Inference:** The theme type is automatically propagated to createStyles
+ * and useTheme used within this provider. No type annotations needed!
  *
  * @example
  * ```tsx
- * // With default theme
- * <ThemeProvider theme={defaultTheme}>
- *     <App />
- * </ThemeProvider>
+ * const themeDefinition = defineTheme({
+ *   colors: { primary: null, secondary: null },
+ *   spacing: { sm: null, md: null }
+ * })
  *
- * // With custom extended theme
- * <ThemeProvider theme={myCustomTheme}>
- *     <App />
+ * const myTheme = createTheme(themeDefinition, {
+ *   colors: { primary: '#007bff', secondary: '#6c757d' },
+ *   spacing: { sm: '8px', md: '16px' }
+ * })
+ *
+ * // Wrap your app
+ * <ThemeProvider theme={myTheme}>
+ *   <App />  // createStyles and useTheme get full autocomplete!
  * </ThemeProvider>
  * ```
  */
@@ -48,16 +57,19 @@ export const ThemeProvider = <T extends Theme>({
 }
 
 /**
- * Hook to access the current theme
- * Use the generic parameter to get proper typing for extended themes
+ * Hook to access the current theme with automatic type inference.
+ *
+ * The theme type is automatically inferred from the ThemeRegistry.
+ * No type annotation needed!
  *
  * @example
  * ```tsx
- * // Basic usage
- * const theme = useTheme()
+ * function MyComponent() {
+ *   const theme = useTheme()
  *
- * // With custom theme type
- * const theme = useTheme<MyCustomTheme>()
+ *   // ✅ Full autocomplete on theme.colors, theme.spacing, etc.
+ *   return <div style={{ color: theme.colors.primary }} />
+ * }
  * ```
  *
  * @throws {Error} If used outside a ThemeProvider

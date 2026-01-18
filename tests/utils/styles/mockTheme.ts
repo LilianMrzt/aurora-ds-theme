@@ -1,69 +1,184 @@
-import type { Theme } from '@/types'
+import { createTheme } from '@/utils/theme'
 
 /**
- * Mock theme for tests - V2
+ * Mock theme type for tests
  */
-export const mockTheme: Theme = {
+type MockThemeType = {
     colors: {
-        // Surface
+        background: string
+        surface: string
+        surfaceHover: string
+        surfaceActive: string
+        text: string
+        textSecondary: string
+        textTertiary: string
+        primary: string
+        primaryHover: string
+        primaryActive: string
+        primarySubtle: string
+        primaryDisabled: string
+        onPrimary: string
+        secondary: string
+        secondaryHover: string
+        secondaryActive: string
+        secondarySubtle: string
+        secondaryDisabled: string
+        onSecondary: string
+        border: string
+        disabled: string
+        disabledText: string
+        success: string
+        successSubtle: string
+        warning: string
+        warningSubtle: string
+        error: string
+        errorHover: string
+        errorSubtle: string
+        onError: string
+        info: string
+        infoSubtle: string
+        link: string
+        linkHover: string
+        linkActive: string
+        linkDisabled: string
+    }
+    spacing: {
+        none: string
+        '2xs': string
+        xs: string
+        sm: string
+        md: string
+        lg: string
+        xl: string
+        '2xl': string
+        '3xl': string
+        '4xl': string
+        '5xl': string
+    }
+    radius: {
+        none: string
+        xs: string
+        sm: string
+        md: string
+        lg: string
+        xl: string
+        '2xl': string
+        full: string
+    }
+    shadows: {
+        none: string
+        xs: string
+        sm: string
+        md: string
+        lg: string
+        xl: string
+        '2xl': string
+        inner: string
+        focus: string
+    }
+    fontSize: {
+        '2xs': string
+        xs: string
+        sm: string
+        md: string
+        lg: string
+        xl: string
+        '2xl': string
+        '3xl': string
+        '4xl': string
+        '5xl': string
+    }
+    fontWeight: {
+        light: number
+        regular: number
+        medium: number
+        semibold: number
+        bold: number
+    }
+    lineHeight: {
+        none: number
+        tight: number
+        normal: number
+        relaxed: number
+        loose: number
+    }
+    zIndex: {
+        behind: number
+        base: number
+        dropdown: number
+        sticky: number
+        overlay: number
+        modal: number
+        popover: number
+        tooltip: number
+        toast: number
+    }
+    transition: {
+        fast: string
+        normal: string
+        slow: string
+    }
+    opacity: {
+        none: number
+        lowest: number
+        low: number
+        medium: number
+        high: number
+        higher: number
+        full: number
+    }
+    breakpoints: {
+        xs: string
+        sm: string
+        md: string
+        lg: string
+        xl: string
+        '2xl': string
+    }
+}
+
+/**
+ * Mock theme for tests
+ */
+export const mockTheme = createTheme<MockThemeType>({
+    colors: {
         background: '#ffffff',
         surface: '#fafafa',
         surfaceHover: '#f4f4f5',
         surfaceActive: '#e4e4e7',
-
-        // Text
         text: '#09090b',
         textSecondary: '#52525b',
         textTertiary: '#a1a1aa',
-
-        // Primary
         primary: '#6366f1',
         primaryHover: '#4f46e5',
         primaryActive: '#4338ca',
         primarySubtle: '#eef2ff',
         primaryDisabled: '#a5b4fc',
         onPrimary: '#ffffff',
-
-        // Secondary
         secondary: '#f1f5f9',
         secondaryHover: '#e2e8f0',
         secondaryActive: '#cbd5e1',
         secondarySubtle: '#f8fafc',
         secondaryDisabled: '#e2e8f0',
         onSecondary: '#334155',
-
-        // Border
         border: '#e4e4e7',
-
-        // Disabled
         disabled: '#f4f4f5',
         disabledText: '#a1a1aa',
-
-        // Success
         success: '#10b981',
         successSubtle: '#ecfdf5',
-
-        // Warning
         warning: '#f97316',
         warningSubtle: '#fff7ed',
-
-        // Error
         error: '#ef4444',
         errorHover: '#dc2626',
         errorSubtle: '#fef2f2',
         onError: '#ffffff',
-
-        // Info
         info: '#3b82f6',
         infoSubtle: '#eff6ff',
-
-        // Links
         link: '#6366f1',
         linkHover: '#4f46e5',
         linkActive: '#4338ca',
         linkDisabled: '#a5b4fc',
     },
-
     spacing: {
         none: '0',
         '2xs': '0.125rem',
@@ -77,7 +192,6 @@ export const mockTheme: Theme = {
         '4xl': '6rem',
         '5xl': '8rem',
     },
-
     radius: {
         none: '0',
         xs: '0.125rem',
@@ -88,7 +202,6 @@ export const mockTheme: Theme = {
         '2xl': '1rem',
         full: '9999px',
     },
-
     shadows: {
         none: 'none',
         xs: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
@@ -100,7 +213,6 @@ export const mockTheme: Theme = {
         inner: 'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)',
         focus: '0 0 0 3px rgb(99 102 241 / 0.4)',
     },
-
     fontSize: {
         '2xs': '0.625rem',
         xs: '0.75rem',
@@ -113,7 +225,6 @@ export const mockTheme: Theme = {
         '4xl': '3rem',
         '5xl': '4rem',
     },
-
     fontWeight: {
         light: 300,
         regular: 400,
@@ -121,7 +232,6 @@ export const mockTheme: Theme = {
         semibold: 600,
         bold: 700,
     },
-
     lineHeight: {
         none: 1,
         tight: 1.25,
@@ -129,7 +239,6 @@ export const mockTheme: Theme = {
         relaxed: 1.75,
         loose: 2,
     },
-
     zIndex: {
         behind: -1,
         base: 0,
@@ -141,13 +250,11 @@ export const mockTheme: Theme = {
         tooltip: 1600,
         toast: 1700,
     },
-
     transition: {
         fast: '150ms ease-out',
         normal: '250ms ease-out',
         slow: '350ms ease-out',
     },
-
     opacity: {
         none: 0,
         lowest: 0.05,
@@ -157,7 +264,6 @@ export const mockTheme: Theme = {
         higher: 0.75,
         full: 1,
     },
-
     breakpoints: {
         xs: '480px',
         sm: '640px',
@@ -166,4 +272,14 @@ export const mockTheme: Theme = {
         xl: '1280px',
         '2xl': '1536px',
     },
-}
+})
+
+// Export type for tests
+export type MockTheme = typeof mockTheme
+
+// Register theme type for tests
+/*declare module '@/types/theme/Theme' {
+    interface ThemeRegistry {
+        theme: MockTheme
+    }
+}*/

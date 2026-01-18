@@ -1,15 +1,15 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 
-import { createStyles, createTypedStyles, setThemeContextGetter } from '@/index'
-import { mockTheme } from '@tests/utils/styles/mockTheme'
-
-import type { Theme, CustomTheme } from '@/types'
+import { createStyles, setThemeContextGetter } from '@/index'
+import { mockTheme, type MockTheme } from '@tests/utils/styles/mockTheme'
 
 describe('createStyles', () => {
-    let previousGetter: (() => Theme | undefined) | null
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let previousGetter: (() => MockTheme | undefined) | null
 
     beforeEach(() => {
-        previousGetter = setThemeContextGetter(() => mockTheme)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        previousGetter = setThemeContextGetter(() => mockTheme) as any
     })
 
     afterEach(() => {
@@ -157,10 +157,12 @@ describe('setThemeContextGetter', () => {
 })
 
 describe('createStyles edge cases', () => {
-    let previousGetter: (() => Theme | undefined) | null
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let previousGetter: (() => MockTheme | undefined) | null
 
     beforeEach(() => {
-        previousGetter = setThemeContextGetter(() => mockTheme)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        previousGetter = setThemeContextGetter(() => mockTheme) as any
     })
 
     afterEach(() => {
@@ -261,10 +263,12 @@ describe('createStyles without theme function', () => {
 })
 
 describe('static style caching', () => {
-    let previousGetter: (() => Theme | undefined) | null
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let previousGetter: (() => MockTheme | undefined) | null
 
     beforeEach(() => {
-        previousGetter = setThemeContextGetter(() => mockTheme)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        previousGetter = setThemeContextGetter(() => mockTheme) as any
     })
 
     afterEach(() => {
@@ -307,10 +311,12 @@ describe('static style caching', () => {
 })
 
 describe('media queries support', () => {
-    let previousGetter: (() => Theme | undefined) | null
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let previousGetter: (() => MockTheme | undefined) | null
 
     beforeEach(() => {
-        previousGetter = setThemeContextGetter(() => mockTheme)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        previousGetter = setThemeContextGetter(() => mockTheme) as any
     })
 
     afterEach(() => {
@@ -349,10 +355,12 @@ describe('media queries support', () => {
 })
 
 describe('container queries support', () => {
-    let previousGetter: (() => Theme | undefined) | null
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let previousGetter: (() => MockTheme | undefined) | null
 
     beforeEach(() => {
-        previousGetter = setThemeContextGetter(() => mockTheme)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        previousGetter = setThemeContextGetter(() => mockTheme) as any
     })
 
     afterEach(() => {
@@ -392,10 +400,12 @@ describe('container queries support', () => {
 })
 
 describe('complex selectors support', () => {
-    let previousGetter: (() => Theme | undefined) | null
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let previousGetter: (() => MockTheme | undefined) | null
 
     beforeEach(() => {
-        previousGetter = setThemeContextGetter(() => mockTheme)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        previousGetter = setThemeContextGetter(() => mockTheme) as any
     })
 
     afterEach(() => {
@@ -446,10 +456,12 @@ describe('complex selectors support', () => {
 })
 
 describe('@supports feature queries', () => {
-    let previousGetter: (() => Theme | undefined) | null
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let previousGetter: (() => MockTheme | undefined) | null
 
     beforeEach(() => {
-        previousGetter = setThemeContextGetter(() => mockTheme)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        previousGetter = setThemeContextGetter(() => mockTheme) as any
     })
 
     afterEach(() => {
@@ -483,104 +495,6 @@ describe('@supports feature queries', () => {
         }))
 
         expect(typeof styles.layout).toBe('string')
-    })
-})
-
-describe('createTypedStyles', () => {
-    let previousGetter: (() => Theme | undefined) | null
-
-    // Custom theme with different color tokens for testing
-    type MyBrandColors = {
-        brand: string
-        brandHover: string
-        surface: string
-        text: string
-    }
-
-    type MyTheme = CustomTheme<MyBrandColors>
-
-    const customTheme: MyTheme = {
-        colors: {
-            brand: '#007bff',
-            brandHover: '#0056b3',
-            surface: '#ffffff',
-            text: '#212529',
-        },
-        spacing: mockTheme.spacing,
-        radius: mockTheme.radius,
-        shadows: mockTheme.shadows,
-        fontSize: mockTheme.fontSize,
-        fontWeight: mockTheme.fontWeight,
-        lineHeight: mockTheme.lineHeight,
-        zIndex: mockTheme.zIndex,
-        transition: mockTheme.transition,
-        opacity: mockTheme.opacity,
-        breakpoints: mockTheme.breakpoints,
-    }
-
-    beforeEach(() => {
-        previousGetter = setThemeContextGetter(() => customTheme as unknown as Theme)
-    })
-
-    afterEach(() => {
-        setThemeContextGetter(previousGetter)
-    })
-
-    it('should create a pre-typed createStyles function', () => {
-        const typedCreateStyles = createTypedStyles<MyTheme>()
-
-        const styles = typedCreateStyles((theme) => ({
-            button: {
-                backgroundColor: theme.colors.brand,
-                color: theme.colors.text,
-            }
-        }))
-
-        expect(typeof styles.button).toBe('string')
-        expect(styles.button).toContain('button')
-    })
-
-    it('should work with dynamic styles', () => {
-        const typedCreateStyles = createTypedStyles<MyTheme>()
-
-        const styles = typedCreateStyles((theme) => ({
-            button: (isHovered: boolean) => ({
-                backgroundColor: isHovered ? theme.colors.brandHover : theme.colors.brand,
-            })
-        }))
-
-        expect(typeof styles.button).toBe('function')
-        expect(typeof styles.button(true)).toBe('string')
-        expect(typeof styles.button(false)).toBe('string')
-    })
-
-    it('should be reusable across multiple style definitions', () => {
-        const typedCreateStyles = createTypedStyles<MyTheme>()
-
-        const buttonStyles = typedCreateStyles((theme) => ({
-            root: { backgroundColor: theme.colors.brand }
-        }))
-
-        const cardStyles = typedCreateStyles((theme) => ({
-            root: { backgroundColor: theme.colors.surface }
-        }))
-
-        expect(typeof buttonStyles.root).toBe('string')
-        expect(typeof cardStyles.root).toBe('string')
-        expect(buttonStyles.root).not.toBe(cardStyles.root)
-    })
-
-    it('should work without theme function (static styles)', () => {
-        const typedCreateStyles = createTypedStyles<MyTheme>()
-
-        const styles = typedCreateStyles({
-            container: {
-                display: 'flex',
-                flexDirection: 'column',
-            }
-        })
-
-        expect(typeof styles.container).toBe('string')
     })
 })
 

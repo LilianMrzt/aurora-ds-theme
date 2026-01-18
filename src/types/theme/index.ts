@@ -1,8 +1,7 @@
 /**
  * Aurora DS Theme - Types
  *
- * Minimalist API with generic types only - no predefined structure.
+ * Minimalist API with module augmentation for type inference.
  */
 
-export type { Theme } from './Theme'
-export type { ThemeDefinition } from './ThemeDefinition'
+export type { Theme, ThemeRegistry } from './Theme'

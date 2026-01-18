@@ -5,7 +5,8 @@ import type { Theme } from '@/types'
 const IS_SERVER = typeof document === 'undefined'
 
 // Global theme getter
-let themeContextGetter: (() => Theme | undefined) | null = null
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let themeContextGetter: (() => any) | null = null
 
 // Stylesheet for client-side injection
 let styleSheet: CSSStyleSheet | null = null
@@ -75,9 +76,10 @@ if (!IS_SERVER) {
 }
 
 /**
- * Set the theme getter
+ * Set the theme getter.
  */
-export const setThemeContextGetter = (getter: (() => Theme | undefined) | null): (() => Theme | undefined) | null => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const setThemeContextGetter = <T extends Theme>(getter: (() => T | undefined) | null): (() => any) | null => {
     const previous = themeContextGetter
     themeContextGetter = getter
     return previous

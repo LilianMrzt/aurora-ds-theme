@@ -1,32 +1,31 @@
 /**
- * @aurora-ds/theme - Minimalist and Type-Safe API
- *
- * Philosophy:
- * 1. The library provides NO default theming
- * 2. You define the ENTIRE structure via `defineTheme`
- * 3. `defineTheme` is required - `createTheme` needs a definition
+ * @aurora-ds/theme - Minimalist and Type-Safe Theme System
  *
  * @example
  * ```typescript
- * // 1. Define the structure
- * const themeDefinition = defineTheme({
- *   colors: { primary: null, secondary: null },
- *   spacing: { sm: null, md: null }
- * })
+ * // 1. Define your theme type
+ * type MyTheme = {
+ *   colors: { primary: string; secondary: string }
+ *   spacing: { sm: string; md: string }
+ * }
  *
- * // 2. Create a conforming theme
- * const myTheme = createTheme(themeDefinition, {
+ * // 2. Create theme(s) with the type
+ * export const lightTheme = createTheme<MyTheme>({
  *   colors: { primary: '#007bff', secondary: '#6c757d' },
  *   spacing: { sm: '8px', md: '16px' }
  * })
  *
- * // 3. Use with full type-safety
- * const useStyles = createStyles((theme) => ({
- *   root: { color: theme.colors.primary }
- * }))
+ * // 3. Register type for autocomplete (once in your app)
+ * declare module '@aurora-ds/theme' {
+ *   interface ThemeRegistry {
+ *     theme: MyTheme
+ *   }
+ * }
  *
- * // 4. Extract theme type for your components
- * type AppTheme = typeof myTheme  // ✅ Automatically inferred
+ * // 4. Use everywhere with full autocomplete!
+ * const useStyles = createStyles((theme) => ({
+ *   root: { color: theme.colors.primary }  // ✅ Autocomplete!
+ * }))
  * ```
  */
 
@@ -35,7 +34,13 @@
 // Core API
 // ============================================================================
 
-export { defineTheme, createTheme } from './utils/theme'
+export { createTheme } from './utils/theme'
+
+// ============================================================================
+// Types - Theme Registry for Module Augmentation
+// ============================================================================
+
+export type { Theme, ThemeRegistry } from './types/theme/Theme'
 
 // ============================================================================
 // Providers & Hooks

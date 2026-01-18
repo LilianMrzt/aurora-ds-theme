@@ -60,37 +60,22 @@ const processStyles = <T extends Record<string, StyleWithPseudos | StyleFunction
 }
 
 /**
-z * Creates type-safe styles with theme support.
+ * Creates type-safe styles with theme support.
  *
- * Supports pseudo-classes, media queries, container queries, feature queries and complex selectors.
- * Theme type is automatically inferred from your theme definition.
+ * **Type Inference:** Register your theme in ThemeRegistry to get automatic
+ * autocomplete without type annotations.
  *
- * @template TTheme - Theme type (automatically inferred from context)
- * @template T - Styles object type
+ * Supports pseudo-classes, media queries, container queries, and complex selectors.
  *
  * @example
  * ```ts
- * // Define your theme structure
- * const themeDefinition = defineTheme({
- *   colors: { primary: null, secondary: null },
- *   spacing: { sm: null, md: null }
- * })
- *
- * const myTheme = createTheme(themeDefinition, {
- *   colors: { primary: '#007bff', secondary: '#6c757d' },
- *   spacing: { sm: '8px', md: '16px' }
- * })
- *
- * type AppTheme = typeof myTheme
- *
- * // Use with full type-safety
- * const useStyles = createStyles<AppTheme>((theme) => ({
+ * // After registering your theme in ThemeRegistry:
+ * const useStyles = createStyles((theme) => ({
  *   root: {
- *     display: 'flex',
- *     padding: theme.spacing.sm,        // ✅ Autocomplete works
- *     color: theme.colors.primary,      // ✅ Type-safe
+ *     padding: theme.spacing.sm,        // ✅ Autocomplete!
+ *     color: theme.colors.primary,      // ✅ Type-safe!
  *     ':hover': {
- *       color: theme.colors.secondary   // ✅ Full IntelliSense
+ *       color: theme.colors.secondary
  *     }
  *   }
  * }))
@@ -98,12 +83,9 @@ z * Creates type-safe styles with theme support.
  *
  * @example
  * ```ts
- * // Without theme parameter (static styles)
+ * // Static styles (no theme)
  * const useStyles = createStyles({
- *   root: {
- *     display: 'flex',
- *     padding: '16px'
- *   }
+ *   root: { display: 'flex', padding: '16px' }
  * })
  * ```
  */

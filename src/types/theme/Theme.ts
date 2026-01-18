@@ -1,24 +1,32 @@
 /**
- * Represents an Aurora DS theme.
+ * Theme registry for module augmentation.
  *
- * Fully generic type based on the user-defined structure via `defineTheme`.
- * No predefined structure - you define all categories and tokens.
- *
- * @template T - Theme structure defined by the user
+ * Declare your theme type once in your app to enable automatic type inference
+ * in createStyles and useTheme.
  *
  * @example
  * ```typescript
- * const definition = defineTheme({
- *   colors: { primary: null, secondary: null },
- *   spacing: { sm: null, md: null }
- * })
- *
- * const myTheme = createTheme(definition, {
- *   colors: { primary: '#007bff', secondary: '#6c757d' },
- *   spacing: { sm: '8px', md: '16px' }
- * })
- * // myTheme has type Theme<{ colors: {...}, spacing: {...} }>
+ * // In your theme.ts file:
+ * declare module '@aurora-ds/theme' {
+ *   interface ThemeRegistry {
+ *     theme: typeof myTheme
+ *   }
+ * }
  * ```
  */
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface ThemeRegistry {}
+
+/**
+ * Infer theme type from registry, fallback to Record<string, any>.
+ * @internal
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Theme<T = Record<string, any>> = T
+type InferredTheme = ThemeRegistry extends { theme: infer T } ? T : Record<string, any>
+
+/**
+ * Represents an Aurora DS theme.
+ * Accepts any object by default. Use module augmentation for type inference.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Theme<T = InferredTheme> = T extends Record<string, any> ? T : Record<string, any>
