@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [3.0.0] - 2026-01-18
+## [3.1.0] - 2026-01-18
 
-### 🚨 Breaking Changes
+### 🎉 Official v3 Release
+
+This is the **official and stable v3 release**. 
+
+**⚠️ Important:** Version 3.0.0 was deprecated and should not be used. Please use v3.1.0 instead.
+
+### 🚨 Breaking Changes (from v2.x)
 
 Aurora v3 is a **complete API redesign** for maximum simplicity and type-safety.
 
@@ -48,11 +54,22 @@ export const lightTheme = createTheme({
 ### Added
 
 - `ThemeRegistry` interface for module augmentation
+- Full `@internal` JSDoc tags for internal functions
 
 ### Changed
 
 - `createTheme` no longer requires generic - type is inferred from `ThemeRegistry`
+- `useTheme` and `ThemeProvider` simplified without generics
 - 19 color scales (removed `sky`)
+- All documentation simplified and clarified
+
+---
+
+## [3.0.0] - 2026-01-XX
+
+**⚠️ DEPRECATED - DO NOT USE**
+
+This version was published in error and has been deprecated. Please use v2.x or v3.1.0 instead.
 
 ---
 
