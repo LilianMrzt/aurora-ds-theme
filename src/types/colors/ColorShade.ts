@@ -1,4 +1,4 @@
-import type { ColorScale } from '@/types'
+import { ColorScale } from '@/types/colors/ColorScale'
 
 /**
  * Available shade values (keys of ColorScale)

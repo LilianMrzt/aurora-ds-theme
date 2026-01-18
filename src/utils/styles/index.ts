@@ -1,4 +1,4 @@
-export { createStyles, createTypedStyles } from './createStyles'
+export { createStyles } from './createStyles'
 export { keyframes } from './keyframes'
 export { fontFace } from './fontFace'
 export { cssVariables, cssVar, injectCssVariables } from './cssVariables'

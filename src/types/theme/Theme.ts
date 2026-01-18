@@ -14,8 +14,7 @@
  * }
  * ```
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface ThemeRegistry {}
+export type ThemeRegistry = object
 
 /**
  * Infer theme type from registry, fallback to Record<string, any>.

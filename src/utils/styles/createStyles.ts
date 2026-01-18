@@ -90,10 +90,9 @@ const processStyles = <T extends Record<string, StyleWithPseudos | StyleFunction
  * ```
  */
 export const createStyles = <
-    TTheme extends Theme = Theme,
     T extends Record<string, StyleWithPseudos | StyleFunction> = Record<string, StyleWithPseudos | StyleFunction>
 >(
-        stylesOrCreator: T | ((theme: TTheme) => T)
+        stylesOrCreator: T | ((theme: Theme) => T)
     ): { [K in keyof T]: T[K] extends (...args: infer TArgs) => StyleWithPseudos ? (...args: TArgs) => string : string } => {
     type Result = { [K in keyof T]: T[K] extends (...args: infer TArgs) => StyleWithPseudos ? (...args: TArgs) => string : string }
     const componentName = getComponentNameFromStack()
@@ -101,11 +100,11 @@ export const createStyles = <
     // Styles with theme (function)
     if (typeof stylesOrCreator === 'function') {
         let cached: Result | null = null
-        let lastTheme: TTheme | undefined
+        let lastTheme: Theme | undefined
 
         return new Proxy({} as Result, {
             get(_, prop: string | symbol) {
-                const theme = getTheme() as TTheme | undefined
+                const theme = getTheme() as Theme | undefined
                 if (!theme) {
                     throw new Error('createStyles: Theme context not found. Make sure you are using this inside a ThemeProvider.')
                 }
@@ -122,46 +121,4 @@ export const createStyles = <
     return processStyles(stylesOrCreator, componentName) as Result
 }
 
-/**
- * Creates a pre-typed createStyles function for your custom theme.
- * Eliminates the need to specify the theme type on every createStyles call.
- *
- * @template TTheme - Your theme type (use `typeof myTheme`)
- *
- * @example
- * ```ts
- * // 1. Define and create your theme
- * const themeDefinition = defineTheme({
- *   colors: { brand: null, accent: null },
- *   spacing: { sm: null, md: null }
- * })
- *
- * const myTheme = createTheme(themeDefinition, {
- *   colors: { brand: '#007bff', accent: '#9c27b0' },
- *   spacing: { sm: '8px', md: '16px' }
- * })
- *
- * type AppTheme = typeof myTheme
- *
- * // 2. Create a pre-typed createStyles (do this once in a shared file)
- * export const createStyles = createTypedStyles<AppTheme>()
- *
- * // 3. Use everywhere without specifying the type!
- * const useStyles = createStyles((theme) => ({
- *   button: {
- *     backgroundColor: theme.colors.brand,    // ✅ Full autocomplete
- *     padding: theme.spacing.md,              // ✅ Type-safe
- *   }
- * }))
- * ```
- */
-export const createTypedStyles = <TTheme extends Record<string, unknown>>() => {
-    return <T extends Record<string, StyleWithPseudos | StyleFunction>>(
-        stylesOrCreator: T | ((theme: TTheme) => T)
-    ): { [K in keyof T]: T[K] extends (...args: infer TArgs) => StyleWithPseudos ? (...args: TArgs) => string : string } => {
-        // Cast to Theme for internal processing - the actual theme structure doesn't matter
-        // as long as it's passed through correctly to the user's callback
-        return createStyles<Theme, T>(stylesOrCreator as T | ((theme: Theme) => T))
-    }
-}
 
