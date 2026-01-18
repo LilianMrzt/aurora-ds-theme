@@ -9,11 +9,10 @@ export { createTheme } from './utils/theme'
 export { colors } from './utils/theme/colors'
 
 // Types
-export type { Theme, ThemeRegistry } from './types/theme/Theme'
+export type { ThemeRegistry } from './types/theme/Theme'
 
 // Providers & Hooks
 export { ThemeProvider, useTheme } from './providers/ThemeProvider'
-export type { ThemeProviderProps } from './providers/ThemeProvider'
 
 // Style Utilities
 export { createStyles } from './utils/styles/createStyles'
@@ -24,5 +23,5 @@ export { cssVariables, cssVar, injectCssVariables } from './utils/styles/cssVari
 // SSR Utilities
 export { getSSRStyles, getSSRStyleTag, clearSSRRules, getSSRRulesArray } from './utils/styles/ssr'
 
-// Types for Style Utilities
-export type { StyleWithPseudos, StyleFunction, FontFaceOptions, CSSProperties } from './utils/styles/types'
+// Types for advanced usage
+export type { StyleWithPseudos, FontFaceOptions } from './utils/styles/types'
