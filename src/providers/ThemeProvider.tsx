@@ -7,40 +7,25 @@ import type { Theme } from '@/types'
 
 const ThemeContext = createContext<Theme | undefined>(undefined)
 
-export type ThemeProviderProps<T extends Theme = Theme> = {
-    theme: T
+export type ThemeProviderProps = {
+    theme: Theme
     children?: ReactNode
 }
 
 /**
- * Theme provider component.
- * Provides theme context to all child components.
- *
- * **Type Inference:** The theme type is automatically propagated to createStyles
- * and useTheme used within this provider. No type annotations needed!
+ * Provides the theme to all child components.
  *
  * @example
  * ```tsx
- * const themeDefinition = defineTheme({
- *   colors: { primary: null, secondary: null },
- *   spacing: { sm: null, md: null }
- * })
- *
- * const myTheme = createTheme(themeDefinition, {
- *   colors: { primary: '#007bff', secondary: '#6c757d' },
- *   spacing: { sm: '8px', md: '16px' }
- * })
- *
- * // Wrap your app
- * <ThemeProvider theme={myTheme}>
- *   <App />  // createStyles and useTheme get full autocomplete!
+ * <ThemeProvider theme={lightTheme}>
+ *   <App />
  * </ThemeProvider>
  * ```
  */
-export const ThemeProvider = <T extends Theme>({
+export const ThemeProvider = ({
     theme,
     children
-}: ThemeProviderProps<T>) => {
+}: ThemeProviderProps) => {
     const previousGetter = setThemeContextGetter(() => theme)
 
     useLayoutEffect(() => {
@@ -57,30 +42,27 @@ export const ThemeProvider = <T extends Theme>({
 }
 
 /**
- * Hook to access the current theme with automatic type inference.
+ * Hook to access the current theme.
  *
- * The theme type is automatically inferred from the ThemeRegistry.
- * No type annotation needed!
+ * Type is automatically inferred from ThemeRegistry (module augmentation).
  *
  * @example
  * ```tsx
  * function MyComponent() {
  *   const theme = useTheme()
- *
- *   // ✅ Full autocomplete on theme.colors, theme.spacing, etc.
  *   return <div style={{ color: theme.colors.primary }} />
  * }
  * ```
  *
  * @throws {Error} If used outside a ThemeProvider
  */
-export const useTheme = <T extends Theme = Theme>(): T => {
+export const useTheme = (): Theme => {
     const theme = useContext(ThemeContext)
 
     if (!theme) {
         throw new Error('useTheme must be used within a ThemeProvider')
     }
 
-    return theme as T
+    return theme
 }
 

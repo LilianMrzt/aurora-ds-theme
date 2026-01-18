@@ -1,20 +1,13 @@
 import type { StyleWithPseudos } from './types'
 import type { Theme } from '@/types'
 
-// Environment detection (constant since it never changes)
 const IS_SERVER = typeof document === 'undefined'
 
-// Global theme getter
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let themeContextGetter: (() => any) | null = null
-
-// Stylesheet for client-side injection
 let styleSheet: CSSStyleSheet | null = null
-
-// SSR buffer to collect server-side rules
 let ssrRules: string[] = []
 
-// Cache for camelCase → kebab-case conversion (pre-allocated for common keys)
 const cssKeyCache = new Map<string, string>([
     ['backgroundColor', 'background-color'],
     ['borderRadius', 'border-radius'],
@@ -38,31 +31,23 @@ const cssKeyCache = new Map<string, string>([
     ['zIndex', 'z-index'],
 ])
 
-// Global cache for static styles (avoids regenerating the same styles)
 const staticStyleCache = new Map<string, string>()
-
-// Set to track already used class names
 const usedClassNames = new Set<string>()
-
-// Set to track already injected keyframes
 const injectedKeyframes = new Set<string>()
-
-// Set to track already injected font-faces
 const injectedFontFaces = new Set<string>()
-
-// Counter for unique keyframe names generation
 let keyframeCounter = 0
 
-// Properties that accept unitless numbers (optimized Set)
 const UNITLESS_PROPERTIES = new Set([
     'animationIterationCount', 'columnCount', 'fillOpacity', 'flexGrow', 'flexShrink',
     'fontWeight', 'lineHeight', 'opacity', 'order', 'orphans', 'widows', 'zIndex', 'zoom'
 ])
 
-// Max LRU cache size for dynamic styles
+/**
+ * Max LRU cache size for dynamic styles.
+ * @internal
+ */
 export const MAX_CACHE_SIZE = 100
 
-// Initialize stylesheet (client-side only)
 if (!IS_SERVER) {
     const existingStyle = document.getElementById('aurora-styles') as HTMLStyleElement | null
     if (existingStyle) {
@@ -76,7 +61,8 @@ if (!IS_SERVER) {
 }
 
 /**
- * Set the theme getter.
+ * Sets the theme getter function used by createStyles.
+ * @internal
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const setThemeContextGetter = <T extends Theme>(getter: (() => T | undefined) | null): (() => any) | null => {
@@ -86,14 +72,16 @@ export const setThemeContextGetter = <T extends Theme>(getter: (() => T | undefi
 }
 
 /**
- * Get the current theme
+ * Returns the current theme from the context.
+ * @internal
  */
 export const getTheme = (): Theme | undefined => {
     return themeContextGetter?.()
 }
 
 /**
- * Insert a CSS rule
+ * Inserts a CSS rule into the stylesheet (or SSR buffer).
+ * @internal
  */
 export const insertRule = (rule: string): void => {
     if (IS_SERVER) {
@@ -108,7 +96,8 @@ export const insertRule = (rule: string): void => {
 }
 
 /**
- * Convert camelCase to kebab-case with caching
+ * Converts camelCase to kebab-case with caching.
+ * @internal
  */
 export const toKebabCase = (key: string): string => {
     let cached = cssKeyCache.get(key)
@@ -120,7 +109,8 @@ export const toKebabCase = (key: string): string => {
 }
 
 /**
- * Convert PascalCase/camelCase to kebab-case for class names
+ * Converts PascalCase/camelCase to kebab-case for class names.
+ * @internal
  */
 export const toKebabCaseClassName = (name: string): string => {
     return name
@@ -129,36 +119,23 @@ export const toKebabCaseClassName = (name: string): string => {
         .toLowerCase()
 }
 
-/**
- * Dangerous patterns that could be used for CSS injection attacks
- * - expression(): IE-specific, allows JavaScript execution
- * - url() with javascript:/data:: can execute scripts or embed malicious content
- * - behavior: IE-specific, loads external HTC files
- * - -moz-binding: Firefox-specific, loads XBL files
- * - @import: could load external malicious stylesheets
- * - </style>: could break out of style context
- */
 const CSS_INJECTION_PATTERNS = /expression\s*\(|javascript\s*:|data\s*:\s*text\/html|behavior\s*:|@import|<\s*\/?\s*style/i
 
 /**
- * Sanitize a CSS value to prevent injection attacks
- * Returns the sanitized value or 'unset' if the value is dangerous
+ * Sanitizes CSS value to prevent injection attacks.
+ * @internal
  */
 export const sanitizeCssValue = (value: string): string => {
-    // Remove any null bytes
     const cleaned = value.replace(/\0/g, '')
-
-    // Check for dangerous patterns
     if (CSS_INJECTION_PATTERNS.test(cleaned)) {
         return 'unset'
     }
-
     return cleaned
 }
 
-
 /**
- * Convert values to valid CSS with sanitization
+ * Converts a value to valid CSS (adds px for numbers).
+ * @internal
  */
 export const toCssValue = (key: string, value: unknown): string => {
     if (typeof value === 'number' && !UNITLESS_PROPERTIES.has(key)) {
@@ -168,8 +145,8 @@ export const toCssValue = (key: string, value: unknown): string => {
 }
 
 /**
- * Convert a styles object to CSS (simple properties only)
- * Optimized to avoid unnecessary allocations
+ * Converts a styles object to a CSS string.
+ * @internal
  */
 export const objectToCss = (obj: Record<string, unknown>): string => {
     let result = ''
@@ -183,14 +160,16 @@ export const objectToCss = (obj: Record<string, unknown>): string => {
 }
 
 /**
- * Convert an & selector to a valid CSS selector
+ * Resolves & selectors to actual class selectors.
+ * @internal
  */
 export const resolveAmpersandSelector = (selector: string, className: string): string => {
     return selector.includes('&') ? selector.replace(/&/g, `.${className}`) : `.${className}${selector}`
 }
 
 /**
- * Create a cache key from arguments
+ * Creates a cache key from function arguments.
+ * @internal
  */
 export const createCacheKey = (args: unknown[]): string => {
     const len = args.length
@@ -224,14 +203,13 @@ export const createCacheKey = (args: unknown[]): string => {
 }
 
 /**
- * Convert cacheKey to a valid CSS suffix
+ * Converts a cache key to a valid CSS class suffix.
+ * @internal
  */
 export const cacheKeyToSuffix = (key: string): string => {
-    // Fast path for simple keys
     const firstChar = key.charCodeAt(0)
     if (key.length < 20) {
         if ((firstChar >= 97 && firstChar <= 122) || (firstChar >= 65 && firstChar <= 90)) {
-            // Starts with letter, check if alphanumeric
             let valid = true
             for (let i = 1; i < key.length; i++) {
                 const c = key.charCodeAt(i)
@@ -242,7 +220,6 @@ export const cacheKeyToSuffix = (key: string): string => {
             }
             if (valid) {return toKebabCaseClassName(key)}
         } else if (firstChar === 45 || (firstChar >= 48 && firstChar <= 57)) {
-            // Number or negative number
             let valid = true
             for (let i = 1; i < key.length; i++) {
                 if (key.charCodeAt(i) < 48 || key.charCodeAt(i) > 57) {
@@ -253,7 +230,6 @@ export const cacheKeyToSuffix = (key: string): string => {
             if (valid) {return key}
         }
     }
-    // Hash for complex keys
     let hash = 5381
     const len = key.length
     for (let i = 0; i < len; i++) {
@@ -263,7 +239,8 @@ export const cacheKeyToSuffix = (key: string): string => {
 }
 
 /**
- * Optimized LRU cache with O(1) deletion
+ * Creates an LRU cache with O(1) operations.
+ * @internal
  */
 export const createLRUCache = <V>(maxSize: number): { getOrSet: (key: string, factory: () => V) => V } => {
     const cache = new Map<string, V>()
@@ -271,14 +248,12 @@ export const createLRUCache = <V>(maxSize: number): { getOrSet: (key: string, fa
         getOrSet(key: string, factory: () => V): V {
             const existing = cache.get(key)
             if (existing !== undefined) {
-                // Move to end (most recent) - O(1) with Map
                 cache.delete(key)
                 cache.set(key, existing)
                 return existing
             }
             const value = factory()
             if (cache.size >= maxSize) {
-                // Remove oldest (first element)
                 const firstKey = cache.keys().next().value
                 if (firstKey !== undefined) { cache.delete(firstKey) }
             }
@@ -289,7 +264,8 @@ export const createLRUCache = <V>(maxSize: number): { getOrSet: (key: string, fa
 }
 
 /**
- * Hash for static styles cache
+ * Generates a hash from a styles object.
+ * @internal
  */
 export const hashStyles = (styles: StyleWithPseudos): string => {
     const str = JSON.stringify(styles)
@@ -302,7 +278,8 @@ export const hashStyles = (styles: StyleWithPseudos): string => {
 }
 
 /**
- * Generic hash for a string
+ * Generates a hash from a string.
+ * @internal
  */
 export const hashString = (str: string): string => {
     let hash = 5381
@@ -314,7 +291,8 @@ export const hashString = (str: string): string => {
 }
 
 /**
- * Get a unique class name
+ * Returns a unique class name, adding suffix if needed.
+ * @internal
  */
 export const getUniqueClassName = (baseName: string): string => {
     if (!usedClassNames.has(baseName)) {
@@ -331,8 +309,8 @@ export const getUniqueClassName = (baseName: string): string => {
 }
 
 /**
- * Generate a CSS class with support for complex selectors
- * Optimized to minimize allocations and iterations
+ * Generates CSS class with support for pseudo-classes, media queries, etc.
+ * @internal
  */
 export const generateCssClass = (styles: StyleWithPseudos, className: string, useCache = false): string => {
     if (useCache) {
@@ -349,30 +327,25 @@ export const generateCssClass = (styles: StyleWithPseudos, className: string, us
         const firstChar = key[0]
 
         if (firstChar === '@') {
-            // @media, @container, @supports
             const innerCss = objectToCss(value as Record<string, unknown>)
             if (innerCss) {
                 insertRule(`${key}{.${uniqueName}{${innerCss}}}`)
             }
         } else if (firstChar === '&') {
-            // Complex selectors (& > div, &:nth-child, etc.)
             const innerCss = objectToCss(value as Record<string, unknown>)
             if (innerCss) {
                 insertRule(`${key.replace(/&/g, `.${uniqueName}`)}{${innerCss}}`)
             }
         } else if (firstChar === ':') {
-            // Pseudo-classes (:hover, :focus, etc.)
             const innerCss = objectToCss(value as Record<string, unknown>)
             if (innerCss) {
                 insertRule(`.${uniqueName}${key}{${innerCss}}`)
             }
         } else if (value != null && typeof value !== 'object') {
-            // Simple CSS properties
             baseCss += `${toKebabCase(key)}:${toCssValue(key, value)};`
         }
     }
 
-    // Inject base rule
     if (baseCss) {
         insertRule(`.${uniqueName}{${baseCss}}`)
     }
@@ -385,49 +358,56 @@ export const generateCssClass = (styles: StyleWithPseudos, className: string, us
 }
 
 /**
- * Check if a keyframe already exists
+ * Checks if keyframes CSS has already been injected.
+ * @internal
  */
 export const hasKeyframes = (css: string): boolean => {
     return injectedKeyframes.has(css)
 }
 
 /**
- * Add a keyframe to the registry
+ * Registers keyframes CSS as injected.
+ * @internal
  */
 export const addKeyframes = (css: string): void => {
     injectedKeyframes.add(css)
 }
 
 /**
- * Get the next keyframe ID
+ * Returns next unique keyframe ID.
+ * @internal
  */
 export const getNextKeyframeId = (): string => {
     return (++keyframeCounter).toString(36)
 }
 
 /**
- * Check if a font-face already exists
+ * Checks if font-face CSS has already been injected.
+ * @internal
  */
 export const hasFontFace = (css: string): boolean => {
     return injectedFontFaces.has(css)
 }
 
 /**
- * Add a font-face to the registry
+ * Registers font-face CSS as injected.
+ * @internal
  */
 export const addFontFace = (css: string): void => {
     injectedFontFaces.add(css)
 }
 
 /**
- * Get SSR rules
+ * Returns SSR rules array.
+ * @internal
  */
 export const getSSRRulesInternal = (): string[] => {
     return ssrRules
 }
 
 /**
- * Reset SSR state
+ * Resets all internal state (for SSR).
+ * @internal
  */
 export const resetState = (): void => {
     ssrRules = []
@@ -437,4 +417,3 @@ export const resetState = (): void => {
     injectedFontFaces.clear()
     keyframeCounter = 0
 }
-

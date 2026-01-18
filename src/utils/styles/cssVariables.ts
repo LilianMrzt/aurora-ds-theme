@@ -3,9 +3,7 @@ import { insertRule, toKebabCase } from './styleEngine'
 import type { Theme } from '@/types'
 
 
-/**
- * Generate CSS variables from a theme object
- */
+/** Generate CSS variables from a theme object */
 const generateCssVariables = (obj: Record<string, unknown>, prefix: string): string => {
     let css = ''
 
@@ -23,51 +21,19 @@ const generateCssVariables = (obj: Record<string, unknown>, prefix: string): str
     return css
 }
 
-/**
- * Create CSS variables from the theme
- * Injects variables into :root
- *
- * @example
- * ```ts
- * // In ThemeProvider
- * injectCssVariables(theme, 'aurora')
- * // Generates: :root { --aurora-colors-primary: #2563EB; ... }
- * ```
- */
+/** Injects CSS variables from theme into :root */
 export const injectCssVariables = (theme: Theme, prefix = 'theme'): void => {
     const variables = generateCssVariables(theme, prefix)
     insertRule(`:root{${variables}}`)
 }
 
-/**
- * Helper to use a CSS variable from the theme
- *
- * @example
- * ```ts
- * const STYLES = createStyles({
- *     root: { color: cssVar('colors-primary') }
- * })
- * // Generates: color: var(--theme-colors-primary)
- * ```
- */
+/** Returns a CSS var() reference for a theme path */
 export const cssVar = (path: string, fallback?: string): string => {
     const varName = `--theme-${path.replace(/\./g, '-')}`
     return fallback ? `var(${varName}, ${fallback})` : `var(${varName})`
 }
 
-/**
- * Create CSS variable references from a typed object
- * Returns an object with the same structure where values are var() references
- *
- * @example
- * ```ts
- * const vars = cssVariables({
- *     primaryColor: '#007bff',
- *     spacing: '1rem',
- * })
- * // vars.primaryColor === 'var(--primary-color)'
- * ```
- */
+/** Creates CSS variable references from an object */
 export const cssVariables = <T extends Record<string, string | number>>(
     variables: T,
     options: { prefix?: string; inject?: boolean } = {}
@@ -92,4 +58,3 @@ export const cssVariables = <T extends Record<string, string | number>>(
 
     return result
 }
-

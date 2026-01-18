@@ -2,20 +2,7 @@ import { addFontFace, hasFontFace, insertRule } from './styleEngine'
 
 import type { FontFaceOptions } from './types'
 
-/**
- * Inject a @font-face rule
- *
- * @example
- * ```ts
- * fontFace({
- *     fontFamily: 'MyFont',
- *     src: "url('/fonts/myfont.woff2') format('woff2')",
- *     fontWeight: 400,
- *     fontStyle: 'normal',
- *     fontDisplay: 'swap'
- * })
- * ```
- */
+/** Injects a @font-face rule and returns the font family name */
 export const fontFace = (options: FontFaceOptions): string => {
     const {
         fontFamily,

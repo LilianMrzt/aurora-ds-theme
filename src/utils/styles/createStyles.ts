@@ -1,4 +1,3 @@
-
 import {
     cacheKeyToSuffix,
     createCacheKey,
@@ -13,7 +12,8 @@ import type { StyleFunction, StyleWithPseudos } from './types'
 import type { Theme } from '@/types'
 
 /**
- * Extract component name from stack trace
+ * Extracts component name from stack trace for class naming.
+ * @internal
  */
 const getComponentNameFromStack = (): string => {
     const stack = new Error().stack || ''
@@ -29,7 +29,8 @@ const getComponentNameFromStack = (): string => {
 }
 
 /**
- * Process styles and generate CSS classes
+ * Processes styles object and generates CSS classes.
+ * @internal
  */
 const processStyles = <T extends Record<string, StyleWithPseudos | StyleFunction>>(
     styles: T,
@@ -60,34 +61,8 @@ const processStyles = <T extends Record<string, StyleWithPseudos | StyleFunction
 }
 
 /**
- * Creates type-safe styles with theme support.
- *
- * **Type Inference:** Register your theme in ThemeRegistry to get automatic
- * autocomplete without type annotations.
- *
- * Supports pseudo-classes, media queries, container queries, and complex selectors.
- *
- * @example
- * ```ts
- * // After registering your theme in ThemeRegistry:
- * const useStyles = createStyles((theme) => ({
- *   root: {
- *     padding: theme.spacing.sm,        // ✅ Autocomplete!
- *     color: theme.colors.primary,      // ✅ Type-safe!
- *     ':hover': {
- *       color: theme.colors.secondary
- *     }
- *   }
- * }))
- * ```
- *
- * @example
- * ```ts
- * // Static styles (no theme)
- * const useStyles = createStyles({
- *   root: { display: 'flex', padding: '16px' }
- * })
- * ```
+ * Creates styles with theme support. Type is inferred from ThemeRegistry.
+ * Supports pseudo-classes, media queries, and complex selectors.
  */
 export const createStyles = <
     T extends Record<string, StyleWithPseudos | StyleFunction> = Record<string, StyleWithPseudos | StyleFunction>
@@ -120,5 +95,3 @@ export const createStyles = <
     // Styles without theme (direct object)
     return processStyles(stylesOrCreator, componentName) as Result
 }
-
-

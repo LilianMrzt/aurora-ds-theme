@@ -1,19 +1,3 @@
-/**
- * Color Scales - Modern color palettes with shades from 25 to 950
- *
- * Scales are only accessible via the colors object to maintain consistency
- *
- * @example
- * ```ts
- * import { colors } from '@aurora-ui/theme'
- *
- * colors.indigo[500]  // '#6366f1'
- * colors.emerald[400] // '#34d399'
- * colors.gray[900]    // '#18181b'
- * ```
- */
-
-// Import all scales for the colors object
 import { amber } from './amber'
 import { blue } from './blue'
 import { cyan } from './cyan'
@@ -34,16 +18,11 @@ import { teal } from './teal'
 import { violet } from './violet'
 import { yellow } from './yellow'
 
-/**
- * All color scales organized by name
- * All scales and special values are only accessible via this object
- */
+/** All color scales (19 scales with 12 shades each) */
 export const colors = {
-    // Neutrals
     gray,
     slate,
     stone,
-    // Colors
     red,
     orange,
     amber,
@@ -60,10 +39,8 @@ export const colors = {
     fuchsia,
     pink,
     rose,
-    // Special
     white: '#ffffff',
     black: '#000000',
     transparent: 'transparent',
     current: 'currentColor',
 } as const
-
