@@ -2,13 +2,13 @@ import { createContext, useContext, useLayoutEffect, type ReactNode } from 'reac
 
 import { setThemeContextGetter } from '@/utils/styles/styleEngine'
 
-import type { Theme } from '@/types'
+import type { _InternalTheme } from '@/types'
 
 
-const ThemeContext = createContext<Theme | undefined>(undefined)
+const ThemeContext = createContext<_InternalTheme | undefined>(undefined)
 
 export type ThemeProviderProps = {
-    theme: Theme
+    theme: _InternalTheme
     children?: ReactNode
 }
 
@@ -56,7 +56,7 @@ export const ThemeProvider = ({
  *
  * @throws {Error} If used outside a ThemeProvider
  */
-export const useTheme = (): Theme => {
+export const useTheme = (): _InternalTheme => {
     const theme = useContext(ThemeContext)
 
     if (!theme) {

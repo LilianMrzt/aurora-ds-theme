@@ -1,6 +1,6 @@
 import { insertRule, toKebabCase } from './styleEngine'
 
-import type { Theme } from '@/types'
+import type { _InternalTheme } from '@/types'
 
 
 /** Generate CSS variables from a theme object */
@@ -22,7 +22,7 @@ const generateCssVariables = (obj: Record<string, unknown>, prefix: string): str
 }
 
 /** Injects CSS variables from theme into :root */
-export const injectCssVariables = (theme: Theme, prefix = 'theme'): void => {
+export const injectCssVariables = (theme: _InternalTheme, prefix = 'theme'): void => {
     const variables = generateCssVariables(theme, prefix)
     insertRule(`:root{${variables}}`)
 }

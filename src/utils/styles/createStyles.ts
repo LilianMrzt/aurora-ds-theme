@@ -9,7 +9,7 @@ import {
 } from './styleEngine'
 
 import type { StyleFunction, StyleWithPseudos } from './types'
-import type { Theme } from '@/types'
+import type { _InternalTheme } from '@/types'
 
 /**
  * Extracts component name from stack trace for class naming.
@@ -67,7 +67,7 @@ const processStyles = <T extends Record<string, StyleWithPseudos | StyleFunction
 export const createStyles = <
     T extends Record<string, StyleWithPseudos | StyleFunction> = Record<string, StyleWithPseudos | StyleFunction>
 >(
-        stylesOrCreator: T | ((theme: Theme) => T)
+        stylesOrCreator: T | ((theme: _InternalTheme) => T)
     ): { [K in keyof T]: T[K] extends (...args: infer TArgs) => StyleWithPseudos ? (...args: TArgs) => string : string } => {
     type Result = { [K in keyof T]: T[K] extends (...args: infer TArgs) => StyleWithPseudos ? (...args: TArgs) => string : string }
     const componentName = getComponentNameFromStack()
@@ -75,11 +75,11 @@ export const createStyles = <
     // Styles with theme (function)
     if (typeof stylesOrCreator === 'function') {
         let cached: Result | null = null
-        let lastTheme: Theme | undefined
+        let lastTheme: _InternalTheme | undefined
 
         return new Proxy({} as Result, {
             get(_, prop: string | symbol) {
-                const theme = getTheme() as Theme | undefined
+                const theme = getTheme() as _InternalTheme | undefined
                 if (!theme) {
                     throw new Error('createStyles: Theme context not found. Make sure you are using this inside a ThemeProvider.')
                 }
@@ -95,3 +95,4 @@ export const createStyles = <
     // Styles without theme (direct object)
     return processStyles(stylesOrCreator, componentName) as Result
 }
+

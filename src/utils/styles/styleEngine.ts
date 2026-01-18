@@ -1,5 +1,5 @@
 import type { StyleWithPseudos } from './types'
-import type { Theme } from '@/types'
+import type { _InternalTheme } from '@/types'
 
 const IS_SERVER = typeof document === 'undefined'
 
@@ -65,7 +65,7 @@ if (!IS_SERVER) {
  * @internal
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const setThemeContextGetter = <T extends Theme>(getter: (() => T | undefined) | null): (() => any) | null => {
+export const setThemeContextGetter = <T extends _InternalTheme>(getter: (() => T | undefined) | null): (() => any) | null => {
     const previous = themeContextGetter
     themeContextGetter = getter
     return previous
@@ -75,7 +75,7 @@ export const setThemeContextGetter = <T extends Theme>(getter: (() => T | undefi
  * Returns the current theme from the context.
  * @internal
  */
-export const getTheme = (): Theme | undefined => {
+export const getTheme = (): _InternalTheme | undefined => {
     return themeContextGetter?.()
 }
 

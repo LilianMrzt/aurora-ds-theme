@@ -1,1 +1,1 @@
-export type { Theme, ThemeRegistry } from './theme'
+export type { _InternalTheme, ThemeRegistry } from './theme'
