@@ -11,9 +11,6 @@ import {
     getSSRStyleTag,
     clearSSRRules,
     getSSRRulesArray,
-    setThemeContextGetter,
-    getTheme,
-    insertRule,
 } from '@/utils/styles'
 
 describe('utils/styles/index.ts exports', () => {
@@ -66,20 +63,4 @@ describe('utils/styles/index.ts exports', () => {
         expect(getSSRRulesArray).toBeDefined()
         expect(typeof getSSRRulesArray).toBe('function')
     })
-
-    it('should export setThemeContextGetter', () => {
-        expect(setThemeContextGetter).toBeDefined()
-        expect(typeof setThemeContextGetter).toBe('function')
-    })
-
-    it('should export getTheme', () => {
-        expect(getTheme).toBeDefined()
-        expect(typeof getTheme).toBe('function')
-    })
-
-    it('should export insertRule', () => {
-        expect(insertRule).toBeDefined()
-        expect(typeof insertRule).toBe('function')
-    })
 })
-

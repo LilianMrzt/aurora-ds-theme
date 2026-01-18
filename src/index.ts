@@ -70,16 +70,6 @@ export { cssVariables, cssVar, injectCssVariables } from './utils/styles/cssVari
 
 export { getSSRStyles, getSSRStyleTag, clearSSRRules, getSSRRulesArray } from './utils/styles/ssr'
 
-// ============================================================================
-// Style Engine (Advanced)
-// ============================================================================
-
-export {
-    setThemeContextGetter,
-    getTheme,
-    insertRule,
-    sanitizeCssValue,
-} from './utils/styles/styleEngine'
 
 // ============================================================================
 // Types for Style Utilities

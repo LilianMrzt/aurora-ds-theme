@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 
-import { createStyles, setThemeContextGetter } from '@/index'
+import { createStyles } from '@/index'
+import { setThemeContextGetter } from '@/utils/styles/styleEngine'
 import { mockTheme, type MockTheme } from '@tests/utils/styles/mockTheme'
 
 describe('createStyles', () => {

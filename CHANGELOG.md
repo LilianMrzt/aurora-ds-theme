@@ -13,43 +13,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Aurora v3 is a **complete API redesign** for maximum simplicity and type-safety.
 
-#### 1. New API: Type + `createTheme<T>()`
+#### 1. New API: Module Augmentation + createTheme
 
 ```typescript
-// ✅ v3 - Define a type, create themed values
+// 1. Define your theme type
 type MyTheme = {
     colors: { primary: string; secondary: string }
     spacing: { sm: string; md: string }
 }
 
-const theme = createTheme<MyTheme>({
-    colors: { primary: '#007bff', secondary: '#6c757d' },
-    spacing: { sm: '8px', md: '16px' }
-})
-```
-
-#### 2. Module Augmentation Required
-
-To get autocomplete in `createStyles` and `useTheme`, you **must** declare your theme type:
-
-```typescript
+// 2. Register it via module augmentation (required for autocomplete)
 declare module '@aurora-ds/theme' {
     interface ThemeRegistry {
         theme: MyTheme
     }
 }
+
+// 3. Create your theme - type is inferred automatically!
+export const lightTheme = createTheme({
+    colors: { primary: '#007bff', secondary: '#6c757d' },
+    spacing: { sm: '8px', md: '16px' }
+})
 ```
 
-#### 3. Removed Exports
+#### 2. Removed Exports
 
 - ❌ `defaultTheme` - Define your own theme
 - ❌ `defaultPalette` - Use `colors` object instead
+- ❌ `createTypedStyles` - No longer needed, type is inferred
+- ❌ `setThemeContextGetter`, `getTheme`, `insertRule`, `sanitizeCssValue` - Internal only
 - ❌ All `Base*` types (`BaseColors`, `BaseSpacing`, etc.) - Define your own
+- ❌ `sky` color scale - Removed (use `blue` or `cyan` instead)
 
 ### Added
 
 - `ThemeRegistry` interface for module augmentation
-- Simpler `createTheme<T>(values)` signature
+
+### Changed
+
+- `createTheme` no longer requires generic - type is inferred from `ThemeRegistry`
+- 19 color scales (removed `sky`)
+
 ---
 
 ## [2.0.1] - 2026-01-04
