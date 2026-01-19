@@ -2,11 +2,11 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 
 import { createStyles } from '@/index'
 import { setThemeContextGetter } from '@/utils/styles/styleEngine'
-import { mockTheme, type MockTheme } from '@tests/utils/styles/mockTheme'
+import { mockTheme, MockThemeType } from '@tests/utils/styles/mockTheme'
 
 describe('createStyles', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let previousGetter: (() => MockTheme | undefined) | null
+    let previousGetter: (() => MockThemeType | undefined) | null
 
     beforeEach(() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -159,7 +159,7 @@ describe('setThemeContextGetter', () => {
 
 describe('createStyles edge cases', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let previousGetter: (() => MockTheme | undefined) | null
+    let previousGetter: (() => MockThemeType | undefined) | null
 
     beforeEach(() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -265,7 +265,7 @@ describe('createStyles without theme function', () => {
 
 describe('static style caching', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let previousGetter: (() => MockTheme | undefined) | null
+    let previousGetter: (() => MockThemeType | undefined) | null
 
     beforeEach(() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -313,7 +313,7 @@ describe('static style caching', () => {
 
 describe('media queries support', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let previousGetter: (() => MockTheme | undefined) | null
+    let previousGetter: (() => MockThemeType | undefined) | null
 
     beforeEach(() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -357,7 +357,7 @@ describe('media queries support', () => {
 
 describe('container queries support', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let previousGetter: (() => MockTheme | undefined) | null
+    let previousGetter: (() => MockThemeType | undefined) | null
 
     beforeEach(() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -402,7 +402,7 @@ describe('container queries support', () => {
 
 describe('complex selectors support', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let previousGetter: (() => MockTheme | undefined) | null
+    let previousGetter: (() => MockThemeType | undefined) | null
 
     beforeEach(() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -458,7 +458,7 @@ describe('complex selectors support', () => {
 
 describe('@supports feature queries', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let previousGetter: (() => MockTheme | undefined) | null
+    let previousGetter: (() => MockThemeType | undefined) | null
 
     beforeEach(() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

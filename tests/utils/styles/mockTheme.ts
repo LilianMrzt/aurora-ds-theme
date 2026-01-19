@@ -3,7 +3,7 @@ import { createTheme } from '@/utils/theme'
 /**
  * Mock theme type for tests
  */
-type MockThemeType = {
+export type MockThemeType = {
     colors: {
         background: string
         surface: string
@@ -140,7 +140,7 @@ type MockThemeType = {
 /**
  * Mock theme for tests
  */
-export const mockTheme = createTheme<MockThemeType>({
+export const mockTheme = createTheme({
     colors: {
         background: '#ffffff',
         surface: '#fafafa',
@@ -274,12 +274,9 @@ export const mockTheme = createTheme<MockThemeType>({
     },
 })
 
-// Export type for tests
-export type MockTheme = typeof mockTheme
-
 // Register theme type for tests
-/*declare module '@/types/theme/Theme' {
+declare module '@/types/theme/Theme' {
     interface ThemeRegistry {
-        theme: MockTheme
+        theme: MockThemeType
     }
-}*/
+}
