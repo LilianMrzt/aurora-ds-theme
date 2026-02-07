@@ -1,6 +1,6 @@
 {
   "name": "@aurora-ds/theme",
-  "version": "3.1.8",
+  "version": "3.1.9",
   "description": "A performant CSS-in-JS theme management library for React",
   "author": "Lilian MARZET <lilian.marzet@gmail.com>",
   "license": "MIT",
@@ -84,7 +84,7 @@
     "size-limit": "^12.0.0",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2",
-    "vite": "^5.4.2",
+    "vite": "^7.3.1",
     "vitest": "^4.0.15"
   },
   "engines": {

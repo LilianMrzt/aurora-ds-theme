@@ -24,4 +24,4 @@ export { cssVariables, cssVar, injectCssVariables } from './utils/styles/cssVari
 export { getSSRStyles, getSSRStyleTag, clearSSRRules, getSSRRulesArray } from './utils/styles/ssr'
 
 // Types for advanced usage
-export type { StyleWithPseudos, FontFaceOptions } from './utils/styles/types'
+export type { StyleWithPseudos, FontFaceOptions } from './utils/styles'

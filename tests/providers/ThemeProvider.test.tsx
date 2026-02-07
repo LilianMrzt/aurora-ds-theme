@@ -172,3 +172,64 @@ describe('useTheme', () => {
     })
 })
 
+describe('ThemeProvider - CSS Variables', () => {
+    it('should inject CSS variables into :root', () => {
+        render(
+            <ThemeProvider theme={defaultTheme}>
+                <div data-testid={'test'}>
+                    {'Test'}
+                </div>
+            </ThemeProvider>
+        )
+
+        const style = document.getElementById('aurora-theme-variables')
+        expect(style).toBeTruthy()
+        expect(style?.textContent).toContain('--theme-colors-primary')
+        expect(style?.textContent).toContain('--theme-colors-background')
+    })
+
+    it('should update CSS variables when theme changes', () => {
+        const altTheme = createTheme({
+            ...mockTheme,
+            colors: {
+                ...mockTheme.colors,
+                background: '#222222',
+            },
+        })
+
+        const { rerender } = render(
+            <ThemeProvider theme={defaultTheme}>
+                <div data-testid={'test'}>
+                    {'Test'}
+                </div>
+            </ThemeProvider>
+        )
+
+        const style = document.getElementById('aurora-theme-variables')
+        expect(style?.textContent).toContain(defaultTheme.colors.background)
+
+        rerender(
+            <ThemeProvider theme={altTheme}>
+                <div data-testid={'test'}>
+                    {'Test'}
+                </div>
+            </ThemeProvider>
+        )
+
+        expect(style?.textContent).toContain('#222222')
+    })
+
+    it('should include spacing variables', () => {
+        render(
+            <ThemeProvider theme={defaultTheme}>
+                <div data-testid={'test'}>
+                    {'Test'}
+                </div>
+            </ThemeProvider>
+        )
+
+        const style = document.getElementById('aurora-theme-variables')
+        expect(style?.textContent).toContain('--theme-spacing-md')
+    })
+})
+

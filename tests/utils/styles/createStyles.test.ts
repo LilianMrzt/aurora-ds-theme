@@ -85,17 +85,6 @@ describe('createStyles', () => {
         expect(typeof styles.button).toBe('function')
     })
 
-    it('should throw error when theme context is not set', () => {
-        setThemeContextGetter(null)
-
-        const styles = createStyles((theme) => ({
-            root: {
-                color: theme.colors.text
-            }
-        }))
-
-        expect(() => styles.root).toThrow('createStyles: Theme context not found')
-    })
 
     it('should handle pseudo-classes in styles', () => {
         const styles = createStyles((theme) => ({
@@ -204,24 +193,6 @@ describe('createStyles edge cases', () => {
         const class2 = styles.root
 
         expect(class1).toBe(class2)
-    })
-
-    it('should reinitialize classes when theme changes', () => {
-        const alternateTheme = { ...mockTheme, colors: { ...mockTheme.colors, primary: '#ff0000' } }
-
-        const styles = createStyles((theme) => ({
-            colored: {
-                color: theme.colors.primary
-            }
-        }))
-
-        const class1 = styles.colored
-
-        setThemeContextGetter(() => alternateTheme)
-
-        const class2 = styles.colored
-
-        expect(class1).not.toBe(class2)
     })
 })
 
@@ -496,6 +467,115 @@ describe('@supports feature queries', () => {
         }))
 
         expect(typeof styles.layout).toBe('string')
+    })
+})
+
+describe('createStyles - CSS Variables mode', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let previousGetter: (() => MockThemeType | undefined) | null
+
+    beforeEach(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        previousGetter = setThemeContextGetter(() => mockTheme) as any
+    })
+
+    afterEach(() => {
+        setThemeContextGetter(previousGetter)
+    })
+
+    it('should use CSS variables for theme values', () => {
+        const styles = createStyles((theme) => ({
+            root: {
+                backgroundColor: theme.colors.background,
+                color: theme.colors.text
+            }
+        }))
+
+        expect(typeof styles.root).toBe('string')
+        expect(styles.root).toContain('root')
+    })
+
+    it('should cache styles and return same class on multiple calls', () => {
+        const stylesCreator = (theme: MockThemeType) => ({
+            button: {
+                backgroundColor: theme.colors.primary
+            }
+        })
+
+        const styles1 = createStyles(stylesCreator)
+        const styles2 = createStyles(stylesCreator)
+
+        // Both should return the same cached class
+        expect(styles1.button).toBe(styles2.button)
+    })
+
+    it('should not require theme context at runtime', () => {
+        // Clear theme context - CSS variables don't need it at runtime
+        setThemeContextGetter(null)
+
+        const styles = createStyles((theme) => ({
+            container: {
+                padding: theme.spacing.md
+            }
+        }))
+
+        // Should not throw because CSS variables mode doesn't need the theme at access time
+        expect(typeof styles.container).toBe('string')
+    })
+
+    it('should handle nested theme properties', () => {
+        const styles = createStyles((theme) => ({
+            text: {
+                fontSize: theme.fontSize.lg,
+                fontWeight: theme.fontWeight.bold,
+                lineHeight: theme.lineHeight.normal
+            }
+        }))
+
+        expect(typeof styles.text).toBe('string')
+    })
+
+    it('should handle dynamic styles with CSS variables', () => {
+        const styles = createStyles((theme) => ({
+            button: (variant: 'primary' | 'secondary') => ({
+                backgroundColor: variant === 'primary' ? theme.colors.primary : theme.colors.secondary
+            })
+        }))
+
+        expect(typeof styles.button).toBe('function')
+        const primaryClass = styles.button('primary')
+        const secondaryClass = styles.button('secondary')
+
+        expect(typeof primaryClass).toBe('string')
+        expect(typeof secondaryClass).toBe('string')
+        expect(primaryClass).not.toBe(secondaryClass)
+    })
+
+    it('should support arbitrary theme structure with any nesting depth', () => {
+        // Test with completely custom theme keys that are NOT in any predefined list
+        const styles = createStyles((theme) => ({
+            custom: {
+                // @ts-expect-error - Testing arbitrary access
+                color: theme.myCustomCategory.deeplyNested.value,
+                // @ts-expect-error - Testing arbitrary access
+                background: theme.brandColors.primary.light.shade100,
+                // @ts-expect-error - Testing arbitrary access
+                padding: theme.customSpacing.xl
+            }
+        }))
+
+        expect(typeof styles.custom).toBe('string')
+    })
+
+    it('should handle deeply nested arbitrary paths', () => {
+        const styles = createStyles((theme) => ({
+            deep: {
+                // @ts-expect-error - Testing arbitrary deep access
+                value: theme.a.b.c.d.e.f.g
+            }
+        }))
+
+        expect(typeof styles.deep).toBe('string')
     })
 })
 
