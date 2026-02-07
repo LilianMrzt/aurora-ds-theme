@@ -1,16 +1,6 @@
-import { createStyles } from '../../../src'
+import { createStyles } from '@/utils/styles'
 
-export type ButtonVariant = 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'outline' | 'ghost'
-export type ButtonSize = 'sm' | 'md' | 'lg'
-
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: ButtonVariant
-    size?: ButtonSize
-    fullWidth?: boolean
-    loading?: boolean
-}
-
-const styles = createStyles((theme) => ({
+export const styles = createStyles((theme) => ({
     base: {
         display: 'inline-flex',
         alignItems: 'center',
@@ -51,58 +41,58 @@ const styles = createStyles((theme) => ({
     },
     // Variants
     primary: {
-        backgroundColor: theme.colors.primary[500],
+        backgroundColor: theme.colors.primary,
         color: 'white',
         ':hover': {
-            backgroundColor: theme.colors.primary[600],
+            backgroundColor: theme.colors.primaryHover,
             boxShadow: theme.shadows.md,
         },
     },
     secondary: {
-        backgroundColor: theme.colors.secondary[500],
+        backgroundColor: theme.colors.secondary,
         color: 'white',
         ':hover': {
-            backgroundColor: theme.colors.secondary[600],
+            backgroundColor: theme.colors.secondaryHover,
             boxShadow: theme.shadows.md,
         },
     },
     success: {
-        backgroundColor: theme.colors.success[500],
+        backgroundColor: theme.colors.success,
         color: 'white',
         ':hover': {
-            backgroundColor: theme.colors.success[600],
+            backgroundColor: theme.colors.successHover,
             boxShadow: theme.shadows.md,
         },
     },
     warning: {
-        backgroundColor: theme.colors.warning[500],
+        backgroundColor: theme.colors.warning,
         color: 'white',
         ':hover': {
-            backgroundColor: theme.colors.warning[600],
+            backgroundColor: theme.colors.warningHover,
             boxShadow: theme.shadows.md,
         },
     },
     error: {
-        backgroundColor: theme.colors.error[500],
+        backgroundColor: theme.colors.error,
         color: 'white',
         ':hover': {
-            backgroundColor: theme.colors.error[600],
+            backgroundColor: theme.colors.errorHover,
             boxShadow: theme.shadows.md,
         },
     },
     outline: {
         backgroundColor: 'transparent',
-        color: theme.colors.primary[500],
-        border: `2px solid ${theme.colors.primary[500]}`,
+        color: theme.colors.primary,
+        border: `2px solid ${theme.colors.primary}`,
         ':hover': {
-            backgroundColor: theme.colors.primary[50],
+            backgroundColor: theme.colors.primaryLight,
         },
     },
     ghost: {
         backgroundColor: 'transparent',
-        color: theme.colors.neutral[700],
+        color: theme.colors.text,
         ':hover': {
-            backgroundColor: theme.colors.neutral[100],
+            backgroundColor: theme.colors.border,
         },
     },
     fullWidth: {
@@ -122,35 +112,3 @@ const styles = createStyles((theme) => ({
         animation: 'spin 0.6s linear infinite',
     },
 }))
-
-export const Button = ({
-    variant = 'primary',
-    size = 'md',
-    fullWidth = false,
-    loading = false,
-    disabled,
-    className,
-    children,
-    ...props
-}: ButtonProps) => {
-
-    const classNames = [
-        styles.base,
-        styles[size],
-        styles[variant],
-        fullWidth && styles.fullWidth,
-        loading && styles.loading,
-        className,
-    ].filter(Boolean).join(' ')
-
-    return (
-        <button
-            className={classNames}
-            disabled={disabled || loading}
-            {...props}
-        >
-            {loading && <span className={styles.spinner} />}
-            {children}
-        </button>
-    )
-}
