@@ -1,11 +1,26 @@
-import { createContext, useContext, useLayoutEffect, useMemo, type ReactNode } from 'react'
+import { createContext, useContext, useLayoutEffect, useMemo, useRef, type ReactNode } from 'react'
 
-import { setThemeContextGetter, toKebabCase } from '@/utils/styles/styleEngine'
+import { setThemeContextGetter, toKebabCase, insertRule } from '@/utils/styles/styleEngine'
 
 import type { _InternalTheme } from '@/types'
 
 const IS_SERVER = typeof document === 'undefined'
 const THEME_STYLE_ID = 'aurora-theme-variables'
+const DISABLE_TRANSITIONS_CLASS = 'aurora-disable-transitions'
+
+let transitionRuleInjected = false
+
+/**
+ * Injects global CSS rule to disable transitions during theme switch.
+ * @internal
+ */
+const injectDisableTransitionsRule = (): void => {
+    if (transitionRuleInjected || IS_SERVER) {
+        return
+    }
+    insertRule(`.${DISABLE_TRANSITIONS_CLASS} *,.${DISABLE_TRANSITIONS_CLASS} *::before,.${DISABLE_TRANSITIONS_CLASS} *::after{transition:none!important}`)
+    transitionRuleInjected = true
+}
 
 const ThemeContext = createContext<_InternalTheme | undefined>(undefined)
 
@@ -32,6 +47,12 @@ const generateCSSVariables = (
 
 export type ThemeProviderProps = {
     theme: _InternalTheme
+    /**
+     * Whether to disable CSS transitions during theme changes.
+     * This prevents visual glitches when switching themes.
+     * @default true
+     */
+    disableTransitionsOnChange?: boolean
     children?: ReactNode
 }
 
@@ -48,9 +69,11 @@ export type ThemeProviderProps = {
  */
 export const ThemeProvider = ({
     theme,
+    disableTransitionsOnChange = true,
     children
 }: ThemeProviderProps) => {
     const previousGetter = setThemeContextGetter(() => theme)
+    const isFirstRender = useRef(true)
 
     // Generate CSS variables string from theme
     const cssVariables = useMemo(() => generateCSSVariables(theme), [theme])
@@ -59,6 +82,18 @@ export const ThemeProvider = ({
     useLayoutEffect(() => {
         if (IS_SERVER) {
             return
+        }
+
+        // Inject the disable-transitions rule once
+        if (disableTransitionsOnChange) {
+            injectDisableTransitionsRule()
+        }
+
+        // Disable transitions during theme change (skip first render)
+        const shouldDisableTransitions = disableTransitionsOnChange && !isFirstRender.current
+
+        if (shouldDisableTransitions) {
+            document.documentElement.classList.add(DISABLE_TRANSITIONS_CLASS)
         }
 
         let styleElement = document.getElementById(THEME_STYLE_ID) as HTMLStyleElement | null
@@ -70,7 +105,19 @@ export const ThemeProvider = ({
         }
 
         styleElement.textContent = `:root{${cssVariables}}`
-    }, [cssVariables])
+
+        // Re-enable transitions after styles are applied
+        if (shouldDisableTransitions) {
+            // Use requestAnimationFrame to ensure styles are applied before re-enabling
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    document.documentElement.classList.remove(DISABLE_TRANSITIONS_CLASS)
+                })
+            })
+        }
+
+        isFirstRender.current = false
+    }, [cssVariables, disableTransitionsOnChange])
 
     useLayoutEffect(() => {
         return () => {

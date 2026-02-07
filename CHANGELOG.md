@@ -7,6 +7,82 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.0] - 2026-02-07
+
+### 🎉 Dynamic Theme Switching
+
+This version introduces a major improvement to theme switching. Components now update **instantly** when the theme changes, without requiring React re-renders.
+
+### ✨ New Features
+
+#### CSS Variables Architecture
+
+`createStyles` now generates CSS classes using CSS variables (`var(--theme-xxx)`) instead of hardcoded values. This enables:
+
+- **Instant theme switching** - No React re-renders needed
+- **Better performance** - Styles are generated once, cached forever
+- **Smaller bundle** - No Proxy overhead at runtime
+
+```typescript
+// Before (v3.1.x): Generated hardcoded values
+.button-root { background-color: #3b82f6; }
+
+// After (v3.2.0): Generated with CSS variables
+.button-root { background-color: var(--theme-colors-primary); }
+```
+
+#### Automatic CSS Variables Injection
+
+`ThemeProvider` now automatically injects all theme values as CSS variables into `:root`:
+
+```css
+:root {
+  --theme-colors-primary: #3b82f6;
+  --theme-colors-background: #ffffff;
+  --theme-spacing-md: 16px;
+  /* ... all theme values */
+}
+```
+
+#### Transition Disable During Theme Change
+
+New `disableTransitionsOnChange` prop (default: `true`) prevents jarring transition animations when switching themes:
+
+```tsx
+// Default: transitions disabled during theme switch
+<ThemeProvider theme={currentTheme}>
+  <App />
+</ThemeProvider>
+
+// Opt-out if you want transitions during theme change
+<ThemeProvider theme={currentTheme} disableTransitionsOnChange={false}>
+  <App />
+</ThemeProvider>
+```
+
+### 🐛 Bug Fixes
+
+- **Fixed**: Components not re-rendering when theme changes in real applications
+- **Fixed**: Theme switching not working correctly with Redux or external state management
+
+### ⚠️ Migration Notes
+
+**No breaking changes** - The API remains exactly the same:
+
+```typescript
+// This still works exactly as before
+const styles = createStyles((theme) => ({
+  root: {
+    backgroundColor: theme.colors.background,
+    padding: theme.spacing.md
+  }
+}))
+```
+
+The only difference is that now it works correctly when you switch themes! 🎉
+
+---
+
 ## [3.1.0] - 2026-01-18
 
 ### 🎉 Official v3 Release

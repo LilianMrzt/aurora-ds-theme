@@ -231,5 +231,72 @@ describe('ThemeProvider - CSS Variables', () => {
         const style = document.getElementById('aurora-theme-variables')
         expect(style?.textContent).toContain('--theme-spacing-md')
     })
+
+    it('should handle theme change with transitions disabled (default)', () => {
+        const altTheme = createTheme({
+            ...mockTheme,
+            colors: {
+                ...mockTheme.colors,
+                background: '#222222',
+            },
+        })
+
+        const { rerender } = render(
+            <ThemeProvider theme={defaultTheme}>
+                <div data-testid={'test'}>
+                    {'Test'}
+                </div>
+            </ThemeProvider>
+        )
+
+        // Change theme - should not throw
+        rerender(
+            <ThemeProvider theme={altTheme}>
+                <div data-testid={'test'}>
+                    {'Test'}
+                </div>
+            </ThemeProvider>
+        )
+
+        // Theme should have changed
+        const style = document.getElementById('aurora-theme-variables')
+        expect(style?.textContent).toContain('#222222')
+    })
+
+    it('should handle theme change with disableTransitionsOnChange=false', () => {
+        const altTheme = createTheme({
+            ...mockTheme,
+            colors: {
+                ...mockTheme.colors,
+                background: '#333333',
+            },
+        })
+
+        const { rerender } = render(
+            <ThemeProvider
+                theme={defaultTheme}
+                disableTransitionsOnChange={false}
+            >
+                <div data-testid={'test'}>
+                    {'Test'}
+                </div>
+            </ThemeProvider>
+        )
+
+        rerender(
+            <ThemeProvider
+                theme={altTheme}
+                disableTransitionsOnChange={false}
+            >
+                <div data-testid={'test'}>
+                    {'Test'}
+                </div>
+            </ThemeProvider>
+        )
+
+        // Theme should have changed
+        const style = document.getElementById('aurora-theme-variables')
+        expect(style?.textContent).toContain('#333333')
+    })
 })
 
