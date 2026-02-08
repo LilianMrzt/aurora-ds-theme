@@ -6,7 +6,9 @@ import type { _InternalTheme } from '@/types'
 
 const IS_SERVER = typeof document === 'undefined'
 const THEME_STYLE_ID = 'aurora-theme-variables'
+const THEME_TRANSITION_STYLE_ID = 'aurora-theme-transition'
 const DISABLE_TRANSITIONS_CLASS = 'aurora-disable-transitions'
+const FORCE_TRANSITIONS_CLASS = 'aurora-force-transitions'
 
 let transitionRuleInjected = false
 
@@ -20,6 +22,26 @@ const injectDisableTransitionsRule = (): void => {
     }
     insertRule(`.${DISABLE_TRANSITIONS_CLASS} *,.${DISABLE_TRANSITIONS_CLASS} *::before,.${DISABLE_TRANSITIONS_CLASS} *::after{transition:none!important}`)
     transitionRuleInjected = true
+}
+
+/**
+ * Injects/updates global CSS rule to force color transitions during theme switch.
+ * @internal
+ */
+const injectForceTransitionsRule = (durationMs: number): void => {
+    if (IS_SERVER) {
+        return
+    }
+
+    let styleElement = document.getElementById(THEME_TRANSITION_STYLE_ID) as HTMLStyleElement | null
+
+    if (!styleElement) {
+        styleElement = document.createElement('style')
+        styleElement.id = THEME_TRANSITION_STYLE_ID
+        document.head.appendChild(styleElement)
+    }
+
+    styleElement.textContent = `.${FORCE_TRANSITIONS_CLASS} *,.${FORCE_TRANSITIONS_CLASS} *::before,.${FORCE_TRANSITIONS_CLASS} *::after{transition:color ${durationMs}ms,background-color ${durationMs}ms,border-color ${durationMs}ms,fill ${durationMs}ms,stroke ${durationMs}ms!important}`
 }
 
 const ThemeContext = createContext<_InternalTheme | undefined>(undefined)
@@ -50,9 +72,17 @@ export type ThemeProviderProps = {
     /**
      * Whether to disable CSS transitions during theme changes.
      * This prevents visual glitches when switching themes.
+     * Ignored if `transitionDuration` is set.
      * @default true
      */
     disableTransitionsOnChange?: boolean
+    /**
+     * Duration in milliseconds for color transitions during theme changes.
+     * When set, forces a smooth transition on all color-related properties
+     * (color, background-color, border-color, fill, stroke).
+     * Takes precedence over `disableTransitionsOnChange`.
+     */
+    transitionDuration?: number
     children?: ReactNode
 }
 
@@ -70,6 +100,7 @@ export type ThemeProviderProps = {
 export const ThemeProvider = ({
     theme,
     disableTransitionsOnChange = true,
+    transitionDuration,
     children
 }: ThemeProviderProps) => {
     const previousGetter = setThemeContextGetter(() => theme)
@@ -84,16 +115,20 @@ export const ThemeProvider = ({
             return
         }
 
-        // Inject the disable-transitions rule once
-        if (disableTransitionsOnChange) {
+        const isThemeChange = !isFirstRender.current
+        const useForceTransition = transitionDuration !== undefined && transitionDuration > 0
+        const shouldDisableTransitions = disableTransitionsOnChange && !useForceTransition && isThemeChange
+
+        // Inject the disable-transitions rule once (if needed)
+        if (shouldDisableTransitions) {
             injectDisableTransitionsRule()
+            document.documentElement.classList.add(DISABLE_TRANSITIONS_CLASS)
         }
 
-        // Disable transitions during theme change (skip first render)
-        const shouldDisableTransitions = disableTransitionsOnChange && !isFirstRender.current
-
-        if (shouldDisableTransitions) {
-            document.documentElement.classList.add(DISABLE_TRANSITIONS_CLASS)
+        // Force color transitions if transitionDuration is set
+        if (useForceTransition && isThemeChange) {
+            injectForceTransitionsRule(transitionDuration)
+            document.documentElement.classList.add(FORCE_TRANSITIONS_CLASS)
         }
 
         let styleElement = document.getElementById(THEME_STYLE_ID) as HTMLStyleElement | null
@@ -116,8 +151,21 @@ export const ThemeProvider = ({
             })
         }
 
+        // Remove force transitions class after animation completes
+        if (useForceTransition && isThemeChange) {
+            const timeoutId = setTimeout(() => {
+                document.documentElement.classList.remove(FORCE_TRANSITIONS_CLASS)
+            }, transitionDuration)
+
+            isFirstRender.current = false
+
+            return () => {
+                clearTimeout(timeoutId)
+            }
+        }
+
         isFirstRender.current = false
-    }, [cssVariables, disableTransitionsOnChange])
+    }, [cssVariables, disableTransitionsOnChange, transitionDuration])
 
     useLayoutEffect(() => {
         return () => {

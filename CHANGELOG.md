@@ -60,6 +60,22 @@ New `disableTransitionsOnChange` prop (default: `true`) prevents jarring transit
 </ThemeProvider>
 ```
 
+#### Smooth Theme Transitions
+
+New `transitionDuration` prop enables smooth color transitions when switching themes:
+
+```tsx
+// Smooth 300ms transition for all colors during theme switch
+<ThemeProvider theme={currentTheme} transitionDuration={300}>
+  <App />
+</ThemeProvider>
+```
+
+When set, this prop:
+- Forces smooth transitions on color-related properties (color, background-color, border-color, fill, stroke)
+- Takes precedence over `disableTransitionsOnChange`
+- Automatically removes the transition after the specified duration
+
 ### 🐛 Bug Fixes
 
 - **Fixed**: Components not re-rendering when theme changes in real applications
