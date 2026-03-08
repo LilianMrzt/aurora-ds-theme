@@ -31,8 +31,6 @@ const cssKeyCache = new Map<string, string>([
     ['zIndex', 'z-index'],
 ])
 
-const staticStyleCache = new Map<string, string>()
-const usedClassNames = new Set<string>()
 const injectedKeyframes = new Set<string>()
 const injectedFontFaces = new Set<string>()
 let keyframeCounter = 0
@@ -42,11 +40,20 @@ const UNITLESS_PROPERTIES = new Set([
     'fontWeight', 'lineHeight', 'opacity', 'order', 'orphans', 'widows', 'zIndex', 'zoom'
 ])
 
+
 /**
- * Max LRU cache size for dynamic styles.
+ * Registry of per-module stylesheets for HMR support.
+ * Maps componentName to its dedicated CSSStyleSheet.
  * @internal
  */
-export const MAX_CACHE_SIZE = 100
+const moduleStyleSheets = new Map<string, CSSStyleSheet>()
+
+/**
+ * Tracks injected dynamic rule keys per module for deduplication within a single HMR cycle.
+ * Maps componentName to a Set of className strings already injected.
+ * @internal
+ */
+const moduleDynamicRules = new Map<string, Set<string>>()
 
 if (!IS_SERVER) {
     const existingStyle = document.getElementById('aurora-styles') as HTMLStyleElement | null
@@ -93,6 +100,120 @@ export const insertRule = (rule: string): void => {
             // Ignore errors (invalid rules)
         }
     }
+}
+
+/**
+ * Creates or retrieves a dedicated stylesheet for a module (identified by componentName).
+ * On subsequent calls with the same name (HMR), clears all existing rules.
+ * @internal
+ */
+export const getModuleStyleSheet = (componentName: string): CSSStyleSheet | null => {
+    if (IS_SERVER) { return null }
+
+    const existing = moduleStyleSheets.get(componentName)
+    if (existing) {
+        // HMR path: clear all existing rules so they can be re-injected with new values
+        const rulesLen = existing.cssRules.length
+        for (let i = rulesLen - 1; i >= 0; i--) {
+            existing.deleteRule(i)
+        }
+        // Reset dynamic rules tracking for this module
+        moduleDynamicRules.delete(componentName)
+        return existing
+    }
+
+    const style = document.createElement('style')
+    style.id = `aurora-mod-${componentName}`
+    style.setAttribute('data-aurora-module', componentName)
+    document.head.appendChild(style)
+    const sheet = style.sheet as CSSStyleSheet
+    moduleStyleSheets.set(componentName, sheet)
+    return sheet
+}
+
+/**
+ * Inserts a CSS rule into a specific module stylesheet (or SSR buffer).
+ * @internal
+ */
+export const insertModuleRule = (sheet: CSSStyleSheet | null, rule: string): void => {
+    if (IS_SERVER) {
+        ssrRules.push(rule)
+    } else if (sheet) {
+        try {
+            sheet.insertRule(rule, sheet.cssRules.length)
+        } catch {
+            // Ignore errors (invalid rules)
+        }
+    }
+}
+
+/**
+ * Generates CSS class using a dedicated module stylesheet.
+ * Uses deterministic class names (no uniqueness suffix) for HMR stability.
+ * @internal
+ */
+export const generateModuleCssClass = (
+    styles: StyleWithPseudos,
+    className: string,
+    sheet: CSSStyleSheet | null
+): string => {
+    let baseCss = ''
+
+    for (const key in styles) {
+        const value = (styles as Record<string, unknown>)[key]
+        const firstChar = key[0]
+
+        if (firstChar === '@') {
+            const innerCss = objectToCss(value as Record<string, unknown>)
+            if (innerCss) {
+                insertModuleRule(sheet, `${key}{.${className}{${innerCss}}}`)
+            }
+        } else if (firstChar === '&') {
+            const innerCss = objectToCss(value as Record<string, unknown>)
+            if (innerCss) {
+                insertModuleRule(sheet, `${key.replace(/&/g, `.${className}`)}{${innerCss}}`)
+            }
+        } else if (firstChar === ':') {
+            const innerCss = objectToCss(value as Record<string, unknown>)
+            if (innerCss) {
+                insertModuleRule(sheet, `.${className}${key}{${innerCss}}`)
+            }
+        } else if (value != null && typeof value !== 'object') {
+            baseCss += `${toKebabCase(key)}:${toCssValue(key, value)};`
+        }
+    }
+
+    if (baseCss) {
+        insertModuleRule(sheet, `.${className}{${baseCss}}`)
+    }
+
+    return className
+}
+
+/**
+ * Max tracked dynamic rules per module before disabling deduplication.
+ * Prevents unbounded memory growth with highly variable dynamic args.
+ * @internal
+ */
+const MAX_DYNAMIC_RULES_PER_MODULE = 500
+
+/**
+ * Tracks a dynamic rule for a module to avoid duplicate injection within one HMR cycle.
+ * Returns true if the rule was already injected (skip), false if it's new (inject).
+ * When the cap is reached, always returns false (re-inject) to prevent memory leaks.
+ * @internal
+ */
+export const trackModuleDynamicRule = (componentName: string, ruleKey: string): boolean => {
+    let set = moduleDynamicRules.get(componentName)
+    if (!set) {
+        set = new Set()
+        moduleDynamicRules.set(componentName, set)
+    }
+    if (set.has(ruleKey)) { return true }
+    // Cap reached: don't track more, but don't block injection
+    if (set.size >= MAX_DYNAMIC_RULES_PER_MODULE) { return false }
+    set.add(ruleKey)
+    return false
 }
 
 /**
@@ -238,44 +359,6 @@ export const cacheKeyToSuffix = (key: string): string => {
     return (hash >>> 0).toString(36)
 }
 
-/**
- * Creates an LRU cache with O(1) operations.
- * @internal
- */
-export const createLRUCache = <V>(maxSize: number): { getOrSet: (key: string, factory: () => V) => V } => {
-    const cache = new Map<string, V>()
-    return {
-        getOrSet(key: string, factory: () => V): V {
-            const existing = cache.get(key)
-            if (existing !== undefined) {
-                cache.delete(key)
-                cache.set(key, existing)
-                return existing
-            }
-            const value = factory()
-            if (cache.size >= maxSize) {
-                const firstKey = cache.keys().next().value
-                if (firstKey !== undefined) { cache.delete(firstKey) }
-            }
-            cache.set(key, value)
-            return value
-        }
-    }
-}
-
-/**
- * Generates a hash from a styles object.
- * @internal
- */
-export const hashStyles = (styles: StyleWithPseudos): string => {
-    const str = JSON.stringify(styles)
-    let hash = 5381
-    const len = str.length
-    for (let i = 0; i < len; i++) {
-        hash = ((hash << 5) + hash) ^ str.charCodeAt(i)
-    }
-    return (hash >>> 0).toString(36)
-}
 
 /**
  * Generates a hash from a string.
@@ -290,72 +373,6 @@ export const hashString = (str: string): string => {
     return (hash >>> 0).toString(36)
 }
 
-/**
- * Returns a unique class name, adding suffix if needed.
- * @internal
- */
-export const getUniqueClassName = (baseName: string): string => {
-    if (!usedClassNames.has(baseName)) {
-        usedClassNames.add(baseName)
-        return baseName
-    }
-    let counter = 2
-    while (usedClassNames.has(`${baseName}-${counter}`)) {
-        counter++
-    }
-    const name = `${baseName}-${counter}`
-    usedClassNames.add(name)
-    return name
-}
-
-/**
- * Generates CSS class with support for pseudo-classes, media queries, etc.
- * @internal
- */
-export const generateCssClass = (styles: StyleWithPseudos, className: string, useCache = false): string => {
-    if (useCache) {
-        const hash = hashStyles(styles)
-        const cached = staticStyleCache.get(hash)
-        if (cached) { return cached }
-    }
-
-    const uniqueName = getUniqueClassName(className)
-    let baseCss = ''
-
-    for (const key in styles) {
-        const value = (styles as Record<string, unknown>)[key]
-        const firstChar = key[0]
-
-        if (firstChar === '@') {
-            const innerCss = objectToCss(value as Record<string, unknown>)
-            if (innerCss) {
-                insertRule(`${key}{.${uniqueName}{${innerCss}}}`)
-            }
-        } else if (firstChar === '&') {
-            const innerCss = objectToCss(value as Record<string, unknown>)
-            if (innerCss) {
-                insertRule(`${key.replace(/&/g, `.${uniqueName}`)}{${innerCss}}`)
-            }
-        } else if (firstChar === ':') {
-            const innerCss = objectToCss(value as Record<string, unknown>)
-            if (innerCss) {
-                insertRule(`.${uniqueName}${key}{${innerCss}}`)
-            }
-        } else if (value != null && typeof value !== 'object') {
-            baseCss += `${toKebabCase(key)}:${toCssValue(key, value)};`
-        }
-    }
-
-    if (baseCss) {
-        insertRule(`.${uniqueName}{${baseCss}}`)
-    }
-
-    if (useCache) {
-        staticStyleCache.set(hashStyles(styles), uniqueName)
-    }
-
-    return uniqueName
-}
 
 /**
  * Checks if keyframes CSS has already been injected.
@@ -411,9 +428,16 @@ export const getSSRRulesInternal = (): string[] => {
  */
 export const resetState = (): void => {
     ssrRules = []
-    staticStyleCache.clear()
-    usedClassNames.clear()
     injectedKeyframes.clear()
     injectedFontFaces.clear()
     keyframeCounter = 0
+    if (!IS_SERVER) {
+        moduleStyleSheets.forEach((_, key) => {
+            const el = document.getElementById(`aurora-mod-${key}`)
+            if (el) { el.remove() }
+        })
+    }
+    moduleStyleSheets.clear()
+    moduleDynamicRules.clear()
 }
+

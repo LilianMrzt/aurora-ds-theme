@@ -7,10 +7,7 @@ import {
     objectToCss,
     createCacheKey,
     cacheKeyToSuffix,
-    createLRUCache,
-    hashStyles,
     hashString,
-    getUniqueClassName,
     resolveAmpersandSelector,
     sanitizeCssValue,
 } from '@/utils/styles/styleEngine'
@@ -174,82 +171,6 @@ describe('cacheKeyToSuffix', () => {
     })
 })
 
-describe('createLRUCache', () => {
-    it('should cache values', () => {
-        const cache = createLRUCache<string>(3)
-        let factoryCalls = 0
-
-        const result1 = cache.getOrSet('key1', () => {
-            factoryCalls++
-            return 'value1'
-        })
-
-        const result2 = cache.getOrSet('key1', () => {
-            factoryCalls++
-            return 'value1-new'
-        })
-
-        expect(result1).toBe('value1')
-        expect(result2).toBe('value1')
-        expect(factoryCalls).toBe(1) // Factory only called once
-    })
-
-    it('should evict oldest when full', () => {
-        const cache = createLRUCache<string>(2)
-
-        cache.getOrSet('key1', () => 'value1')
-        cache.getOrSet('key2', () => 'value2')
-        cache.getOrSet('key3', () => 'value3') // Should evict key1
-
-        let key1Calls = 0
-        cache.getOrSet('key1', () => {
-            key1Calls++
-            return 'value1-new'
-        })
-
-        expect(key1Calls).toBe(1) // key1 was evicted, factory called again
-    })
-
-    it('should refresh recently used items', () => {
-        const cache = createLRUCache<string>(2)
-
-        cache.getOrSet('key1', () => 'value1')
-        cache.getOrSet('key2', () => 'value2')
-        cache.getOrSet('key1', () => 'value1') // Refresh key1
-        cache.getOrSet('key3', () => 'value3') // Should evict key2, not key1
-
-        let key1Calls = 0
-        let key2Calls = 0
-
-        cache.getOrSet('key1', () => {
-            key1Calls++
-            return 'value1-new'
-        })
-
-        cache.getOrSet('key2', () => {
-            key2Calls++
-            return 'value2-new'
-        })
-
-        expect(key1Calls).toBe(0) // key1 was refreshed, still cached
-        expect(key2Calls).toBe(1) // key2 was evicted
-    })
-})
-
-describe('hashStyles', () => {
-    it('should return consistent hash for same styles', () => {
-        const styles = { color: 'red', fontSize: '16px' }
-        const hash1 = hashStyles(styles)
-        const hash2 = hashStyles(styles)
-        expect(hash1).toBe(hash2)
-    })
-
-    it('should return different hash for different styles', () => {
-        const hash1 = hashStyles({ color: 'red' })
-        const hash2 = hashStyles({ color: 'blue' })
-        expect(hash1).not.toBe(hash2)
-    })
-})
 
 describe('hashString', () => {
     it('should return consistent hash for same string', () => {
@@ -265,22 +186,6 @@ describe('hashString', () => {
     })
 })
 
-describe('getUniqueClassName', () => {
-    it('should return base name if not used', () => {
-        const name = getUniqueClassName('unique-test-class')
-        expect(name).toBe('unique-test-class')
-    })
-
-    it('should append counter for duplicate names', () => {
-        const name1 = getUniqueClassName('duplicate-class')
-        const name2 = getUniqueClassName('duplicate-class')
-        const name3 = getUniqueClassName('duplicate-class')
-
-        expect(name1).toBe('duplicate-class')
-        expect(name2).toBe('duplicate-class-2')
-        expect(name3).toBe('duplicate-class-3')
-    })
-})
 
 describe('resolveAmpersandSelector', () => {
     it('should replace & with class name', () => {
