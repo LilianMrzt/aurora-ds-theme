@@ -1,9 +1,8 @@
 import {
     addKeyframes,
-    getNextKeyframeId,
-    hashString,
+    getKeyframeName,
     hasKeyframes,
-    insertRule,
+    insertKeyframeRule,
     objectToCss
 } from './styleEngine'
 
@@ -16,13 +15,13 @@ export const keyframes = (frames: Record<string, CSSProperties>): string => {
         css += `${key}{${objectToCss(frames[key] as Record<string, unknown>)}}`
     }
 
+    const name = getKeyframeName(css)
+
     if (hasKeyframes(css)) {
-        const hash = hashString(css)
-        return `aurora-kf-${hash}`
+        return name
     }
 
-    const name = `aurora-kf-${getNextKeyframeId()}`
-    insertRule(`@keyframes ${name}{${css}}`)
+    insertKeyframeRule(`@keyframes ${name}{${css}}`)
     addKeyframes(css)
 
     return name

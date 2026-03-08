@@ -1,9 +1,11 @@
 import {
     cacheKeyToSuffix,
     createCacheKey,
-    createLRUCache,
-    generateCssClass,
-    MAX_CACHE_SIZE,
+    generateModuleCssClass,
+    getModuleStyleSheet,
+    hashString,
+    setCurrentModuleContext,
+    trackModuleDynamicRule,
     toKebabCase,
     toKebabCaseClassName
 } from './styleEngine'
@@ -12,21 +14,61 @@ import type { StyleFunction, StyleWithPseudos } from './types'
 import type { _InternalTheme } from '@/types'
 
 /**
- * Extracts component name from stack trace for class naming.
+ * Tracks module IDs to detect collisions and disambiguate.
+ * Maps moduleId → full stack signature that created it.
  * @internal
  */
-const getComponentNameFromStack = (): string => {
+const moduleRegistry = new Map<string, string>()
+
+/**
+ * Extracts component name from stack trace for class naming.
+ * Uses a hash of the full file path to disambiguate same-name files in different folders.
+ * @internal
+ */
+const getModuleId = (): string => {
     const stack = new Error().stack || ''
-    const match = stack.match(/([A-Za-z0-9_]+)\.styles\.[tj]s/)
-    if (match?.[1]) {
-        return toKebabCaseClassName(match[1])
+
+    // Try to match *.styles.ts/js pattern first
+    const styleMatch = stack.match(/([A-Za-z0-9_]+)\.styles\.[tj]s/)
+    const baseName = styleMatch?.[1]
+        ? toKebabCaseClassName(styleMatch[1])
+        : (() => {
+            const fileMatch = stack.match(/\/([A-Za-z0-9_]+)\.[tj]sx?[:\d]*\)?$/m)
+            return (fileMatch?.[1] && fileMatch[1] !== 'createStyles')
+                ? toKebabCaseClassName(fileMatch[1])
+                : 'style'
+        })()
+
+    // Extract the full file path for disambiguation
+    const pathMatch = stack.match(/(?:at\s+.*?\(|at\s+)((?:[A-Za-z]:)?[^\s)]+\.styles\.[tj]s)/) ||
+                      stack.match(/(?:at\s+.*?\(|at\s+)((?:[A-Za-z]:)?[^\s)]+\.[tj]sx?)[:\d]*\)?/m)
+    const filePath = pathMatch?.[1] || ''
+
+    // If the baseName is already registered by the same file, return it as-is (HMR case)
+    const existing = moduleRegistry.get(baseName)
+    if (existing === filePath) {
+        return baseName
     }
-    const fileMatch = stack.match(/\/([A-Za-z0-9_]+)\.[tj]sx?[:\d]*\)?$/m)
-    if (fileMatch?.[1] && fileMatch[1] !== 'createStyles') {
-        return toKebabCaseClassName(fileMatch[1])
+
+    // If not registered yet, claim it
+    if (!existing) {
+        moduleRegistry.set(baseName, filePath)
+        return baseName
     }
-    return 'style'
+
+    // Collision: different file wants the same baseName → disambiguate with path hash
+    const disambiguated = `${baseName}-${hashString(filePath)}`
+    moduleRegistry.set(disambiguated, filePath)
+    return disambiguated
 }
+
+/**
+ * Singleton CSS variable theme proxy.
+ * Stateless — always returns var(--theme-xxx) references regardless of actual theme.
+ * Created lazily on first use, then reused for all subsequent createStyles calls.
+ * @internal
+ */
+let cssVarThemeSingleton: _InternalTheme | null = null
 
 /**
  * Creates a theme proxy that returns CSS variable references instead of actual values.
@@ -37,60 +79,50 @@ const getComponentNameFromStack = (): string => {
  * @internal
  */
 const createCSSVariableTheme = (): _InternalTheme => {
+    if (cssVarThemeSingleton) { return cssVarThemeSingleton }
+
     const createNestedProxy = (path: string): unknown => {
-        // Create a function that returns the CSS variable
         const getValue = () => `var(--theme-${path})`
 
-        // Return a proxy that acts as both a value and an object for further nesting
         return new Proxy(getValue, {
             get(_, prop) {
-                // Handle Symbol.toPrimitive for coercion
                 if (prop === Symbol.toPrimitive) {
                     return getValue
                 }
 
-                // Ignore other symbols (used by React, JSON.stringify, etc.)
                 if (typeof prop !== 'string') {
                     return undefined
                 }
 
-                // Handle coercion to string/primitive
                 if (prop === 'toString' || prop === 'valueOf') {
                     return getValue
                 }
 
-                // Create nested path
                 const kebabProp = toKebabCase(prop)
                 const newPath = path ? `${path}-${kebabProp}` : kebabProp
 
-                // Return a new proxy for the nested path
                 return createNestedProxy(newPath)
             },
 
-            // When used in string context (template literals, string concatenation)
             apply() {
                 return getValue()
             }
         })
     }
 
-    return createNestedProxy('') as _InternalTheme
+    cssVarThemeSingleton = createNestedProxy('') as _InternalTheme
+    return cssVarThemeSingleton
 }
 
 /**
- * Cache for CSS variable-based styles.
- * Key is the stringified creator function, value is the processed styles.
- * @internal
- */
-const cssVarStylesCache = new Map<string, Record<string, string | ((...args: unknown[]) => string)>>()
-
-/**
- * Processes styles object and generates CSS classes.
+ * Processes styles object and generates CSS classes using a module-specific stylesheet.
+ * Static styles are injected immediately. Dynamic styles inject on first call per args.
  * @internal
  */
 const processStyles = <T extends Record<string, StyleWithPseudos | StyleFunction>>(
     styles: T,
-    componentName: string
+    componentName: string,
+    moduleSheet: CSSStyleSheet | null
 ): Record<string, string | ((...args: unknown[]) => string)> => {
     const classes = {} as Record<string, string | ((...args: unknown[]) => string)>
 
@@ -99,16 +131,19 @@ const processStyles = <T extends Record<string, StyleWithPseudos | StyleFunction
         if (style) {
             const baseName = `${componentName}-${toKebabCaseClassName(key)}`
             if (typeof style === 'function') {
-                const lru = createLRUCache<string>(MAX_CACHE_SIZE)
                 classes[key] = (...args: unknown[]) => {
                     const cacheKey = createCacheKey(args)
-                    return lru.getOrSet(cacheKey, () => {
+                    const className = `${baseName}-${cacheKeyToSuffix(cacheKey)}`
+                    // Only inject if not already injected in this HMR cycle
+                    if (!trackModuleDynamicRule(componentName, className)) {
                         const resolved = (style as (...a: unknown[]) => StyleWithPseudos)(...args)
-                        return generateCssClass(resolved, `${baseName}-${cacheKeyToSuffix(cacheKey)}`)
-                    })
+                        generateModuleCssClass(resolved, className, moduleSheet)
+                    }
+                    return className
                 }
             } else {
-                classes[key] = generateCssClass(style, baseName, true)
+                generateModuleCssClass(style, baseName, moduleSheet)
+                classes[key] = baseName
             }
         }
     }
@@ -146,25 +181,20 @@ export const createStyles = <
         stylesOrCreator: T | ((theme: _InternalTheme) => T)
     ): { [K in keyof T]: T[K] extends (...args: infer TArgs) => StyleWithPseudos ? (...args: TArgs) => string : string } => {
     type Result = { [K in keyof T]: T[K] extends (...args: infer TArgs) => StyleWithPseudos ? (...args: TArgs) => string : string }
-    const componentName = getComponentNameFromStack()
+    const componentName = getModuleId()
+    const moduleSheet = getModuleStyleSheet(componentName)
 
-    // Styles with theme (function)
-    if (typeof stylesOrCreator === 'function') {
-        const creatorKey = `${componentName}:${stylesOrCreator.toString().slice(0, 200)}`
-        let cached = cssVarStylesCache.get(creatorKey)
-
-        if (!cached) {
+    // Set module context so keyframes()/fontFace() calls inject into the module sheet
+    setCurrentModuleContext(componentName, moduleSheet)
+    try {
+        if (typeof stylesOrCreator === 'function') {
             const cssVarTheme = createCSSVariableTheme()
             const styles = stylesOrCreator(cssVarTheme)
-            cached = processStyles(styles, componentName)
-            cssVarStylesCache.set(creatorKey, cached)
+            return processStyles(styles, componentName, moduleSheet) as Result
         }
 
-        return cached as Result
+        return processStyles(stylesOrCreator, componentName, moduleSheet) as Result
+    } finally {
+        setCurrentModuleContext(null)
     }
-
-
-    // Styles without theme (direct object)
-    return processStyles(stylesOrCreator, componentName) as Result
 }
-

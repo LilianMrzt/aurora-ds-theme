@@ -1,4 +1,4 @@
-import { addFontFace, hasFontFace, insertRule } from './styleEngine'
+import { addFontFace, hasFontFace, insertFontFaceRule } from './styleEngine'
 
 import type { FontFaceOptions } from './types'
 
@@ -25,7 +25,7 @@ export const fontFace = (options: FontFaceOptions): string => {
 
     // Check if already injected
     if (!hasFontFace(css)) {
-        insertRule(`@font-face{${css}}`)
+        insertFontFaceRule(`@font-face{${css}}`)
         addFontFace(css)
     }
 
