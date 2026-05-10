@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.5.0] - 2026-05-10
+
 ### ✨ New Features
 
 #### `createVariants` — CVA-style variants without a wrapper component
@@ -40,58 +42,59 @@ export const button = createVariants((theme) => ({
 <button className={button({ variant: 'ghost' }, props.className)} />
 ```
 
+Exported types: `CreateVariantsConfig`, `CompoundVariant`, `VariantProps<V>`, `VariantFn`.
+
 #### Responsive tokens
 
-CSS values can now be declared as objects whose keys match `theme.breakpoints`:
+CSS values can now be declared as objects whose keys match `theme.breakpoints`. Aurora detects them automatically and emits `@media (min-width: …)` rules in mobile-first order. The `base` key produces the unmediated rule.
 
 ```ts
 const styles = createStyles(() => ({
   card: {
     padding: { base: 8, md: 16, lg: 24 },
     fontSize: { base: 14, lg: 18 },
-  }
+    gridTemplateColumns: { base: '1fr', md: '1fr 1fr', lg: 'repeat(3, 1fr)' },
+  },
 }))
 ```
 
-Aurora detects responsive tokens automatically and emits matching `@media (min-width: …)` rules in the order declared by `theme.breakpoints` (mobile-first cascade). The `base` key produces the unmediated rule.
-
 `ThemeProvider` registers `theme.breakpoints` automatically — no extra setup required.
+`StyleWithPseudos` was widened to accept `ResponsiveValue<T>` for any CSS property (autocomplete works out of the box).
 
-The `StyleWithPseudos` type was widened to accept `ResponsiveValue<T>` for every CSS property, so autocomplete works out of the box.
+#### Explicit module id for `createStyles` and `createVariants` — ⚠️ recommended in production
 
-#### Explicit module id for `createStyles` (recommended in production)
-
-`createStyles` now accepts an optional second argument `{ id }` to opt-out of stack-trace based module identification. **Strongly recommended** for production / SSR setups where deterministic class names are required.
+Both `createStyles` and `createVariants` now accept an optional `{ id }` second argument to opt-out of stack-trace-based module identification.
 
 ```ts
-// Before (still works, fragile in some prod bundles):
-export const styles = createStyles((theme) => ({ ... }))
-
-// After (recommended for production):
-export const styles = createStyles((theme) => ({ ... }), { id: 'button' })
+// Guarantees identical class names across builds and SSR ↔ CSR boundaries:
+export const styles = createStyles((theme) => ({ ... }), { id: 'card' })
+export const button = createVariants((theme) => ({ ... }), { id: 'button' })
 ```
 
-When `id` is provided, the engine skips `Error().stack` parsing entirely (faster and engine-agnostic) and guarantees stable class names across builds and SSR ↔ CSR boundaries.
+When `id` is provided the engine skips `Error().stack` parsing entirely (faster, engine-agnostic, immune to minification).
 
 #### `cx(...args)` helper
 
-A tiny dependency-free `clsx`-like helper for joining class names with conditional support:
+A tiny, dependency-free `clsx`-like helper for joining class names conditionally:
 
 ```ts
 import { cx } from '@aurora-ds/theme'
 
-<button className={cx(styles.base, styles[size], isActive && styles.active)} />
+<button className={cx(styles.base, styles[size], isActive && styles.active, props.className)} />
 ```
+
+Falsy values (`false`, `null`, `undefined`, `''`) are silently ignored.
 
 #### `globalStyles({...})`
 
-A new top-level API to inject global CSS rules (resets, base styles, body, `:root`, `@media`, etc.) using the same nested syntax as `createStyles`:
+Injects global CSS rules (resets, `body`, `:root`, `@media`, etc.) using the same nested syntax as `createStyles`:
 
 ```ts
 import { globalStyles } from '@aurora-ds/theme'
 
 globalStyles({
-  'html, body': { margin: 0, padding: 0 },
+  'html, body': { margin: 0, padding: 0, fontFamily: 'system-ui, sans-serif' },
+  '*': { boxSizing: 'border-box' },
   'a': { color: 'inherit', ':hover': { textDecoration: 'underline' } },
   '@media (prefers-reduced-motion: reduce)': {
     '*': { animation: 'none', transition: 'none' },
@@ -101,14 +104,41 @@ globalStyles({
 
 ### 🚀 Improvements
 
-- **`useInsertionEffect`** is now used (when available, React 18+) for theme CSS variable injection. This is the official React API for CSS-in-JS and avoids any FOUC during commit. Falls back to `useLayoutEffect` on older React.
-- **Skip redundant `:root` rewrites**: when the user re-creates the `theme` object on each render without memoization, the `<style>` tag is no longer rewritten if the resulting CSS string is identical to the previous one. Saves a style recalc.
-- **Stable cache key for object args**: `createStyles` dynamic-style functions now produce identical class names regardless of the key order of object arguments (`{ a, b }` vs `{ b, a }`). Prevents accidental cache misses and double-injection.
-- **Dev-only warnings** are now emitted (via `console.warn`) when the engine fails to insert a CSS rule (invalid selector, unsupported syntax, etc.). Stripped from production bundles via dead-code elimination.
+- **`useInsertionEffect`** is now used (React 18+) for theme CSS variable injection — the official React API for CSS-in-JS. Eliminates any FOUC during commit. Falls back to `useLayoutEffect` on older React.
+- **Skip redundant `:root` rewrites** — when `theme` is re-created on each render without memoization, the style tag is no longer rewritten if the resulting CSS is identical to the previous value. Saves a style recalc.
+- **Stable cache key for object args** — dynamic-style functions now produce identical class names regardless of the key insertion order of object arguments (`{ a, b }` vs `{ b, a }`). Prevents accidental cache misses and double-injection.
+- **Dev-only warnings on `insertRule` failure** — `console.warn('[aurora-ds] …')` is now emitted in dev when the engine fails to insert a CSS rule (invalid selector, unsupported syntax, etc.). Stripped from production bundles via `process.env.NODE_ENV` dead-code elimination.
+
+### 🔍 Dev-only diagnostics (new in 3.5.0)
+
+Three new warnings are surfaced in development and completely removed from production builds:
+
+1. **Suspicious style key** — keys containing `<`, `{`, `}` or `;` are flagged and skipped to prevent CSS injection mistakes.
+2. **Object value on non-selector key** — when an object value is used on a key that isn't a selector (`@`, `&`, `:`) and doesn't match any registered breakpoint, a clear message hints at the likely typo (`"Did you forget the & prefix or the base key?"`).
+3. **`createStyles` called inside a React render** — detected via stack trace heuristic (`renderWithHooks`, `react-dom`). Warning fires at most once per module id to avoid console spam.
+
+### 🧪 Testing
+
+- Added **193 tests total** (up from 139 in 3.3.0), including:
+  - 13 tests for `createVariants` (variants, defaults, compounds, theme, extra class)
+  - 6 tests for responsive tokens (base + @media, mobile-first, unknown breakpoints)
+  - 7 tests for `cx` (conditionals, falsy filtering, edge cases)
+  - 7 tests for `globalStyles` (selectors, pseudos, `&`, `@media`, px conversion)
+  - 6 tests for dev warnings (suspicious keys, object-on-non-selector, valid selector no-warn)
+  - **8 integration tests** for SSR in a real Node.js environment (no DOM): buffer collection, `<style>` tag generation, responsive tokens on the server, stable class names, multi-module, `clearSSRRules`
 
 ### 🔒 Compatibility
 
-All changes are 100% additive and backward-compatible. No existing API was modified.
+All changes are **100% additive and backward-compatible**. No existing API was modified or removed. Consumer code using `createStyles`, `ThemeProvider`, `useTheme`, `keyframes`, `fontFace`, `cssVar`, `injectCssVariables` or any SSR helpers requires **zero migration**.
+
+### 📦 Bundle
+
+| Entry | Size (gzip) |
+|---|---|
+| `dist/index.js` (ESM) | **6.74 KB** |
+| `dist/index.cjs` (CJS) | **6.80 KB** |
+
+Limit: 10 KB — remaining headroom: **~3.2 KB**.
 
 ## [3.2.10] - 2026-05-10
 

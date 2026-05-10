@@ -3,7 +3,7 @@
 > A performant, type-safe and fully customizable **CSS-in-JS** theming library for React.
 
 [![npm version](https://img.shields.io/npm/v/@aurora-ds/theme)](https://www.npmjs.com/package/@aurora-ds/theme)
-[![bundle size](https://img.shields.io/badge/bundle-~6.3KB_gz-brightgreen)](https://bundlephobia.com/package/@aurora-ds/theme)
+[![bundle size](https://img.shields.io/badge/bundle-~6.74KB_gz-brightgreen)](https://bundlephobia.com/package/@aurora-ds/theme)
 [![license](https://img.shields.io/npm/l/@aurora-ds/theme)](./LICENSE)
 
 ---
