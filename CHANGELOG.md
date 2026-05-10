@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.10] - 2026-05-10
+
+### 🐛 Bug Fixes
+
+#### Production builds: styles silently overwritten
+
+Fixed a critical regression where, in minified consumer bundles (Vite/webpack/etc.), multiple `createStyles()` calls compiled into the same chunk would all share a single module stylesheet and **clobber each other's rules**, resulting in completely missing styles for some components while others rendered correctly.
+
+Root cause: `getModuleId()` derived the module name from `*.styles.[tj]s` matches in `new Error().stack`. In production builds those filenames are stripped during minification, so the fallback path returned the same name for every call inside a chunk. `getModuleStyleSheet()` then treated each subsequent call as an HMR re-injection and wiped the previously injected rules.
+
+Fix: when the original module name cannot be recovered from the stack trace (i.e. in any minified/production bundle), `getModuleId()` now allocates a unique id per call via a monotonic counter, ensuring every `createStyles()` call owns its own isolated stylesheet.
+
+
+
 ## [3.2.0] - 2026-02-07
 
 ### 🎉 Dynamic Theme Switching

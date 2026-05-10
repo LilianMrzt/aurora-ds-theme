@@ -247,7 +247,11 @@ describe('static style caching', () => {
         setThemeContextGetter(previousGetter)
     })
 
-    it('should reuse cached class for identical static styles', () => {
+    it('should produce isolated classes for separate createStyles calls', () => {
+        // Each createStyles call must own its own module stylesheet, even when
+        // the input is identical. Sharing the same class across distinct calls
+        // used to cause stylesheets to clobber each other in minified
+        // production bundles (see getModuleId fallback).
         const styles1 = createStyles({
             identical: {
                 display: 'flex',
@@ -262,7 +266,9 @@ describe('static style caching', () => {
             }
         })
 
-        expect(styles1.identical).toBe(styles2.identical)
+        expect(typeof styles1.identical).toBe('string')
+        expect(typeof styles2.identical).toBe('string')
+        expect(styles1.identical).not.toBe(styles2.identical)
     })
 
     it('should generate deterministic class names based on key name', () => {
@@ -498,7 +504,7 @@ describe('createStyles - CSS Variables mode', () => {
         expect(styles.root).toContain('root')
     })
 
-    it('should cache styles and return same class on multiple calls', () => {
+    it('should isolate distinct createStyles calls into their own module sheets', () => {
         const stylesCreator = (theme: MockThemeType) => ({
             button: {
                 backgroundColor: theme.colors.primary
@@ -508,8 +514,10 @@ describe('createStyles - CSS Variables mode', () => {
         const styles1 = createStyles(stylesCreator)
         const styles2 = createStyles(stylesCreator)
 
-        // Both should return the same cached class
-        expect(styles1.button).toBe(styles2.button)
+        // Distinct calls must yield distinct classes so module sheets never collide.
+        expect(typeof styles1.button).toBe('string')
+        expect(typeof styles2.button).toBe('string')
+        expect(styles1.button).not.toBe(styles2.button)
     })
 
     it('should not require theme context at runtime', () => {

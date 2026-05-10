@@ -21,27 +21,44 @@ import type { _InternalTheme } from '@/types'
 const moduleRegistry = new Map<string, string>()
 
 /**
+ * Monotonic counter used as a fallback when the calling module cannot be
+ * identified from the stack trace (e.g., minified production bundles where
+ * `*.styles.ts` filenames have been stripped). Guarantees each
+ * `createStyles()` call gets a unique module id, preventing different
+ * components inside the same chunk from sharing — and clobbering — the
+ * same module stylesheet.
+ * @internal
+ */
+let anonymousModuleCounter = 0
+
+/**
  * Extracts component name from stack trace for class naming.
  * Uses a hash of the full file path to disambiguate same-name files in different folders.
+ *
+ * In production builds, bundlers (Vite/webpack/etc.) minify and merge source
+ * files into hashed chunks, so the original `*.styles.[tj]s` filenames are
+ * lost from stack traces. When that happens we fall back to a monotonic
+ * counter so that each `createStyles` call gets its own module sheet
+ * instead of all of them sharing a single name (which used to cause
+ * `getModuleStyleSheet` to wipe each other's rules via the HMR reset path).
  * @internal
  */
 const getModuleId = (): string => {
     const stack = new Error().stack || ''
 
-    // Try to match *.styles.ts/js pattern first
+    // Try to match *.styles.ts/js pattern first (works in dev / non-minified builds)
     const styleMatch = stack.match(/([A-Za-z0-9_]+)\.styles\.[tj]s/)
-    const baseName = styleMatch?.[1]
-        ? toKebabCaseClassName(styleMatch[1])
-        : (() => {
-            const fileMatch = stack.match(/\/([A-Za-z0-9_]+)\.[tj]sx?[:\d]*\)?$/m)
-            return (fileMatch?.[1] && fileMatch[1] !== 'createStyles')
-                ? toKebabCaseClassName(fileMatch[1])
-                : 'style'
-        })()
 
-    // Extract the full file path for disambiguation
-    const pathMatch = stack.match(/(?:at\s+.*?\(|at\s+)((?:[A-Za-z]:)?[^\s)]+\.styles\.[tj]s)/) ||
-                      stack.match(/(?:at\s+.*?\(|at\s+)((?:[A-Za-z]:)?[^\s)]+\.[tj]sx?)[:\d]*\)?/m)
+    if (!styleMatch?.[1]) {
+        // Production / minified build path: original module name is unrecoverable.
+        // Allocate a fresh, unique id per call so module sheets never collide.
+        return `s${(anonymousModuleCounter++).toString(36)}`
+    }
+
+    const baseName = toKebabCaseClassName(styleMatch[1])
+
+    // Extract the full file path for disambiguation (same-name files in different folders)
+    const pathMatch = stack.match(/(?:at\s+.*?\(|at\s+)((?:[A-Za-z]:)?[^\s)]+\.styles\.[tj]s)/)
     const filePath = pathMatch?.[1] || ''
 
     // If the baseName is already registered by the same file, return it as-is (HMR case)
