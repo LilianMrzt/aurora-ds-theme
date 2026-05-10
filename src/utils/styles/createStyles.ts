@@ -14,6 +14,41 @@ import type { StyleFunction, StyleWithPseudos } from './types'
 import type { _InternalTheme } from '@/types'
 
 /**
+ * Dev-only flag, dead-code-eliminated in production builds.
+ * @internal
+ */
+const __DEV__ = typeof process !== 'undefined'
+    && typeof process.env !== 'undefined'
+    && process.env.NODE_ENV !== 'production'
+
+/**
+ * Set of stable module ids for which the React-component anti-pattern warning
+ * has already fired, so we never spam the console more than once per module.
+ * @internal
+ */
+const reactComponentWarningSeen = new Set<string>()
+
+/**
+ * Heuristic that flags `createStyles` calls happening inside a React render.
+ * Looks for tell-tale frame names (`renderWithHooks`, `react-dom`, `react-stack-bottom-frame`).
+ * Only runs in dev. Safe to skip in any other environment (no-op).
+ * @internal
+ */
+const detectReactComponentMisuse = (id: string): void => {
+    if (!__DEV__) { return }
+    if (reactComponentWarningSeen.has(id)) { return }
+    const stack = new Error().stack || ''
+    if (!/(renderWithHooks|react-dom|react-stack-bottom-frame|beginWork)/.test(stack)) { return }
+    reactComponentWarningSeen.add(id)
+    // eslint-disable-next-line no-console
+    console.warn(
+        `[aurora-ds] createStyles("${id}") was called from inside a React render. ` +
+        'Move it to module top-level — calling it on every render creates a new stylesheet ' +
+        'each time, hurting performance and breaking caching.'
+    )
+}
+
+/**
  * Tracks module IDs to detect collisions and disambiguate.
  * Maps moduleId → full stack signature that created it.
  * @internal
@@ -224,6 +259,9 @@ export const createStyles = <
     const componentName = options?.id
         ? toKebabCaseClassName(options.id)
         : getModuleId()
+
+    detectReactComponentMisuse(componentName)
+
     const moduleSheet = getModuleStyleSheet(componentName)
 
     // Set module context so keyframes()/fontFace() calls inject into the module sheet

@@ -240,6 +240,16 @@ const isResponsiveTokenObject = (value: unknown): value is Record<string, unknow
 const AMPERSAND_RE = /&/g
 
 /**
+ * Matches keys containing characters that are unambiguous markers of
+ * CSS-injection attempts: `<` (HTML tag), `{`, `}` (CSS block delimiters)
+ * and `;` (declaration terminator). Other characters that are legitimate
+ * in selectors (`>`, `"`, `'`, `:`, `&`, `[`, `]`, etc.) are NOT flagged.
+ * Used in dev only to surface typos / unsafe usage early.
+ * @internal
+ */
+const SUSPICIOUS_KEY_RE = /[<{};]/
+
+/**
  * Generates CSS class using a dedicated module stylesheet.
  * Uses deterministic class names (no uniqueness suffix) for HMR stability.
  * @internal
@@ -255,6 +265,11 @@ export const generateModuleCssClass = (
     for (const key in styles) {
         const value = (styles as Record<string, unknown>)[key]
         const firstChar = key.charCodeAt(0)
+
+        if (__DEV__ && SUSPICIOUS_KEY_RE.test(key)) {
+            devWarn(`Suspicious style key "${key}" — contains forbidden characters (<, >, ;, {, }, ", '). This rule is ignored to prevent CSS injection.`)
+            continue
+        }
 
         if (firstChar === 64 /* @ */) {
             const innerCss = objectToCss(value as Record<string, unknown>)
@@ -289,6 +304,14 @@ export const generateModuleCssClass = (
                 insertModuleRule(
                     sheet,
                     `@media (min-width:${minWidth}){${dotClass}{${kebabKey}:${toCssValue(key, bpValue)};}}`
+                )
+            }
+        } else if (value != null && typeof value === 'object' && !Array.isArray(value)) {
+            // Object value but key isn't a selector and isn't a recognized responsive token.
+            // Likely a typo / forgotten '&' prefix / unknown breakpoint name.
+            if (__DEV__) {
+                devWarn(
+                    `Style key "${key}" has an object value but isn't a selector (':hover', '&...', '@...') and doesn't match any registered breakpoint. This block is ignored. Did you forget the "&" prefix, or the "base" key, or to declare the breakpoint in theme.breakpoints?`
                 )
             }
         } else if (value != null && typeof value !== 'object') {
