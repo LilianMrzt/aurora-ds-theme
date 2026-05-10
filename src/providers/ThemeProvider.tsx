@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { createContext, useContext, useLayoutEffect, useMemo, useRef, type ReactNode } from 'react'
 
-import { setThemeContextGetter, toKebabCase, insertRule } from '@/utils/styles/styleEngine'
+import { setThemeContextGetter, toKebabCase, insertRule, setResponsiveBreakpoints } from '@/utils/styles/styleEngine'
 
 import type { _InternalTheme } from '@/types'
 
@@ -118,6 +118,14 @@ export const ThemeProvider = ({
     const previousGetter = setThemeContextGetter(() => theme)
     const isFirstRender = useRef(true)
     const lastInjectedCssRef = useRef<string | null>(null)
+
+    // Register responsive breakpoints from theme.breakpoints (if present) so
+    // that `padding: { base, md, lg }` style tokens can be expanded into
+    // matching @media rules by the engine. Done synchronously during render
+    // so that any createStyles call following the provider mount sees the
+    // up-to-date breakpoint registry.
+    const breakpoints = (theme as unknown as { breakpoints?: Record<string, string | number> }).breakpoints
+    setResponsiveBreakpoints(breakpoints)
 
     // Generate CSS variables string from theme
     const cssVariables = useMemo(() => generateCSSVariables(theme), [theme])

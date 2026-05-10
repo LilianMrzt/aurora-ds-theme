@@ -195,6 +195,48 @@ export const insertModuleRule = (sheet: CSSStyleSheet | null, rule: string): voi
     }
 }
 
+/**
+ * Registry of responsive breakpoints, populated by ThemeProvider from
+ * `theme.breakpoints` (when present). Iterated in declaration order to
+ * preserve mobile-first cascade.
+ * @internal
+ */
+const responsiveBreakpoints = new Map<string, string>()
+
+/**
+ * Registers responsive breakpoints from a theme. Called by ThemeProvider
+ * after each theme update. Values can be strings (e.g. `'768px'`) or
+ * numbers (treated as px).
+ * @internal
+ */
+export const setResponsiveBreakpoints = (bps: Record<string, string | number> | undefined | null): void => {
+    responsiveBreakpoints.clear()
+    if (!bps) { return }
+    for (const k in bps) {
+        const v = bps[k]
+        if (v == null) { continue }
+        responsiveBreakpoints.set(k, typeof v === 'number' ? `${v}px` : String(v))
+    }
+}
+
+/**
+ * Returns true if the value looks like a responsive token object,
+ * i.e. an object whose keys are all either `base` or registered
+ * breakpoint names.
+ * @internal
+ */
+const isResponsiveTokenObject = (value: unknown): value is Record<string, unknown> => {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) { return false }
+    if (responsiveBreakpoints.size === 0) { return false }
+    let hasResponsiveKey = false
+    for (const k in value as Record<string, unknown>) {
+        if (k === 'base') { hasResponsiveKey = true; continue }
+        if (!responsiveBreakpoints.has(k)) { return false }
+        hasResponsiveKey = true
+    }
+    return hasResponsiveKey
+}
+
 const AMPERSAND_RE = /&/g
 
 /**
@@ -229,6 +271,25 @@ export const generateModuleCssClass = (
             const innerCss = objectToCss(value as Record<string, unknown>)
             if (innerCss) {
                 insertModuleRule(sheet, `${dotClass}${key}{${innerCss}}`)
+            }
+        } else if (value != null && typeof value === 'object' && isResponsiveTokenObject(value)) {
+            // Responsive token: { base: ..., md: ..., lg: ... }
+            // - `base` is appended to the unmediated rule
+            // - other keys (matching theme.breakpoints) generate @media rules
+            //   in declaration order for mobile-first cascade.
+            const responsive = value as Record<string, unknown>
+            const kebabKey = toKebabCase(key)
+            if ('base' in responsive && responsive.base != null) {
+                baseCss += `${kebabKey}:${toCssValue(key, responsive.base)};`
+            }
+            for (const [bpKey, minWidth] of responsiveBreakpoints) {
+                if (!(bpKey in responsive)) { continue }
+                const bpValue = responsive[bpKey]
+                if (bpValue == null) { continue }
+                insertModuleRule(
+                    sheet,
+                    `@media (min-width:${minWidth}){${dotClass}{${kebabKey}:${toCssValue(key, bpValue)};}}`
+                )
             }
         } else if (value != null && typeof value !== 'object') {
             baseCss += `${toKebabCase(key)}:${toCssValue(key, value)};`

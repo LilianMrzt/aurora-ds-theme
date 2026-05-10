@@ -17,6 +17,13 @@ export { ThemeProvider, useTheme } from './providers/ThemeProvider'
 // Style Utilities
 export { createStyles } from './utils/styles/createStyles'
 export type { CreateStylesOptions } from './utils/styles/createStyles'
+export { createVariants } from './utils/styles/createVariants'
+export type {
+    CreateVariantsConfig,
+    CompoundVariant,
+    VariantProps,
+    VariantFn
+} from './utils/styles/createVariants'
 export { keyframes } from './utils/styles/keyframes'
 export { fontFace } from './utils/styles/fontFace'
 export { cssVariables, cssVar, injectCssVariables } from './utils/styles/cssVariables'
@@ -29,4 +36,4 @@ export type { CxArg } from './utils/styles/cx'
 export { getSSRStyles, getSSRStyleTag, clearSSRRules, getSSRRulesArray } from './utils/styles/ssr'
 
 // Types for advanced usage
-export type { StyleWithPseudos, FontFaceOptions } from './utils/styles'
+export type { StyleWithPseudos, FontFaceOptions, ResponsiveValue, ResponsiveCSSProperties } from './utils/styles'

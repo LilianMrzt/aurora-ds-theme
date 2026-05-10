@@ -9,6 +9,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ✨ New Features
 
+#### `createVariants` — CVA-style variants without a wrapper component
+
+A new top-level API for declaring variant-aware components in a single typed config object. Built on top of `createStyles`, so it shares the same theming, HMR, SSR and per-module stylesheet behavior.
+
+```ts
+import { createVariants } from '@aurora-ds/theme'
+
+export const button = createVariants((theme) => ({
+  base: { display: 'inline-flex', borderRadius: theme.radius.md, cursor: 'pointer' },
+  variants: {
+    size: {
+      sm: { padding: theme.spacing.xs, fontSize: 12 },
+      md: { padding: theme.spacing.sm, fontSize: 14 },
+      lg: { padding: theme.spacing.md, fontSize: 16 },
+    },
+    variant: {
+      primary: { backgroundColor: theme.colors.primary, color: 'white' },
+      ghost:   { backgroundColor: 'transparent', color: theme.colors.text },
+    },
+  },
+  defaultVariants: { size: 'md', variant: 'primary' },
+  compoundVariants: [
+    { size: 'sm', variant: 'ghost', styles: { fontWeight: 600 } },
+  ],
+}), { id: 'button' })
+
+// Usage
+<button className={button({ size: 'lg' })} />
+<button className={button({ variant: 'ghost' }, props.className)} />
+```
+
+#### Responsive tokens
+
+CSS values can now be declared as objects whose keys match `theme.breakpoints`:
+
+```ts
+const styles = createStyles(() => ({
+  card: {
+    padding: { base: 8, md: 16, lg: 24 },
+    fontSize: { base: 14, lg: 18 },
+  }
+}))
+```
+
+Aurora detects responsive tokens automatically and emits matching `@media (min-width: …)` rules in the order declared by `theme.breakpoints` (mobile-first cascade). The `base` key produces the unmediated rule.
+
+`ThemeProvider` registers `theme.breakpoints` automatically — no extra setup required.
+
+The `StyleWithPseudos` type was widened to accept `ResponsiveValue<T>` for every CSS property, so autocomplete works out of the box.
+
 #### Explicit module id for `createStyles` (recommended in production)
 
 `createStyles` now accepts an optional second argument `{ id }` to opt-out of stack-trace based module identification. **Strongly recommended** for production / SSR setups where deterministic class names are required.
