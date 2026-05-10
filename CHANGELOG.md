@@ -7,6 +7,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### ✨ New Features
+
+#### Explicit module id for `createStyles` (recommended in production)
+
+`createStyles` now accepts an optional second argument `{ id }` to opt-out of stack-trace based module identification. **Strongly recommended** for production / SSR setups where deterministic class names are required.
+
+```ts
+// Before (still works, fragile in some prod bundles):
+export const styles = createStyles((theme) => ({ ... }))
+
+// After (recommended for production):
+export const styles = createStyles((theme) => ({ ... }), { id: 'button' })
+```
+
+When `id` is provided, the engine skips `Error().stack` parsing entirely (faster and engine-agnostic) and guarantees stable class names across builds and SSR ↔ CSR boundaries.
+
+#### `cx(...args)` helper
+
+A tiny dependency-free `clsx`-like helper for joining class names with conditional support:
+
+```ts
+import { cx } from '@aurora-ds/theme'
+
+<button className={cx(styles.base, styles[size], isActive && styles.active)} />
+```
+
+#### `globalStyles({...})`
+
+A new top-level API to inject global CSS rules (resets, base styles, body, `:root`, `@media`, etc.) using the same nested syntax as `createStyles`:
+
+```ts
+import { globalStyles } from '@aurora-ds/theme'
+
+globalStyles({
+  'html, body': { margin: 0, padding: 0 },
+  'a': { color: 'inherit', ':hover': { textDecoration: 'underline' } },
+  '@media (prefers-reduced-motion: reduce)': {
+    '*': { animation: 'none', transition: 'none' },
+  },
+})
+```
+
+### 🚀 Improvements
+
+- **`useInsertionEffect`** is now used (when available, React 18+) for theme CSS variable injection. This is the official React API for CSS-in-JS and avoids any FOUC during commit. Falls back to `useLayoutEffect` on older React.
+- **Skip redundant `:root` rewrites**: when the user re-creates the `theme` object on each render without memoization, the `<style>` tag is no longer rewritten if the resulting CSS string is identical to the previous one. Saves a style recalc.
+- **Stable cache key for object args**: `createStyles` dynamic-style functions now produce identical class names regardless of the key order of object arguments (`{ a, b }` vs `{ b, a }`). Prevents accidental cache misses and double-injection.
+- **Dev-only warnings** are now emitted (via `console.warn`) when the engine fails to insert a CSS rule (invalid selector, unsupported syntax, etc.). Stripped from production bundles via dead-code elimination.
+
+### 🔒 Compatibility
+
+All changes are 100% additive and backward-compatible. No existing API was modified.
+
 ## [3.2.10] - 2026-05-10
 
 ### 🐛 Bug Fixes

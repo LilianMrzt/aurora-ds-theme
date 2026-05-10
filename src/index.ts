@@ -16,9 +16,14 @@ export { ThemeProvider, useTheme } from './providers/ThemeProvider'
 
 // Style Utilities
 export { createStyles } from './utils/styles/createStyles'
+export type { CreateStylesOptions } from './utils/styles/createStyles'
 export { keyframes } from './utils/styles/keyframes'
 export { fontFace } from './utils/styles/fontFace'
 export { cssVariables, cssVar, injectCssVariables } from './utils/styles/cssVariables'
+export { globalStyles } from './utils/styles/globalStyles'
+export type { GlobalStyleBlock } from './utils/styles/globalStyles'
+export { cx } from './utils/styles/cx'
+export type { CxArg } from './utils/styles/cx'
 
 // SSR Utilities
 export { getSSRStyles, getSSRStyleTag, clearSSRRules, getSSRRulesArray } from './utils/styles/ssr'

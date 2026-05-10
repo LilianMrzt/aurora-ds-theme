@@ -1,7 +1,12 @@
 export { createStyles } from './createStyles'
+export type { CreateStylesOptions } from './createStyles'
 export { keyframes } from './keyframes'
 export { fontFace } from './fontFace'
 export { cssVariables, cssVar, injectCssVariables } from './cssVariables'
+export { globalStyles } from './globalStyles'
+export type { GlobalStyleBlock } from './globalStyles'
+export { cx } from './cx'
+export type { CxArg } from './cx'
 export { getSSRStyles, getSSRStyleTag, clearSSRRules, getSSRRulesArray } from './ssr'
 export type { StyleWithPseudos, StyleFunction, FontFaceOptions, CSSProperties } from './types'
 

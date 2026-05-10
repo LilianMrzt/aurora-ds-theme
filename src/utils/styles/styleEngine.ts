@@ -3,6 +3,28 @@ import type { _InternalTheme } from '@/types'
 
 const IS_SERVER = typeof document === 'undefined'
 
+/**
+ * Dev-only flag. Bundlers (Vite/webpack/tsup) statically replace
+ * `process.env.NODE_ENV` so this entire branch is dead-code-eliminated
+ * in production builds. The `typeof process` guard makes it safe to load
+ * in environments without a process global (e.g. some edge runtimes).
+ * @internal
+ */
+const __DEV__ = typeof process !== 'undefined'
+    && typeof process.env !== 'undefined'
+    && process.env.NODE_ENV !== 'production'
+
+/**
+ * Dev-only logger. Stripped from production bundles via dead code elimination.
+ * @internal
+ */
+const devWarn = (message: string, ...args: unknown[]): void => {
+    if (__DEV__) {
+        // eslint-disable-next-line no-console
+        console.warn(`[aurora-ds] ${message}`, ...args)
+    }
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let themeContextGetter: (() => any) | null = null
 let styleSheet: CSSStyleSheet | null = null
@@ -111,8 +133,8 @@ export const insertRule = (rule: string): void => {
     } else if (styleSheet) {
         try {
             styleSheet.insertRule(rule, styleSheet.cssRules.length)
-        } catch {
-            // Ignore errors (invalid rules)
+        } catch (error) {
+            devWarn('Failed to insert CSS rule:', rule, error)
         }
     }
 }
@@ -167,8 +189,8 @@ export const insertModuleRule = (sheet: CSSStyleSheet | null, rule: string): voi
     } else if (sheet) {
         try {
             sheet.insertRule(rule, sheet.cssRules.length)
-        } catch {
-            // Ignore errors (invalid rules)
+        } catch (error) {
+            devWarn('Failed to insert module CSS rule:', rule, error)
         }
     }
 }
@@ -332,6 +354,35 @@ export const resolveAmpersandSelector = (selector: string, className: string): s
 }
 
 /**
+ * Stable JSON.stringify that sorts object keys recursively so that
+ * `{a:1,b:2}` and `{b:2,a:1}` produce the same cache key. Limits
+ * recursion depth to keep the hot path cheap.
+ * @internal
+ */
+const STABLE_STRINGIFY_MAX_DEPTH = 4
+const stableStringify = (value: unknown, depth = 0): string => {
+    if (value === null || typeof value !== 'object') {
+        return JSON.stringify(value)
+    }
+    if (depth >= STABLE_STRINGIFY_MAX_DEPTH) {
+        // Fallback: native (unsorted) — collisions still avoided per-call
+        // because depth-bounded keys are rare in style args.
+        return JSON.stringify(value)
+    }
+    if (Array.isArray(value)) {
+        return '[' + value.map(v => stableStringify(v, depth + 1)).join(',') + ']'
+    }
+    const keys = Object.keys(value as Record<string, unknown>).sort()
+    const parts: string[] = []
+    for (const k of keys) {
+        const v = (value as Record<string, unknown>)[k]
+        if (v === undefined) { continue }
+        parts.push(JSON.stringify(k) + ':' + stableStringify(v, depth + 1))
+    }
+    return '{' + parts.join(',') + '}'
+}
+
+/**
  * Creates a cache key from function arguments.
  * @internal
  */
@@ -358,12 +409,12 @@ export const createCacheKey = (args: unknown[]): string => {
             } else if (t === 'string' || t === 'number' || t === 'boolean') {
                 result += i ? '|' + arg : String(arg)
             } else {
-                return JSON.stringify(args)
+                return stableStringify(args)
             }
         }
         return result
     }
-    return JSON.stringify(args)
+    return stableStringify(args)
 }
 
 /**

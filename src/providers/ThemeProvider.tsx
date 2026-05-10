@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { createContext, useContext, useLayoutEffect, useMemo, useRef, type ReactNode } from 'react'
 
 import { setThemeContextGetter, toKebabCase, insertRule } from '@/utils/styles/styleEngine'
@@ -9,6 +10,17 @@ const THEME_STYLE_ID = 'aurora-theme-variables'
 const THEME_TRANSITION_STYLE_ID = 'aurora-theme-transition'
 const DISABLE_TRANSITIONS_CLASS = 'aurora-disable-transitions'
 const FORCE_TRANSITIONS_CLASS = 'aurora-force-transitions'
+
+/**
+ * Use `useInsertionEffect` when available (React 18+) so that style mutations
+ * happen *before* layout effects of children — this is the official React API
+ * for CSS-in-JS libraries and avoids any FOUC during commit. Falls back to
+ * `useLayoutEffect` on older React versions.
+ * @internal
+ */
+const useInsertionEffect: typeof useLayoutEffect =
+    (React as unknown as { useInsertionEffect?: typeof useLayoutEffect }).useInsertionEffect
+    ?? useLayoutEffect
 
 let transitionRuleInjected = false
 
@@ -105,12 +117,13 @@ export const ThemeProvider = ({
 }: ThemeProviderProps) => {
     const previousGetter = setThemeContextGetter(() => theme)
     const isFirstRender = useRef(true)
+    const lastInjectedCssRef = useRef<string | null>(null)
 
     // Generate CSS variables string from theme
     const cssVariables = useMemo(() => generateCSSVariables(theme), [theme])
 
     // Inject CSS variables into :root
-    useLayoutEffect(() => {
+    useInsertionEffect(() => {
         if (IS_SERVER) {
             return
         }
@@ -139,7 +152,14 @@ export const ThemeProvider = ({
             document.head.appendChild(styleElement)
         }
 
-        styleElement.textContent = `:root{${cssVariables}}`
+        // Skip the DOM write if the resulting CSS is identical to the previous
+        // injection — this avoids an unnecessary style recalc when the user
+        // re-creates the theme object on every render without memoizing it.
+        const nextCss = `:root{${cssVariables}}`
+        if (lastInjectedCssRef.current !== nextCss) {
+            styleElement.textContent = nextCss
+            lastInjectedCssRef.current = nextCss
+        }
 
         // Re-enable transitions after styles are applied
         if (shouldDisableTransitions) {

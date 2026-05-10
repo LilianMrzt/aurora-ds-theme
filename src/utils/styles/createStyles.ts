@@ -169,6 +169,28 @@ const processStyles = <T extends Record<string, StyleWithPseudos | StyleFunction
 }
 
 /**
+ * Options for {@link createStyles}.
+ */
+export type CreateStylesOptions = {
+    /**
+     * Explicit, stable module id used to namespace generated class names.
+     *
+     * **Strongly recommended in production** to avoid relying on
+     * `Error().stack` parsing, which is fragile across engines and
+     * unreliable after minification. When provided, this id is used as-is
+     * (after kebab-casing) and guarantees deterministic class names across
+     * builds, SSR ↔ CSR boundaries and HMR cycles.
+     *
+     * @example
+     * ```ts
+     * // Button.styles.ts
+     * export const styles = createStyles((theme) => ({ ... }), { id: 'button' })
+     * ```
+     */
+    id?: string
+}
+
+/**
  * Creates styles with theme support. Type is inferred from ThemeRegistry.
  * Supports pseudo-classes, media queries, and complex selectors.
  *
@@ -176,6 +198,8 @@ const processStyles = <T extends Record<string, StyleWithPseudos | StyleFunction
  * Theme values are automatically updated when ThemeProvider's theme changes.
  *
  * @param stylesOrCreator - Static styles object or function that receives theme
+ * @param options - Optional configuration. Pass `{ id }` to opt-out of stack-trace based
+ *                  module identification (recommended for production / SSR setups).
  *
  * @example
  * ```tsx
@@ -186,19 +210,20 @@ const processStyles = <T extends Record<string, StyleWithPseudos | StyleFunction
  *   }
  * }))
  *
- * // Usage in component
- * function MyComponent() {
- *   return <div className={styles.root}>Hello</div>
- * }
+ * // Or with an explicit id (recommended in production):
+ * const styles = createStyles((theme) => ({ ... }), { id: 'my-component' })
  * ```
  */
 export const createStyles = <
     T extends Record<string, StyleWithPseudos | StyleFunction> = Record<string, StyleWithPseudos | StyleFunction>
 >(
-        stylesOrCreator: T | ((theme: _InternalTheme) => T)
+        stylesOrCreator: T | ((theme: _InternalTheme) => T),
+        options?: CreateStylesOptions
     ): { [K in keyof T]: T[K] extends (...args: infer TArgs) => StyleWithPseudos ? (...args: TArgs) => string : string } => {
     type Result = { [K in keyof T]: T[K] extends (...args: infer TArgs) => StyleWithPseudos ? (...args: TArgs) => string : string }
-    const componentName = getModuleId()
+    const componentName = options?.id
+        ? toKebabCaseClassName(options.id)
+        : getModuleId()
     const moduleSheet = getModuleStyleSheet(componentName)
 
     // Set module context so keyframes()/fontFace() calls inject into the module sheet

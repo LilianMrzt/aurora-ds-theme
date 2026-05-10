@@ -123,6 +123,70 @@ describe('createStyles', () => {
 
         expect(typeof styles.text).toBe('string')
     })
+
+    describe('explicit id option', () => {
+        it('uses the explicit id as a stable namespace prefix', () => {
+            const styles = createStyles(() => ({
+                root: { display: 'flex' }
+            }), { id: 'my-button' })
+
+            expect(styles.root).toBe('my-button-root')
+        })
+
+        it('produces identical class names across calls with the same id', () => {
+            const a = createStyles(() => ({ root: { color: 'red' } }), { id: 'fixed-id' })
+            const b = createStyles(() => ({ root: { color: 'blue' } }), { id: 'fixed-id' })
+
+            expect(a.root).toBe(b.root)
+            expect(a.root).toBe('fixed-id-root')
+        })
+
+        it('kebab-cases camelCase ids', () => {
+            const styles = createStyles(() => ({
+                root: { display: 'flex' }
+            }), { id: 'MyAwesomeWidget' })
+
+            expect(styles.root).toBe('my-awesome-widget-root')
+        })
+
+        it('produces distinct namespaces for distinct ids', () => {
+            const a = createStyles(() => ({ root: { color: 'red' } }), { id: 'foo' })
+            const b = createStyles(() => ({ root: { color: 'red' } }), { id: 'bar' })
+
+            expect(a.root).not.toBe(b.root)
+        })
+
+        it('still supports dynamic styles with explicit id', () => {
+            const styles = createStyles(() => ({
+                item: (active: boolean) => ({ opacity: active ? 1 : 0.5 })
+            }), { id: 'dyn' })
+
+            expect(styles.item(true)).toContain('dyn-item-')
+            expect(styles.item(true)).toBe(styles.item(true))
+            expect(styles.item(true)).not.toBe(styles.item(false))
+        })
+    })
+
+    describe('stable cache key for object args', () => {
+        it('produces the same className for objects with same content but different key order', () => {
+            const styles = createStyles(() => ({
+                box: (config: { a: number; b: number }) => ({ order: config.a + config.b })
+            }), { id: 'stable-cache' })
+
+            const c1 = styles.box({ a: 1, b: 2 })
+            const c2 = styles.box({ b: 2, a: 1 })
+
+            expect(c1).toBe(c2)
+        })
+
+        it('produces different classNames for different object content', () => {
+            const styles = createStyles(() => ({
+                box: (config: { value: number }) => ({ order: config.value })
+            }), { id: 'stable-cache-2' })
+
+            expect(styles.box({ value: 1 })).not.toBe(styles.box({ value: 2 }))
+        })
+    })
 })
 
 describe('setThemeContextGetter', () => {
