@@ -5,8 +5,6 @@
 // Core API
 export { createTheme } from './utils/theme'
 
-// Color Scales
-export { colors } from './utils/theme/colors'
 
 // Types
 export type { ThemeRegistry } from './types/theme/Theme'

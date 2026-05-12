@@ -7,6 +7,58 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-05-12
+
+### 🚨 Breaking Changes
+
+#### Removed `colors` export and all built-in color palettes
+
+Aurora DS Theme is a fully customizable theming library — shipping opinionated color scales alongside that goes against its core philosophy and bloats the bundle unnecessarily.
+
+The following have been **permanently removed**:
+
+- ❌ `colors` — the object grouping 19 color scales (gray, slate, stone, red, orange, amber, yellow, lime, green, emerald, teal, cyan, blue, indigo, violet, purple, fuchsia, pink, rose, white, black, transparent, current)
+- ❌ `ColorName` — union type of scale names
+- ❌ `ColorScale` — type for the 12 shades (25 → 950)
+- ❌ `ColorShade` — type for the keys of `ColorScale`
+
+#### Migration
+
+If you used `colors` to initialize your theme, copy the hex values you need directly into your own theme definition:
+
+```ts
+// Before (≤ 3.x)
+import { colors, createTheme } from '@aurora-ds/theme'
+
+export const lightTheme = createTheme({
+    colors: {
+        primary: colors.blue[500],
+        background: colors.gray[50],
+    },
+})
+
+// After (4.x) — hardcoded values, or from your own source of truth
+export const lightTheme = createTheme({
+    colors: {
+        primary: '#3b82f6',
+        background: '#f9fafb',
+    },
+})
+```
+
+If you used `ColorScale`, `ColorName` or `ColorShade` in your own types, define them locally or remove them if no longer needed.
+
+### 📦 Bundle
+
+Removing the 19 color scales (× 12 shades each) significantly reduces bundle size:
+
+| Entry | v3.5.0 (gzip) | v4.0.0 (gzip) | Savings |
+|---|---|---|---|
+| `dist/index.js` (ESM) | 6.74 KB | **5.11 KB** | −1.63 KB (−24%) |
+| `dist/index.cjs` (CJS) | 6.80 KB | **5.18 KB** | −1.62 KB (−24%) |
+
+Size-limit: 10 KB — remaining headroom: **~4.8 KB**.
+
 ## [3.5.0] - 2026-05-10
 
 ### ✨ New Features
