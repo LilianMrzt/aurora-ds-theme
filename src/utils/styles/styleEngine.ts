@@ -261,6 +261,16 @@ export const generateModuleCssClass = (
 ): string => {
     let baseCss = ''
     const dotClass = `.${className}`
+    // At-rules (@media/@container/@supports), pseudo-classes (:hover), compound
+    // selectors (&...) and responsive breakpoints are collected here and flushed
+    // AFTER the base rule, so they cascade correctly over base declarations
+    // (CSS uses source order at equal specificity). Lazily allocated to avoid
+    // overhead for plain style objects.
+    let deferredRules: string[] | null = null
+    const defer = (rule: string): void => {
+        if (deferredRules === null) { deferredRules = [rule] }
+        else { deferredRules.push(rule) }
+    }
 
     for (const key in styles) {
         const value = (styles as Record<string, unknown>)[key]
@@ -274,24 +284,25 @@ export const generateModuleCssClass = (
         if (firstChar === 64 /* @ */) {
             const innerCss = objectToCss(value as Record<string, unknown>)
             if (innerCss) {
-                insertModuleRule(sheet, `${key}{${dotClass}{${innerCss}}}`)
+                defer(`${key}{${dotClass}{${innerCss}}}`)
             }
         } else if (firstChar === 38 /* & */) {
             const innerCss = objectToCss(value as Record<string, unknown>)
             if (innerCss) {
                 AMPERSAND_RE.lastIndex = 0
-                insertModuleRule(sheet, `${key.replace(AMPERSAND_RE, dotClass)}{${innerCss}}`)
+                defer(`${key.replace(AMPERSAND_RE, dotClass)}{${innerCss}}`)
             }
         } else if (firstChar === 58 /* : */) {
             const innerCss = objectToCss(value as Record<string, unknown>)
             if (innerCss) {
-                insertModuleRule(sheet, `${dotClass}${key}{${innerCss}}`)
+                defer(`${dotClass}${key}{${innerCss}}`)
             }
         } else if (value != null && typeof value === 'object' && isResponsiveTokenObject(value)) {
             // Responsive token: { base: ..., md: ..., lg: ... }
             // - `base` is appended to the unmediated rule
             // - other keys (matching theme.breakpoints) generate @media rules
-            //   in declaration order for mobile-first cascade.
+            //   in declaration order for mobile-first cascade. They are deferred
+            //   so they're injected AFTER the base rule and actually win.
             const responsive = value as Record<string, unknown>
             const kebabKey = toKebabCase(key)
             if ('base' in responsive && responsive.base != null) {
@@ -301,8 +312,7 @@ export const generateModuleCssClass = (
                 if (!(bpKey in responsive)) { continue }
                 const bpValue = responsive[bpKey]
                 if (bpValue == null) { continue }
-                insertModuleRule(
-                    sheet,
+                defer(
                     `@media (min-width:${minWidth}){${dotClass}{${kebabKey}:${toCssValue(key, bpValue)};}}`
                 )
             }
@@ -319,8 +329,17 @@ export const generateModuleCssClass = (
         }
     }
 
+    // 1. Base rule first, so deferred at-rules / pseudo-classes / responsive
+    //    breakpoints declared in source order win at equal specificity.
     if (baseCss) {
         insertModuleRule(sheet, `${dotClass}{${baseCss}}`)
+    }
+
+    // 2. Flush deferred rules in their original declaration order.
+    if (deferredRules !== null) {
+        for (let i = 0; i < (deferredRules as string[]).length; i++) {
+            insertModuleRule(sheet, (deferredRules as string[])[i])
+        }
     }
 
     return className
